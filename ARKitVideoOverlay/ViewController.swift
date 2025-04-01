@@ -1,74 +1,93 @@
-//
-//  ViewController.swift
-//  ARKitVideoOverlay
-//
-//  Created by Web TL AE Stanislav Grinshpun on 28/03/2025.
-//
-
 import UIKit
-import SceneKit
 import ARKit
+import SceneKit
+import SpriteKit
+import AVFoundation
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
-    @IBOutlet var sceneView: ARSCNView!
-    
+    var currentVideoNode: SKVideoNode?
+    var player: AVPlayer?
+    var sceneView: ARSCNView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Set the view's delegate
+
+        sceneView = ARSCNView(frame: view.frame)
+        view.addSubview(sceneView)
+
         sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
-        
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
-        // Set the scene to the view
-        sceneView.scene = scene
+        sceneView.scene = SCNScene()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
 
-        // Run the view's session
-        sceneView.session.run(configuration)
+        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
+            fatalError("Missing AR Resources")
+        }
+
+        let configuration = ARImageTrackingConfiguration()
+        configuration.trackingImages = referenceImages
+        configuration.maximumNumberOfTrackedImages = 1
+
+        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        // Pause the view's session
         sceneView.session.pause()
     }
 
-    // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
-    
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
+        guard let imageAnchor = anchor as? ARImageAnchor else { return nil }
+
+        let referenceImage = imageAnchor.referenceImage
+        let width = referenceImage.physicalSize.width
+        let height = referenceImage.physicalSize.height
+
+        let plane = SCNPlane(width: width, height: height)
+
+        guard let url = Bundle.main.url(forResource: "Magic", withExtension: "mp4") else { return nil }
+        let player = AVPlayer(url: url)
+        self.player = player
+        player.actionAtItemEnd = .none
+        let videoNode = SKVideoNode(avPlayer: player)
         
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player.currentItem, queue: .main) { _ in
+            player.seek(to: .zero)
+            player.play()
+        }
+        
+        videoNode.play()
+        self.currentVideoNode = videoNode
+
+        let videoScene = SKScene(size: CGSize(width: 1280, height: 720))
+        videoNode.position = CGPoint(x: videoScene.size.width / 2, y: videoScene.size.height / 2)
+        videoNode.size = videoScene.size
+        videoNode.yScale = -1 // Инвертировать по Y
+        videoScene.addChild(videoNode)
+
+        plane.firstMaterial?.diffuse.contents = videoScene
+        plane.firstMaterial?.isDoubleSided = true
+
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.eulerAngles.x = -.pi / 2
+
+        let parentNode = SCNNode()
+        parentNode.addChildNode(planeNode)
+        
+
+        return parentNode
     }
     
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
-    }
-    
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let imageAnchor = anchor as? ARImageAnchor else { return }
+
+        if imageAnchor.isTracked {
+            player?.play()
+        } else {
+            player?.pause()
+        }
     }
 }
