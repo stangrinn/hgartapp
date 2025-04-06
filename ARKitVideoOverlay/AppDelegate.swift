@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  ARKitVideoOverlay
 //
-//  Created by Web TL AE Stanislav Grinshpun on 28/03/2025.
+//  Created by Stanislav Grinshpun on 28/03/2025.
 //
 
 import UIKit

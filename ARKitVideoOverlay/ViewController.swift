@@ -6,7 +6,6 @@ import AVFoundation
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
-    var currentVideoNode: SKVideoNode?
     var player: AVPlayer?
     var sceneView: ARSCNView!
 
@@ -48,7 +47,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         let plane = SCNPlane(width: width, height: height)
 
+        #if APPCLIP
+        guard let url = URL(string: "https://helenagrinshpun.art/assets/videos/Magician.mp4") else { return nil }
+        #else
         guard let url = Bundle.main.url(forResource: "Magic", withExtension: "mp4") else { return nil }
+        #endif
+        
         let player = AVPlayer(url: url)
         self.player = player
         player.actionAtItemEnd = .none
@@ -60,12 +64,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         
         videoNode.play()
-        self.currentVideoNode = videoNode
 
         let videoScene = SKScene(size: CGSize(width: 1280, height: 720))
         videoNode.position = CGPoint(x: videoScene.size.width / 2, y: videoScene.size.height / 2)
         videoNode.size = videoScene.size
-        videoNode.yScale = -1 // Инвертировать по Y
+        videoNode.yScale = -1 // Invert by Y
         videoScene.addChild(videoNode)
 
         plane.firstMaterial?.diffuse.contents = videoScene
