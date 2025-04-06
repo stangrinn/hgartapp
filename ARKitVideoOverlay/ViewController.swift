@@ -1,3 +1,4 @@
+import Foundation
 import UIKit
 import ARKit
 import SceneKit
@@ -5,9 +6,21 @@ import SpriteKit
 import AVFoundation
 
 class ViewController: UIViewController, ARSCNViewDelegate {
+    
+    let CONFIG_URL: String = "https://helenagrinshpun.art/assets/config.json"
 
+    struct ARTarget: Decodable {
+        let name: String
+        let imageUrl: String
+        let videoUrl: String
+        let physicalWidth: Float
+    }
+
+    var targets: [ARTarget] = []
+    var referenceImages: Set<ARReferenceImage> = []
     var player: AVPlayer?
     var sceneView: ARSCNView!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,16 +34,61 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        loadTargetsAndStartSession()
+    }
 
-        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
-            fatalError("Missing AR Resources")
+    func loadTargetsAndStartSession() {
+        
+        guard let configURL = URL(string: CONFIG_URL) else {
+            fatalError("Invalid config URL")
         }
+        
+        URLSession.shared.dataTask(with: configURL) { data, response, error in
+            guard let data = data else {
+                print("Failed to fetch config: \(error?.localizedDescription ?? "unknown error")")
+                return
+            }
 
-        let configuration = ARImageTrackingConfiguration()
-        configuration.trackingImages = referenceImages
-        configuration.maximumNumberOfTrackedImages = 1
+            do {
+                let decoded = try JSONDecoder().decode([String: [ARTarget]].self, from: data)
+                
+                self.targets = decoded["targets"] ?? []
 
-        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+                let group = DispatchGroup()
+
+                for target in self.targets {
+
+                    guard let imageUrl = URL(string: target.imageUrl) else { continue }
+
+                    group.enter()
+
+                    URLSession.shared.dataTask(with: imageUrl) { imageData, _, _ in defer { group.leave() }
+                        
+                        guard let imageData = imageData,
+                              let uiImage = UIImage(data: imageData),
+                              let cgImage = uiImage.cgImage else { return }
+                        
+                        let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
+                        arImage.name = target.name
+                        self.referenceImages.insert(arImage)
+                        
+                    }.resume()
+                }
+
+                group.notify(queue: .main) {
+                    let configuration = ARImageTrackingConfiguration()
+                    
+                    configuration.trackingImages = self.referenceImages
+                    
+                    configuration.maximumNumberOfTrackedImages = self.referenceImages.count
+                    
+                    self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+                }
+
+            } catch {
+                print("Failed to decode config: \(error.localizedDescription)")
+            }
+        }.resume()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -47,11 +105,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         let plane = SCNPlane(width: width, height: height)
 
-        #if APPCLIP
-        guard let url = URL(string: "https://helenagrinshpun.art/assets/videos/Magician.mp4") else { return nil }
-        #else
-        guard let url = Bundle.main.url(forResource: "Magic", withExtension: "mp4") else { return nil }
-        #endif
+        guard let name = imageAnchor.referenceImage.name,
+              let target = targets.first(where: { $0.name == name }),
+              let url = URL(string: target.videoUrl) else {
+            return nil
+        }
         
         let player = AVPlayer(url: url)
         self.player = player
