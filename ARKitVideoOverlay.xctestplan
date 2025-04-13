@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "56252E7A-4E72-45C9-8360-2F9480B5D171",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ARKitVideoOverlay.xcodeproj",
+      "identifier" : "FB9261092D96A84B0003B2FF",
+      "name" : "ARKitVideoOverlay"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ARKitVideoOverlay.xcodeproj",
+        "identifier" : "FB92611E2D96A84C0003B2FF",
+        "name" : "ARKitVideoOverlayTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ARKitVideoOverlay.xcodeproj",
+        "identifier" : "FB9261282D96A84C0003B2FF",
+        "name" : "ARKitVideoOverlayUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
