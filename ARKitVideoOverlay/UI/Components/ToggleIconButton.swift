@@ -60,7 +60,9 @@ final class ToggleIconButton: UIButton {
     }
     
     func attach(to view: UIView, target: Any, action: Selector, toggled: Bool, xOffset: CGFloat, yOffset: CGFloat, alignRight: Bool = false) {
+        
         setToggled(toggled)
+        
         addTarget(target, action: action, for: .touchUpInside)
         
         DispatchQueue.main.async {

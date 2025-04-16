@@ -70,9 +70,9 @@ class ARSessionManager: NSObject {
                     configuration.maximumNumberOfTrackedImages = self.referenceImages.count
                     
                     self.sceneView?.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+                    
+                    completion(self.targets)
                 }
-                
-                completion(self.targets)
                 
             } catch {
                 print("Failed to decode config: \(error.localizedDescription)")

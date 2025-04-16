@@ -16,11 +16,13 @@ enum VideoOverlayManager {
 
     private static var playPauseButton: UIButton?
     private static var muteButton: UIButton?
+    private static var players: [String: AVPlayer] = [:]
+    private static var observers: [PlayerObserver] = []
 
     static func createPreloaderOverlay(view: UIView) {
         guard let path = Bundle.main.path(forResource: "Loader", ofType:"mp4") else {
             print("Intro video not found")
-            return 
+            return
         }
 
         let player = AVPlayer(url: URL(fileURLWithPath: path))
@@ -40,7 +42,7 @@ enum VideoOverlayManager {
             object: player.currentItem,
             queue: .main
         ) { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 playerLayer.removeFromSuperlayer()
             }
         }
@@ -60,21 +62,26 @@ enum VideoOverlayManager {
         plane.firstMaterial?.diffuse.contents = UIColor.clear
         plane.firstMaterial?.isDoubleSided = true
         
-        let player = AVPlayer(url: url)
-        
+        let player: AVPlayer
+        if let existing = players[target.name] {
+            player = existing
+            print("♻️ Reusing AVPlayer for \(target.name)")
+        } else {
+            player = AVPlayer(url: url)
+            players[target.name] = player
+            print("🎥 Creating new AVPlayer for \(target.name)")
+
+            let observer = PlayerObserver()
+            observers.append(observer)
+            if let currentItem = player.currentItem {
+                currentItem.addObserver(observer, forKeyPath: "status", options: [.new, .initial], context: nil)
+            }
+        }
+
         let videoNode = SKVideoNode(avPlayer: player)
         
         player.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
-
-        NotificationCenter.default.addObserver(
-            forName: .AVPlayerItemDidPlayToEndTime,
-            object: player.currentItem,
-            queue: .main) { _ in
-                player.seek(to: CMTime.zero)
-                player.play()
-        }
-
-        videoNode.play()
+        print("🎥 Preparing AVPlayer with URL: \(url)")
 
         Task { @MainActor in
             do {
@@ -95,9 +102,15 @@ enum VideoOverlayManager {
                 videoNode.yScale = -1
                 videoScene.addChild(videoNode)
 
+                print("✅ Video scene created, assigning to plane")
                 plane.firstMaterial?.diffuse.contents = videoScene
+                
+                if player.currentItem?.status == .readyToPlay {
+                    print("⚠️ Player not ready: \(player.currentItem?.status.rawValue ?? -1)")
+                }
             } catch {
                 print("Failed to load video size: \(error)")
+                print("❌ Error loading asset track info: \(error.localizedDescription)")
             }
         }
 
@@ -106,8 +119,6 @@ enum VideoOverlayManager {
 
         let parentNode = SCNNode()
         parentNode.addChildNode(planeNode)
-        
-        updatePlayPauseIcon(isPlaying: true)
 
         return (parentNode, player)
     }
@@ -144,8 +155,7 @@ enum VideoOverlayManager {
 
     static func updatePlayPauseIcon(isPlaying: Bool) {
         let iconName =  isPlaying ? "pause.fill" : "play.fill"
-        
-        print("Updating play pause icon", iconName)
+
         
         DispatchQueue.main.async {
             if var config = playPauseButton?.configuration {
