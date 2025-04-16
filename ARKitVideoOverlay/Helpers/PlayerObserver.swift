@@ -9,15 +9,21 @@ import Foundation
 import AVFoundation
 
 class PlayerObserver: NSObject {
+    private let player: AVPlayer
+
+    init(player: AVPlayer) {
+        self.player = player
+        super.init()
+    }
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard keyPath == "status",
               let item = object as? AVPlayerItem else { return }
 
         if item.status == .readyToPlay {
-            print("🎬 Player item is ready. Starting playback.")
+            print("🎬 Player item is ready. Starting playback.", object as Any)
             DispatchQueue.main.async {
-                // Здесь вы должны как-то найти соответствующий AVPlayer и вызвать .play()
-                // Например, если вы передадите его через init или замыкание
+                self.player.play()
             }
         } else if item.status == .failed {
             print("❌ AVPlayerItem failed:", item.error?.localizedDescription ?? "Unknown error")

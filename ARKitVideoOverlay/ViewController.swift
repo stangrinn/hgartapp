@@ -10,15 +10,25 @@ import ReplayKit
 class ViewController: UIViewController, ARSCNViewDelegate {
     
     var arSessionManager: ARSessionManager!
+    
     var targets: [ARTarget] = []
+    
     var referenceImages: Set<ARReferenceImage> = []
+    
     var playersByAnchor: [UUID: AVPlayer] = [:]
+    
     var currentAnchorID: UUID?
+    
     var sceneView: ARSCNView!
+    
     var trackedNodes: [UUID: SCNNode] = [:]
+    
     let recorder = RPScreenRecorder.shared()
+    
     var isRecording = false
+    
     private var isPlaying = true
+    
     private var isMuted = false
     
     
@@ -33,9 +43,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         VideoOverlayManager.createPreloaderOverlay(view: view)
         
         arSessionManager = ARSessionManager(sceneView: sceneView)
+        
         arSessionManager.loadTargetsAndStartSession(completion: { [weak self] loadedTargets in
             self?.targets = loadedTargets
-//            print("Targets loaded: \(loadedTargets)")
         })
        
         VideoOverlayManager.setupControls(
@@ -66,72 +76,82 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         guard let imageAnchor = anchor as? ARImageAnchor else { return nil }
         
-        playOverlay(for: imageAnchor)
-        
-        print("Renderer--NodeForAnchor", anchor.identifier, trackedNodes[anchor.identifier] ?? "anchor not found")
+        createOrPlayMainOverlay(for: imageAnchor)
         
         return trackedNodes[anchor.identifier]
     }
     
-    func renderer(_ renderer: any SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-        print("RENDERER--DidRemove", anchor.identifier)
-    }
-    
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        
         guard let imageAnchor = anchor as? ARImageAnchor else { return }
         
-        print ("RENDEERER--DidUpdate", imageAnchor.isTracked)
+//        print ("RENDERER--DidUpdate", imageAnchor.isTracked, anchor.identifier)
 
         if !imageAnchor.isTracked {
-            print("Anchor lost: \(anchor.identifier)")
-
-//            if let player = playersByAnchor[anchor.identifier] {
-//                player.pause()
-//                player.replaceCurrentItem(with: nil)
-//                playersByAnchor.removeValue(forKey: anchor.identifier)
-//            }
-//
-//            node.removeFromParentNode()
-//            trackedNodes.removeValue(forKey: anchor.identifier)
-
+            
+            if let player = playersByAnchor[anchor.identifier] {
+                player.pause()
+                player.seek(to: .zero)
+            }
+            
             if currentAnchorID == anchor.identifier {
                 currentAnchorID = nil
             }
-
+            
             isPlaying = false
+        
             VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
+            
+            print("Anchor lost ID: \(anchor.identifier), isPlaying: \(isPlaying)")
+            
         } else {
-            playOverlay(for: imageAnchor)
+            createOrPlayMainOverlay(for: imageAnchor)
         }
     }
     
-    private func playOverlay(for anchor: ARImageAnchor) {
+    private func createOrPlayMainOverlay(for anchor: ARImageAnchor) {
+        
         if let player = playersByAnchor[anchor.identifier] {
-            player.seek(to: .zero)
+            
             if player.timeControlStatus != .playing {
+                
+                player.seek(to: .zero)
+                
                 player.play()
-                print("▶️ Reused player restarted")
-            } else {
-                print("⏯ Player already playing")
+                
             }
+            
             isPlaying = true
+            
             VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
+            
+//          print("Restored VIDEO OVERLAY for anchor: \(anchor.identifier)")
+            
             return
         }
 
-        if let result = VideoOverlayManager.createOverlay(for: anchor, targets: targets) {
+        if let result = VideoOverlayManager.createMainOverlay(for: anchor, targets: targets) {
+            
             currentAnchorID = anchor.identifier
+            
             playersByAnchor[anchor.identifier] = result.player
+            
             result.player.seek(to: .zero)
-            result.player.play()
+            
+//            result.player.play()
+            
             isPlaying = true
+            
             VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
+            
             trackedNodes[anchor.identifier] = result.node
             
             print("Created VIDEO OVERLAY for anchor: \(anchor.identifier)")
         }
     }
-        
+    
+    
+    /// PLAYER FUNCTIONS
     @objc private func togglePlayPause() {
         
         guard let currentAnchorID = currentAnchorID,
@@ -179,8 +199,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @objc private func toggleMute() {
         guard let currentAnchorID = currentAnchorID,
               let player = playersByAnchor[currentAnchorID] else { return }
+        
         player.isMuted = !player.isMuted
+        
         self.isMuted.toggle()
+        
         VideoOverlayManager.updateMuteIcon(isMuted: isMuted)
     }
 }

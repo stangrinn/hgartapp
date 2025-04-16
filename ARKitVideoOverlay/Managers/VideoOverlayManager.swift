@@ -12,7 +12,7 @@ import ARKit
 import Foundation
 import CoreMedia
 
-enum VideoOverlayManager {
+class VideoOverlayManager {
 
     private static var playPauseButton: UIButton?
     private static var muteButton: UIButton?
@@ -48,7 +48,7 @@ enum VideoOverlayManager {
         }
     }
 
-    static func createOverlay(for imageAnchor: ARImageAnchor, targets: [ARTarget]) -> (node: SCNNode, player: AVPlayer)? {
+    static func createMainOverlay(for imageAnchor: ARImageAnchor, targets: [ARTarget]) -> (node: SCNNode, player: AVPlayer)? {
 
         guard let name = imageAnchor.referenceImage.name,
               let target = targets.first(where: { $0.name == name }),
@@ -63,16 +63,24 @@ enum VideoOverlayManager {
         plane.firstMaterial?.isDoubleSided = true
         
         let player: AVPlayer
+        
         if let existing = players[target.name] {
+            
             player = existing
+            
             print("♻️ Reusing AVPlayer for \(target.name)")
         } else {
+            
             player = AVPlayer(url: url)
+            
             players[target.name] = player
+            
             print("🎥 Creating new AVPlayer for \(target.name)")
 
-            let observer = PlayerObserver()
+            let observer = PlayerObserver(player: player)
+            
             observers.append(observer)
+        
             if let currentItem = player.currentItem {
                 currentItem.addObserver(observer, forKeyPath: "status", options: [.new, .initial], context: nil)
             }
@@ -81,28 +89,39 @@ enum VideoOverlayManager {
         let videoNode = SKVideoNode(avPlayer: player)
         
         player.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
+        
         print("🎥 Preparing AVPlayer with URL: \(url)")
 
         Task { @MainActor in
             do {
                 let asset = AVURLAsset(url: url)
+                
                 let tracks = try await asset.loadTracks(withMediaType: .video)
+                
                 guard let track = tracks.first else { return }
 
                 let size = try await track.load(.naturalSize)
+                
                 let transform = try await track.load(.preferredTransform)
+                
                 let transformedSize = size.applying(transform)
 
                 let width = abs(transformedSize.width)
+                
                 let height = abs(transformedSize.height)
 
                 let videoScene = SKScene(size: CGSize(width: width, height: height))
+                
                 videoNode.position = CGPoint(x: width / 2, y: height / 2)
+                
                 videoNode.size = CGSize(width: width, height: height)
+                
                 videoNode.yScale = -1
+                
                 videoScene.addChild(videoNode)
 
                 print("✅ Video scene created, assigning to plane")
+                
                 plane.firstMaterial?.diffuse.contents = videoScene
                 
                 if player.currentItem?.status == .readyToPlay {
@@ -115,9 +134,11 @@ enum VideoOverlayManager {
         }
 
         let planeNode = SCNNode(geometry: plane)
+        
         planeNode.eulerAngles.x = -.pi / 2
 
         let parentNode = SCNNode()
+        
         parentNode.addChildNode(planeNode)
 
         return (parentNode, player)
@@ -137,6 +158,7 @@ enum VideoOverlayManager {
             backgroundColor: UIColor.black.withAlphaComponent(0.4),
             symbolSize: 14
         )
+        
         playPauseButton.attach(to: view, target: target, action: playPauseSelector, toggled: isPlaying(), xOffset: 32, yOffset: 32)
 
         self.playPauseButton = playPauseButton
