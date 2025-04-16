@@ -52,6 +52,7 @@
 		FB2D9FC72D9C685E00CBAD8C /* Exceptions for "ARKitVideoOverlay" folder in "weart" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Helpers/PlayerObserver.swift,
 				Loader.mp4,
 				Managers/ARSessionManager.swift,
 				Managers/VideoOverlayManager.swift,
