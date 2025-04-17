@@ -1,66 +1,52 @@
-import Foundation
 import UIKit
 import ARKit
 import SceneKit
-import SpriteKit
-import AVFoundation
 import ReplayKit
 
-
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController {
     
-    var arSessionManager: ARSessionManager!
-    
-    var targets: [ARTarget] = []
-    
-    var referenceImages: Set<ARReferenceImage> = []
-    
-    var playersByAnchor: [UUID: AVPlayer] = [:]
-    
-    var currentAnchorID: UUID?
-    
-    var sceneView: ARSCNView!
-    
-    var trackedNodes: [UUID: SCNNode] = [:]
-    
-    let recorder = RPScreenRecorder.shared()
-    
-    var isRecording = false
-    
-    private var isPlaying = true
-    
-    private var isMuted = false
-    
+    private var arSessionManager: ARSessionManager!
+    private var videoManager: VideoManager!
+    private var recordingManager: RecordingManager!
+    private var arSceneManager: ARSceneManager!
+    private var sceneView: ARSCNView!
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
+        setupSceneView()
+        setupManagers()
+        setupUI()
+    }
+    
+    private func setupSceneView() {
         sceneView = ARSCNView(frame: view.frame)
-        
         view.addSubview(sceneView)
+        sceneView.scene = SCNScene()
+    }
+    
+    private func setupManagers() {
+        videoManager = VideoManager(view: view)
+        recordingManager = RecordingManager()
+        arSceneManager = ARSceneManager(videoManager: videoManager)
         
-        VideoOverlayManager.createPreloaderOverlay(view: view)
+        sceneView.delegate = arSceneManager
         
         arSessionManager = ARSessionManager(sceneView: sceneView)
+        arSessionManager.loadTargetsAndStartSession { [weak self] loadedTargets in
+            self?.arSceneManager.setTargets(loadedTargets)
+        }
+    }
+    
+    private func setupUI() {
+        VideoOverlayManager.createPreloaderOverlay(view: view)
         
-        arSessionManager.loadTargetsAndStartSession(completion: { [weak self] loadedTargets in
-            self?.targets = loadedTargets
-        })
-       
-        VideoOverlayManager.setupControls(
+        videoManager.setupControls(
             view: self.view,
             target: self,
             playPauseSelector: #selector(togglePlayPause),
             recordSelector: #selector(startStopRecording),
-            muteSelector: #selector(toggleMute),
-            isMuted: { [weak self] in self?.isMuted ?? false },
-            isPlaying: { [weak self] in self?.isPlaying ?? false }
+            muteSelector: #selector(toggleMute)
         )
-        
-        sceneView.delegate = self
-        
-        sceneView.scene = SCNScene()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,144 +58,41 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        
-        guard let imageAnchor = anchor as? ARImageAnchor else { return nil }
-        
-        createOrPlayMainOverlay(for: imageAnchor)
-        
-        return trackedNodes[anchor.identifier]
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        
-        guard let imageAnchor = anchor as? ARImageAnchor else { return }
-        
-//        print ("RENDERER--DidUpdate", imageAnchor.isTracked, anchor.identifier)
-
-        if !imageAnchor.isTracked {
-            
-            if let player = playersByAnchor[anchor.identifier] {
-                player.pause()
-                player.seek(to: .zero)
-            }
-            
-            if currentAnchorID == anchor.identifier {
-                currentAnchorID = nil
-            }
-            
-            isPlaying = false
-        
-            VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
-            
-            print("Anchor lost ID: \(anchor.identifier), isPlaying: \(isPlaying)")
-            
-        } else {
-            createOrPlayMainOverlay(for: imageAnchor)
-        }
-    }
-    
-    private func createOrPlayMainOverlay(for anchor: ARImageAnchor) {
-        
-        if let player = playersByAnchor[anchor.identifier] {
-            
-            if player.timeControlStatus != .playing {
-                
-                player.seek(to: .zero)
-                
-                player.play()
-                
-            }
-            
-            isPlaying = true
-            
-            VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
-            
-//          print("Restored VIDEO OVERLAY for anchor: \(anchor.identifier)")
-            
-            return
-        }
-
-        if let result = VideoOverlayManager.createMainOverlay(for: anchor, targets: targets) {
-            
-            currentAnchorID = anchor.identifier
-            
-            playersByAnchor[anchor.identifier] = result.player
-            
-            result.player.seek(to: .zero)
-            
-//            result.player.play()
-            
-            isPlaying = true
-            
-            VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
-            
-            trackedNodes[anchor.identifier] = result.node
-            
-            print("Created VIDEO OVERLAY for anchor: \(anchor.identifier)")
-        }
-    }
-    
-    
-    /// PLAYER FUNCTIONS
     @objc private func togglePlayPause() {
-        
-        guard let currentAnchorID = currentAnchorID,
-              let player = playersByAnchor[currentAnchorID] else {
-            print("Player is nil")
-            return
-        }
-        
-        if player.timeControlStatus == .playing {
-            player.pause()
-            self.isPlaying = false
-        } else {
-            player.play()
-            self.isPlaying = true
-        }
-        
-        VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
+        print("ViewController: togglePlayPause called")
+        videoManager.togglePlayPause()
     }
-
+    
     @objc private func startStopRecording() {
-        if isRecording {
-            recorder.stopRecording { previewVC, error in
-                self.isRecording = false
+        print("ViewController: startStopRecording called, isRecording: \(recordingManager.isRecordingActive)")
+        if recordingManager.isRecordingActive {
+            recordingManager.stopRecording { [weak self] previewVC, error in
                 if let error = error {
-                    print("Stop recording error: \(error.localizedDescription)")
-                    return
+                    print("ViewController: Recording stop error: \(error.localizedDescription)")
                 }
                 if let previewVC = previewVC {
                     previewVC.previewControllerDelegate = self
-                    self.present(previewVC, animated: true, completion: nil)
+                    self?.present(previewVC, animated: true, completion: nil)
                 }
             }
         } else {
-            recorder.startRecording { error in
+            recordingManager.startRecording { error in
                 if let error = error {
-                    print("Start recording error: \(error.localizedDescription)")
-                } else {
-                    self.isRecording = true
-                    print("Recording started")
+                    print("ViewController: Recording start error: \(error.localizedDescription)")
                 }
             }
         }
     }
-
+    
     @objc private func toggleMute() {
-        guard let currentAnchorID = currentAnchorID,
-              let player = playersByAnchor[currentAnchorID] else { return }
-        
-        player.isMuted = !player.isMuted
-        
-        self.isMuted.toggle()
-        
-        VideoOverlayManager.updateMuteIcon(isMuted: isMuted)
+        print("ViewController: toggleMute called")
+        videoManager.toggleMute()
     }
 }
 
 extension ViewController: RPPreviewViewControllerDelegate {
     func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
+        print("ViewController: previewControllerDidFinish")
         dismiss(animated: true, completion: nil)
     }
 }
