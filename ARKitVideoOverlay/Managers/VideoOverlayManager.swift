@@ -146,32 +146,31 @@ class VideoOverlayManager {
 
     static func setupControls(view: UIView,
                               target: Any,
-                              playPauseSelector: Selector,
-                              recordSelector: Selector,
+//                              playPauseSelector: Selector,
                               muteSelector: Selector,
                               isMuted: @escaping () -> Bool,
                               isPlaying: @escaping () -> Bool) {
 
-        let playPauseButton = ToggleIconButton(
-            defaultIconName: "play.fill",
-            toggledIconName: "pause.fill",
-            backgroundColor: UIColor.black.withAlphaComponent(0.4),
-            symbolSize: 14
-        )
+//        let playPauseButton = ToggledIconButton(
+//            defaultIconName: "play.fill",
+//            toggledIconName: "pause.fill",
+//            backgroundColor: UIColor.black.withAlphaComponent(0.4),
+//            symbolSize: 14
+//        )
+//
+//        playPauseButton.attach(to: view, target: target, action: playPauseSelector, toggled: isPlaying(), xOffset: 32, yOffset: 32)
+//        playPauseButton.isHidden = true
+//
+//        self.playPauseButton = playPauseButton
 
-        playPauseButton.attach(to: view, target: target, action: playPauseSelector, toggled: isPlaying(), xOffset: 32, yOffset: 32)
-        playPauseButton.isHidden = true
-
-        self.playPauseButton = playPauseButton
-
-        let muteButton = ToggleIconButton(
+        let muteButton = ToggledIconButton(
             defaultIconName: "speaker.wave.2.fill",
             toggledIconName: "speaker.slash.fill",
             backgroundColor: UIColor.black.withAlphaComponent(0.4),
             symbolSize: 14
         )
 
-        muteButton.attach(to: view, target: target, action: muteSelector, toggled: isMuted(), xOffset: 32, yOffset: 32, alignRight: true)
+        muteButton.attach(to: view, target: target, action: muteSelector, toggled: isMuted(), xOffset: 32, yOffset: 32)
         muteButton.isHidden = true
 
         self.muteButton = muteButton

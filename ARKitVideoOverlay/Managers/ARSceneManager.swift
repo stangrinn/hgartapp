@@ -8,9 +8,11 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     private var trackedNodes: [UUID: SCNNode] = [:]
     private weak var videoManager: VideoManager?
     private var targets: [ARTarget] = []
+    private var scannerOverlay: TargetScannerOverlay!
     
-    init(videoManager: VideoManager) {
+    init(videoManager: VideoManager, scannerOverlay: TargetScannerOverlay) {
         self.videoManager = videoManager
+        self.scannerOverlay = scannerOverlay
         super.init()
     }
     
@@ -29,6 +31,8 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         if let node = videoManager?.createOrPlayMainOverlay(for: imageAnchor, targets: targets) {
             print("ARSceneManager: node created for anchor: \(anchor.identifier)")
             trackedNodes[anchor.identifier] = node
+
+            scannerOverlay.stopAndRemove()
             return node
         }
         
@@ -43,7 +47,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         }
         
         if !imageAnchor.isTracked {
-            videoManager?.pauseVideo(for: anchor.identifier)
+            videoManager?.setToStartAndPauseVideo(for: anchor.identifier)
             videoManager?.clearCurrentAnchor()
         } else {
             _ = videoManager?.createOrPlayMainOverlay(for: imageAnchor, targets: targets)

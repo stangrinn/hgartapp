@@ -53,6 +53,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Helpers/PlayerObserver.swift,
+				Helpers/TargetScannerOverlay.swift,
 				Managers/ARSceneManager.swift,
 				Managers/ARSessionManager.swift,
 				Managers/RecordingManager.swift,

@@ -8,6 +8,7 @@ class ViewController: UIViewController {
     private var arSessionManager: ARSessionManager!
     private var videoManager: VideoManager!
     private var recordingManager: RecordingManager!
+    private var scannerOverlay: TargetScannerOverlay!
     private var arSceneManager: ARSceneManager!
     private var sceneView: ARSCNView!
     
@@ -19,6 +20,7 @@ class ViewController: UIViewController {
     }
     
     private func setupSceneView() {
+        
         sceneView = ARSCNView(frame: view.frame)
         view.addSubview(sceneView)
         sceneView.scene = SCNScene()
@@ -28,9 +30,11 @@ class ViewController: UIViewController {
         
         videoManager = VideoManager(view: view)
         
-        recordingManager = RecordingManager()
+        scannerOverlay = TargetScannerOverlay(frame: view.bounds)
         
-        arSceneManager = ARSceneManager(videoManager: videoManager)
+        view.addSubview(scannerOverlay)
+        
+        arSceneManager = ARSceneManager(videoManager: videoManager, scannerOverlay: scannerOverlay)
         
         sceneView.delegate = arSceneManager
         
@@ -55,8 +59,6 @@ class ViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         sceneView.session.pause()
-        
-        print("ViewController: viewWillDisappear")
     }
 }
 

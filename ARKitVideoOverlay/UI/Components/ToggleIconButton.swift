@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ToggleIconButton: UIButton {
+final class ToggledIconButton: UIButton {
     private let defaultIconName: String
     private let toggledIconName: String
     private var isToggled = false
