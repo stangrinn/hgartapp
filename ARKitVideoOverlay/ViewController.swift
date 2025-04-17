@@ -39,14 +39,7 @@ class ViewController: UIViewController {
     
     private func setupUI() {
         VideoOverlayManager.createPreloaderOverlay(view: view)
-        
-        videoManager.setupControls(
-            view: self.view,
-            target: self,
-            playPauseSelector: #selector(togglePlayPause),
-            recordSelector: #selector(startStopRecording),
-            muteSelector: #selector(toggleMute)
-        )
+        videoManager.setupControls(view: view)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,37 +49,6 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         sceneView.session.pause()
-    }
-    
-    @objc private func togglePlayPause() {
-        print("ViewController: togglePlayPause called")
-        videoManager.togglePlayPause()
-    }
-    
-    @objc private func startStopRecording() {
-        print("ViewController: startStopRecording called, isRecording: \(recordingManager.isRecordingActive)")
-        if recordingManager.isRecordingActive {
-            recordingManager.stopRecording { [weak self] previewVC, error in
-                if let error = error {
-                    print("ViewController: Recording stop error: \(error.localizedDescription)")
-                }
-                if let previewVC = previewVC {
-                    previewVC.previewControllerDelegate = self
-                    self?.present(previewVC, animated: true, completion: nil)
-                }
-            }
-        } else {
-            recordingManager.startRecording { error in
-                if let error = error {
-                    print("ViewController: Recording start error: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-    
-    @objc private func toggleMute() {
-        print("ViewController: toggleMute called")
-        videoManager.toggleMute()
     }
 }
 

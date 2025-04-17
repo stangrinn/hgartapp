@@ -53,13 +53,13 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Helpers/PlayerObserver.swift,
-				Loader.mp4,
 				Managers/ARSceneManager.swift,
 				Managers/ARSessionManager.swift,
 				Managers/RecordingManager.swift,
 				Managers/VideoManager.swift,
 				Managers/VideoOverlayManager.swift,
 				Models/ARTarget.swift,
+				UI/Assets/Loader.mp4,
 				UI/Components/ToggleIconButton.swift,
 				ViewController.swift,
 			);

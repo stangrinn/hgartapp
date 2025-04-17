@@ -6,8 +6,8 @@ import ARKit
 class VideoManager {
     private var playersByAnchor: [UUID: AVPlayer] = [:]
     private var currentAnchorID: UUID?
-    private var isPlaying = true
-    private var isMuted = false
+    private var isPlaying: Bool = true
+    private var isMuted: Bool = false
     private weak var view: UIView?
     
     init(view: UIView) {
@@ -23,10 +23,10 @@ class VideoManager {
     ) {
         VideoOverlayManager.setupControls(
             view: view,
-            target: target,
-            playPauseSelector: playPauseSelector,
-            recordSelector: recordSelector,
-            muteSelector: muteSelector,
+            target: self,
+            playPauseSelector: #selector(togglePlayPause),
+            recordSelector: #selector(startStopRecording),
+            muteSelector: #selector(toggleMute),
             isMuted: { [weak self] in self?.isMuted ?? false },
             isPlaying: { [weak self] in self?.isPlaying ?? false }
         )
@@ -39,7 +39,9 @@ class VideoManager {
                 player.play()
             }
             isPlaying = true
+            currentAnchorID = anchor.identifier
             VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
+            VideoOverlayManager.setControlsVisible(true)
             return nil
         }
 
@@ -49,16 +51,19 @@ class VideoManager {
             result.player.seek(to: .zero)
             isPlaying = true
             VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
+            VideoOverlayManager.setControlsVisible(true)
             return result.node
         }
         
+        VideoOverlayManager.setControlsVisible(false)
         return nil
     }
     
-    func togglePlayPause() {
+    @objc func togglePlayPause() {
         guard let currentAnchorID = currentAnchorID,
               let player = playersByAnchor[currentAnchorID] else {
             print("Player is nil")
+            VideoOverlayManager.setControlsVisible(false)
             return
         }
         
@@ -73,13 +78,18 @@ class VideoManager {
         VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
     }
     
-    func toggleMute() {
+    @objc func toggleMute() {
         guard let currentAnchorID = currentAnchorID,
               let player = playersByAnchor[currentAnchorID] else { return }
         
         player.isMuted = !player.isMuted
         isMuted.toggle()
         VideoOverlayManager.updateMuteIcon(isMuted: isMuted)
+    }
+    
+    @objc func startStopRecording() {
+        // TODO: Implement recording functionality
+        print("Recording functionality to be implemented")
     }
     
     func pauseVideo(for anchorID: UUID) {
@@ -89,9 +99,11 @@ class VideoManager {
         }
         isPlaying = false
         VideoOverlayManager.updatePlayPauseIcon(isPlaying: isPlaying)
+        VideoOverlayManager.setControlsVisible(false)
     }
     
     func clearCurrentAnchor() {
         currentAnchorID = nil
+        VideoOverlayManager.setControlsVisible(false)
     }
 } 
