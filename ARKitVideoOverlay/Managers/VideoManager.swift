@@ -54,8 +54,8 @@ class VideoManager {
             playersByAnchor[anchor.identifier] = result.player
             
             result.player.seek(to: .zero)
-            
-            result.player.isMuted = (isMuted == nil ? false : isMuted)!  /// Set muted due to the best practicies
+
+            result.player.isMuted = (isMuted == nil ? true : isMuted!)  /// Set muted due to the best practicies
             
             let player = result.player
 
@@ -79,7 +79,7 @@ class VideoManager {
 
     func setToStartAndPauseVideo(for anchorID: UUID) {
         
-        if let player = playersByAnchor[anchorID] {
+        if let player: AVPlayer = playersByAnchor[anchorID] {
             player.pause()
             player.seek(to: .zero)
         }

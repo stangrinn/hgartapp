@@ -56,11 +56,13 @@ class VideoOverlayManager {
             return nil
         }
 
-        let plane: SCNPlane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width,
+        let plane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width,
                              height: imageAnchor.referenceImage.physicalSize.height)
-
+        
         plane.firstMaterial?.diffuse.contents = UIColor.clear
         plane.firstMaterial?.isDoubleSided = true
+        plane.firstMaterial?.transparency = 1.0  
+        plane.firstMaterial?.writesToDepthBuffer = false
 
         let player: AVPlayer
 
@@ -151,18 +153,6 @@ class VideoOverlayManager {
                               isMuted: @escaping () -> Bool,
                               isPlaying: @escaping () -> Bool) {
 
-//        let playPauseButton = ToggledIconButton(
-//            defaultIconName: "play.fill",
-//            toggledIconName: "pause.fill",
-//            backgroundColor: UIColor.black.withAlphaComponent(0.4),
-//            symbolSize: 14
-//        )
-//
-//        playPauseButton.attach(to: view, target: target, action: playPauseSelector, toggled: isPlaying(), xOffset: 32, yOffset: 32)
-//        playPauseButton.isHidden = true
-//
-//        self.playPauseButton = playPauseButton
-
         let muteButton = ToggledIconButton(
             defaultIconName: "speaker.wave.2.fill",
             toggledIconName: "speaker.slash.fill",
@@ -170,7 +160,7 @@ class VideoOverlayManager {
             symbolSize: 14
         )
 
-        muteButton.attach(to: view, target: target, action: muteSelector, toggled: isMuted(), xOffset: 32, yOffset: 32)
+        muteButton.attach(to: view, target: target, action: muteSelector, toggled: isMuted(), xOffset: 32, yOffset: 32, alignRight: true)
         muteButton.isHidden = true
 
         self.muteButton = muteButton
@@ -178,8 +168,11 @@ class VideoOverlayManager {
 
     static func setControlsVisible(_ visible: Bool) {
         DispatchQueue.main.async {
-            playPauseButton?.isHidden = !visible
-            muteButton?.isHidden = !visible
+            UIView.animate(withDuration: 0.5, animations: {
+                muteButton?.alpha = visible ? 1.0 : 0.0
+            }, completion: { _ in
+                muteButton?.isHidden = !visible
+            })
         }
     }
 
