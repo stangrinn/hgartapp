@@ -19,9 +19,9 @@ let package: Package = Package(
             dependencies: [],
             path: "ARKitVideoOverlay",
             linkerSettings: [
-                .linkedFramework("UIKit"),
                 .linkedFramework("ARKit"),
                 .linkedFramework("SceneKit"),
+                .linkedFramework("UIKit"),
                 .linkedFramework("AVFoundation")
             ]
         )

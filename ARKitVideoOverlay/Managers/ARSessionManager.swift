@@ -11,6 +11,7 @@ import UIKit
 import SceneKit
 
 class ARSessionManager: NSObject {
+
     private var targets: [ARTarget] = []
     private var referenceImages: Set<ARReferenceImage> = []
     private let sceneView: ARSCNView
@@ -20,6 +21,12 @@ class ARSessionManager: NSObject {
         self.sceneView = sceneView
     }
     
+    /**
+        Loads the targets from the config file and starts the session.
+        @param:
+            - completion: A closure that is called when the targets are loaded and the session is started.
+            - Returns: An array of targets.
+    */
     func loadTargetsAndStartSession(completion: @escaping ([ARTarget]) -> Void) {
         
         guard let url = URL(string: CONFIG_URL) else {

@@ -1,7 +1,10 @@
+import Foundation
+import UIKit
 import ARKit
 import SceneKit
 
 class ARSceneManager: NSObject, ARSCNViewDelegate {
+    
     private var trackedNodes: [UUID: SCNNode] = [:]
     private weak var videoManager: VideoManager?
     private var targets: [ARTarget] = []
@@ -17,7 +20,6 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     }
     
     // MARK: - ARSCNViewDelegate
-    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         guard let imageAnchor = anchor as? ARImageAnchor else {
             print("ARSceneManager: anchor is not ARImageAnchor")

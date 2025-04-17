@@ -16,15 +16,18 @@ class PlayerObserver: NSObject {
         super.init()
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey : Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
         guard keyPath == "status",
               let item = object as? AVPlayerItem else { return }
 
         if item.status == .readyToPlay {
-            print("🎬 Player item is ready. Starting playback.", object as Any)
-            DispatchQueue.main.async {
-                self.player.play()
-            }
+            print("🎬 Player item is ready. Starting playback.")
+            self.player.play()
         } else if item.status == .failed {
             print("❌ AVPlayerItem failed:", item.error?.localizedDescription ?? "Unknown error")
         }

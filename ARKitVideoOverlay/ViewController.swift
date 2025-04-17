@@ -4,7 +4,7 @@ import SceneKit
 import ReplayKit
 
 class ViewController: UIViewController {
-    
+
     private var arSessionManager: ARSessionManager!
     private var videoManager: VideoManager!
     private var recordingManager: RecordingManager!
@@ -25,13 +25,17 @@ class ViewController: UIViewController {
     }
     
     private func setupManagers() {
+        
         videoManager = VideoManager(view: view)
+        
         recordingManager = RecordingManager()
+        
         arSceneManager = ARSceneManager(videoManager: videoManager)
         
         sceneView.delegate = arSceneManager
         
         arSessionManager = ARSessionManager(sceneView: sceneView)
+        
         arSessionManager.loadTargetsAndStartSession { [weak self] loadedTargets in
             self?.arSceneManager.setTargets(loadedTargets)
         }
@@ -47,8 +51,12 @@ class ViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        
         super.viewWillDisappear(animated)
+        
         sceneView.session.pause()
+        
+        print("ViewController: viewWillDisappear")
     }
 }
 
