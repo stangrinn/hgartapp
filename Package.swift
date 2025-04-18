@@ -18,12 +18,21 @@ let package: Package = Package(
             name: "ARKitVideoOverlay",
             dependencies: [],
             path: "ARKitVideoOverlay",
+            resources: [
+                .process("UI/Assets/Loader.mp4"),
+                .process("Assets.xcassets")
+            ],
             linkerSettings: [
                 .linkedFramework("ARKit"),
                 .linkedFramework("SceneKit"),
                 .linkedFramework("UIKit"),
                 .linkedFramework("AVFoundation")
             ]
+        ),
+        .testTarget(
+            name: "ARKitVideoOverlayTests",
+            dependencies: ["ARKitVideoOverlay"],
+            path: "Tests"
         )
     ]
 )
