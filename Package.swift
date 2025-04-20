@@ -32,7 +32,7 @@ let package: Package = Package(
         .testTarget(
             name: "ARKitVideoOverlayTests",
             dependencies: ["ARKitVideoOverlay"],
-            path: "Tests"
+            path: "ARKitVideoOverlayTests"
         )
     ]
 )

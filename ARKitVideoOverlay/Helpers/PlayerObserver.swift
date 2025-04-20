@@ -9,11 +9,28 @@ import Foundation
 import AVFoundation
 
 class PlayerObserver: NSObject {
-    private let player: AVPlayer
+    private let _player: AVPlayer
+    private var isObserving = false
+    
+    var player: AVPlayer {
+        return _player
+    }
 
     init(player: AVPlayer) {
-        self.player = player
+        self._player = player
         super.init()
+    }
+    
+    func startObserving() {
+        guard !isObserving, let currentItem = _player.currentItem else { return }
+        currentItem.addObserver(self, forKeyPath: "status", options: [.new, .initial], context: nil)
+        isObserving = true
+    }
+    
+    func stopObserving() {
+        guard isObserving, let currentItem = _player.currentItem else { return }
+        currentItem.removeObserver(self, forKeyPath: "status")
+        isObserving = false
     }
 
     override func observeValue(
@@ -27,7 +44,7 @@ class PlayerObserver: NSObject {
 
         if item.status == .readyToPlay {
             print("🎬 Player item is ready. Starting playback.")
-            self.player.play()
+            self._player.play()
         } else if item.status == .failed {
             print("❌ AVPlayerItem failed:", item.error?.localizedDescription ?? "Unknown error")
         }

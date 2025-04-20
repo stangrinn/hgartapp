@@ -19,7 +19,7 @@
 			remoteGlobalIDString = FB2D9F8F2D9C577A00CBAD8C;
 			remoteInfo = weart;
 		};
-		FB54843B2DB16FB200919B57 /* PBXContainerItemProxy */ = {
+		FBF674D62DB1FCAE00F84E99 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FB9261022D96A84B0003B2FF /* Project object */;
 			proxyType = 1;
@@ -45,8 +45,8 @@
 /* Begin PBXFileReference section */
 		FB2D9F902D9C577A00CBAD8C /* weart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB3E601C2D96B226006EDCDA /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
-		FB5484372DB16FB200919B57 /* ARKitVideoOverlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARKitVideoOverlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB92610A2D96A84B0003B2FF /* ARKitVideoOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARKitVideoOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBF674D22DB1FCAE00F84E99 /* ARKitVideoOverlayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARKitVideoOverlayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -85,22 +85,17 @@
 			path = weart;
 			sourceTree = "<group>";
 		};
-		FB5484162DB16E0800919B57 /* ARKitVideoOverlayTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ARKitVideoOverlayTests;
-			sourceTree = "<group>";
-		};
-		FB5484382DB16FB200919B57 /* ARKitVideoOverlayTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ARKitVideoOverlayTests;
-			sourceTree = "<group>";
-		};
 		FB92610C2D96A84B0003B2FF /* ARKitVideoOverlay */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				FB2D9FC72D9C685E00CBAD8C /* Exceptions for "ARKitVideoOverlay" folder in "weart" target */,
 			);
 			path = ARKitVideoOverlay;
+			sourceTree = "<group>";
+		};
+		FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ARKitVideoOverlayTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -113,18 +108,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB5484342DB16FB200919B57 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FB9261072D96A84B0003B2FF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				FB3E601D2D96B226006EDCDA /* ARKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBF674CF2DB1FCAE00F84E99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,9 +137,8 @@
 		FB9261012D96A84B0003B2FF = {
 			isa = PBXGroup;
 			children = (
-				FB5484162DB16E0800919B57 /* ARKitVideoOverlayTests */,
 				FB2D9F912D9C577A00CBAD8C /* weart */,
-				FB5484382DB16FB200919B57 /* ARKitVideoOverlayTests */,
+				FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */,
 				FB3E601B2D96B226006EDCDA /* Frameworks */,
 				FB92610B2D96A84B0003B2FF /* Products */,
 				FB92610C2D96A84B0003B2FF /* ARKitVideoOverlay */,
@@ -156,7 +150,7 @@
 			children = (
 				FB92610A2D96A84B0003B2FF /* ARKitVideoOverlay.app */,
 				FB2D9F902D9C577A00CBAD8C /* weart.app */,
-				FB5484372DB16FB200919B57 /* ARKitVideoOverlayTests.xctest */,
+				FBF674D22DB1FCAE00F84E99 /* ARKitVideoOverlayTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,7 +172,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				FB2D9F912D9C577A00CBAD8C /* weart */,
-				FB5484162DB16E0800919B57 /* ARKitVideoOverlayTests */,
 			);
 			name = weart;
 			packageProductDependencies = (
@@ -186,29 +179,6 @@
 			productName = weart;
 			productReference = FB2D9F902D9C577A00CBAD8C /* weart.app */;
 			productType = "com.apple.product-type.application.on-demand-install-capable";
-		};
-		FB5484362DB16FB200919B57 /* ARKitVideoOverlayTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FB54843D2DB16FB200919B57 /* Build configuration list for PBXNativeTarget "ARKitVideoOverlayTests" */;
-			buildPhases = (
-				FB5484332DB16FB200919B57 /* Sources */,
-				FB5484342DB16FB200919B57 /* Frameworks */,
-				FB5484352DB16FB200919B57 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FB54843C2DB16FB200919B57 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				FB5484382DB16FB200919B57 /* ARKitVideoOverlayTests */,
-			);
-			name = ARKitVideoOverlayTests;
-			packageProductDependencies = (
-			);
-			productName = ARKitVideoOverlayTests;
-			productReference = FB5484372DB16FB200919B57 /* ARKitVideoOverlayTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		FB9261092D96A84B0003B2FF /* ARKitVideoOverlay */ = {
 			isa = PBXNativeTarget;
@@ -225,7 +195,6 @@
 				FB2D9FB92D9C577B00CBAD8C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				FB5484162DB16E0800919B57 /* ARKitVideoOverlayTests */,
 				FB92610C2D96A84B0003B2FF /* ARKitVideoOverlay */,
 			);
 			name = ARKitVideoOverlay;
@@ -234,6 +203,29 @@
 			productName = ARKitVideoOverlay;
 			productReference = FB92610A2D96A84B0003B2FF /* ARKitVideoOverlay.app */;
 			productType = "com.apple.product-type.application";
+		};
+		FBF674D12DB1FCAE00F84E99 /* ARKitVideoOverlayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBF674D82DB1FCAE00F84E99 /* Build configuration list for PBXNativeTarget "ARKitVideoOverlayTests" */;
+			buildPhases = (
+				FBF674CE2DB1FCAE00F84E99 /* Sources */,
+				FBF674CF2DB1FCAE00F84E99 /* Frameworks */,
+				FBF674D02DB1FCAE00F84E99 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FBF674D72DB1FCAE00F84E99 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */,
+			);
+			name = ARKitVideoOverlayTests;
+			packageProductDependencies = (
+			);
+			productName = ARKitVideoOverlayTests;
+			productReference = FBF674D22DB1FCAE00F84E99 /* ARKitVideoOverlayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -248,12 +240,12 @@
 					FB2D9F8F2D9C577A00CBAD8C = {
 						CreatedOnToolsVersion = 16.2;
 					};
-					FB5484362DB16FB200919B57 = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = FB9261092D96A84B0003B2FF;
-					};
 					FB9261092D96A84B0003B2FF = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					FBF674D12DB1FCAE00F84E99 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = FB9261092D96A84B0003B2FF;
 					};
 				};
 			};
@@ -276,7 +268,7 @@
 			targets = (
 				FB9261092D96A84B0003B2FF /* ARKitVideoOverlay */,
 				FB2D9F8F2D9C577A00CBAD8C /* weart */,
-				FB5484362DB16FB200919B57 /* ARKitVideoOverlayTests */,
+				FBF674D12DB1FCAE00F84E99 /* ARKitVideoOverlayTests */,
 			);
 		};
 /* End PBXProject section */
@@ -289,14 +281,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB5484352DB16FB200919B57 /* Resources */ = {
+		FB9261082D96A84B0003B2FF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB9261082D96A84B0003B2FF /* Resources */ = {
+		FBF674D02DB1FCAE00F84E99 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -313,14 +305,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB5484332DB16FB200919B57 /* Sources */ = {
+		FB9261062D96A84B0003B2FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB9261062D96A84B0003B2FF /* Sources */ = {
+		FBF674CE2DB1FCAE00F84E99 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -335,10 +327,10 @@
 			target = FB2D9F8F2D9C577A00CBAD8C /* weart */;
 			targetProxy = FB2D9FB82D9C577B00CBAD8C /* PBXContainerItemProxy */;
 		};
-		FB54843C2DB16FB200919B57 /* PBXTargetDependency */ = {
+		FBF674D72DB1FCAE00F84E99 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FB9261092D96A84B0003B2FF /* ARKitVideoOverlay */;
-			targetProxy = FB54843B2DB16FB200919B57 /* PBXContainerItemProxy */;
+			targetProxy = FBF674D62DB1FCAE00F84E99 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -407,44 +399,6 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		FB54843E2DB16FB200919B57 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VWR38Q45WB;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlayTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARKitVideoOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ARKitVideoOverlay";
-			};
-			name = Debug;
-		};
-		FB54843F2DB16FB200919B57 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VWR38Q45WB;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlayTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARKitVideoOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ARKitVideoOverlay";
 			};
 			name = Release;
 		};
@@ -637,6 +591,44 @@
 			};
 			name = Release;
 		};
+		FBF674D92DB1FCAE00F84E99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARKitVideoOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ARKitVideoOverlay";
+			};
+			name = Debug;
+		};
+		FBF674DA2DB1FCAE00F84E99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARKitVideoOverlay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ARKitVideoOverlay";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -645,15 +637,6 @@
 			buildConfigurations = (
 				FB2D9FBC2D9C577B00CBAD8C /* Debug */,
 				FB2D9FBD2D9C577B00CBAD8C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FB54843D2DB16FB200919B57 /* Build configuration list for PBXNativeTarget "ARKitVideoOverlayTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FB54843E2DB16FB200919B57 /* Debug */,
-				FB54843F2DB16FB200919B57 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -672,6 +655,15 @@
 			buildConfigurations = (
 				FB9261342D96A84C0003B2FF /* Debug */,
 				FB9261352D96A84C0003B2FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FBF674D82DB1FCAE00F84E99 /* Build configuration list for PBXNativeTarget "ARKitVideoOverlayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBF674D92DB1FCAE00F84E99 /* Debug */,
+				FBF674DA2DB1FCAE00F84E99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
