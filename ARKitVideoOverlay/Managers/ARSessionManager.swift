@@ -15,7 +15,7 @@ class ARSessionManager: NSObject {
     private var targets: [ARTarget] = []
     private var referenceImages: Set<ARReferenceImage> = []
     private let sceneView: ARSCNView
-    private let CONFIG_URL: String = "https://helenagrinshpun.art/assets/config.json"
+    private let CONFIG_URL: String = "https://helenagrinshpun.art/wp-content/themes/kahlo/assets/config.json"
     
     init(sceneView: ARSCNView) {
         self.sceneView = sceneView
