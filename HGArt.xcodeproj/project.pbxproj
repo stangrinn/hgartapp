@@ -104,9 +104,9 @@
 			path = HGARtApp;
 			sourceTree = "<group>";
 		};
-		FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */ = {
+		FBF674D32DB1FCAE00F84E99 /* Tests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ARKitVideoOverlayTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -149,7 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
-				FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */,
+				FBF674D32DB1FCAE00F84E99 /* Tests */,
 				FB3E601B2D96B226006EDCDA /* Frameworks */,
 				FB92610B2D96A84B0003B2FF /* Products */,
 				FB92610C2D96A84B0003B2FF /* HGARtApp */,
@@ -229,7 +229,7 @@
 				FBF674D72DB1FCAE00F84E99 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */,
+				FBF674D32DB1FCAE00F84E99 /* Tests */,
 			);
 			name = HGArtTests;
 			packageProductDependencies = (

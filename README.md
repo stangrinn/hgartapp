@@ -1,6 +1,7 @@
-# ARKitVideoOverlay
+# HGARt
 
-ARKitVideoOverlay is an iOS application that uses augmented reality to overlay videos on real-world objects. The app recognizes predefined image targets and plays corresponding videos on top of them, creating an immersive AR experience.
+HGARt is an iOS application that uses augmented reality to overlay videos and 3d animations on real-world objects. 
+The app recognizes predefined image targets and plays corresponding videos on top of them, creating an immersive AR experience.
 
 ## Features
 
