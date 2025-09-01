@@ -50,14 +50,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FB2D9FC22D9C577B00CBAD8C /* Exceptions for "weart" folder in "weart" target */ = {
+		FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "weart" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = FB2D9F8F2D9C577A00CBAD8C /* weart */;
 		};
-		FB2D9FC72D9C685E00CBAD8C /* Exceptions for "ARKitVideoOverlay" folder in "weart" target */ = {
+		FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "weart" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Helpers/PlayerObserver.swift,
@@ -74,7 +74,7 @@
 			);
 			target = FB2D9F8F2D9C577A00CBAD8C /* weart */;
 		};
-		FBD5816D2E45E852004DE3CA /* Exceptions for "ARKitVideoOverlay" folder in "HGArt" target */ = {
+		FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -87,21 +87,21 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FB2D9F912D9C577A00CBAD8C /* weart */ = {
+		FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FB2D9FC22D9C577B00CBAD8C /* Exceptions for "weart" folder in "weart" target */,
+				FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "weart" target */,
 			);
-			path = weart;
+			path = HGARtAppClip;
 			sourceTree = "<group>";
 		};
-		FB92610C2D96A84B0003B2FF /* ARKitVideoOverlay */ = {
+		FB92610C2D96A84B0003B2FF /* HGARtApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FBD5816D2E45E852004DE3CA /* Exceptions for "ARKitVideoOverlay" folder in "HGArt" target */,
-				FB2D9FC72D9C685E00CBAD8C /* Exceptions for "ARKitVideoOverlay" folder in "weart" target */,
+				FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */,
+				FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "weart" target */,
 			);
-			path = ARKitVideoOverlay;
+			path = HGARtApp;
 			sourceTree = "<group>";
 		};
 		FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */ = {
@@ -148,11 +148,11 @@
 		FB9261012D96A84B0003B2FF = {
 			isa = PBXGroup;
 			children = (
-				FB2D9F912D9C577A00CBAD8C /* weart */,
+				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
 				FBF674D32DB1FCAE00F84E99 /* ARKitVideoOverlayTests */,
 				FB3E601B2D96B226006EDCDA /* Frameworks */,
 				FB92610B2D96A84B0003B2FF /* Products */,
-				FB92610C2D96A84B0003B2FF /* ARKitVideoOverlay */,
+				FB92610C2D96A84B0003B2FF /* HGARtApp */,
 			);
 			sourceTree = "<group>";
 		};
@@ -182,7 +182,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				FB2D9F912D9C577A00CBAD8C /* weart */,
+				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
 			);
 			name = weart;
 			packageProductDependencies = (
@@ -206,7 +206,7 @@
 				FB2D9FB92D9C577B00CBAD8C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				FB92610C2D96A84B0003B2FF /* ARKitVideoOverlay */,
+				FB92610C2D96A84B0003B2FF /* HGARtApp */,
 			);
 			name = HGArt;
 			packageProductDependencies = (
@@ -351,13 +351,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppClipIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = weart/weart.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HGArtAppClip/HGArtAppClip.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = weart/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "HG Art Clip";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -389,13 +389,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppClipIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = weart/weart.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HGArtAppClip/HGArtAppClip.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = weart/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "HG Art Clip";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -558,7 +558,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "$(SRCROOT)/ARKitVideoOverlay/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "HG Art";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
@@ -597,7 +597,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "$(SRCROOT)/ARKitVideoOverlay/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "HG Art";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
