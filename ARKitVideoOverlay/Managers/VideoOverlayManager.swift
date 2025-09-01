@@ -29,7 +29,8 @@ class VideoOverlayManager {
         let playerLayer: AVPlayerLayer = AVPlayerLayer(player: player)
 
         playerLayer.frame = view.bounds
-        playerLayer.videoGravity = .resizeAspect
+    // Fill the screen to avoid letterboxing; acceptable to crop edges for full-bleed look
+    playerLayer.videoGravity = .resizeAspectFill
         playerLayer.zPosition = 999
         playerLayer.backgroundColor = UIColor.black.cgColor
 
@@ -114,15 +115,26 @@ class VideoOverlayManager {
 
                 let videoScene = SKScene(size: CGSize(width: width, height: height))
 
-                videoNode.position = CGPoint(x: width / 2, y: height / 2)
+                // Wrap the SKVideoNode inside an SKSpriteNode and use aspectFill so the video
+                // fills the scene without letterboxing (may crop edges)
+                let sprite = SKSpriteNode()
+                sprite.size = CGSize(width: width, height: height)
+                sprite.position = CGPoint(x: width / 2, y: height / 2)
+                sprite.yScale = -1
+                sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 
-                videoNode.size = CGSize(width: width, height: height)
+                // Use the SKScene scaleMode to control how the scene's content is scaled
+                // SKSpriteNode doesn't have a scaleMode property
+                videoScene.scaleMode = .aspectFill
 
+                videoNode.position = CGPoint(x: 0, y: 0)
+                videoNode.size = sprite.size
                 videoNode.yScale = -1
 
-                videoScene.addChild(videoNode)
+                sprite.addChild(videoNode)
+                videoScene.addChild(sprite)
 
-                print("✅ Video scene created, assigning to plane")
+                print("✅ Video scene created, assigning to plane (aspectFill)")
 
                 plane.firstMaterial?.diffuse.contents = videoScene
 

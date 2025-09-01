@@ -5,7 +5,7 @@
 //  Created by AE Stanislav Grinshpun on 2025-04-17.
 //
 
-import UIKit
+
 import ARKit
 
 final class TargetScannerOverlay: UIView {
