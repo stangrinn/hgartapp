@@ -3,12 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		FB2372B72E447DEE00DD2A17 /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB3E601C2D96B226006EDCDA /* ARKit.framework */; };
-		FB2D9FBB2D9C577B00CBAD8C /* weart.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = FB2D9F902D9C577A00CBAD8C /* weart.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB2D9FBB2D9C577B00CBAD8C /* HGArtClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,35 +31,34 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		FB2D9FBA2D9C577B00CBAD8C /* Embed App Clips */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
-			dstSubfolderSpec = 16;
+			dstSubfolder = Product;
 			files = (
-				FB2D9FBB2D9C577B00CBAD8C /* weart.app in Embed App Clips */,
+				FB2D9FBB2D9C577B00CBAD8C /* HGArtClip.app in Embed App Clips */,
 			);
 			name = "Embed App Clips";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FB2D9F902D9C577A00CBAD8C /* weart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weart.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArtClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB3E601C2D96B226006EDCDA /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 		FB92610A2D96A84B0003B2FF /* HGArt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGArtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "weart" target */ = {
+		FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = FB2D9F8F2D9C577A00CBAD8C /* weart */;
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
 		};
-		FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "weart" target */ = {
+		FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "HGArtClip" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Controllers/CameraPermissionDeniedViewController.swift,
 				Helpers/PlayerObserver.swift,
 				Helpers/TargetScannerOverlay.swift,
 				Managers/ARSceneManager.swift,
@@ -69,10 +68,11 @@
 				Managers/VideoOverlayManager.swift,
 				Models/ARTarget.swift,
 				UI/Assets/Loader.mp4,
+				UI/Components/PaddedLabelText.swift,
 				UI/Components/ToggleIconButton.swift,
 				ViewController.swift,
 			);
-			target = FB2D9F8F2D9C577A00CBAD8C /* weart */;
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
 		};
 		FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -84,13 +84,20 @@
 			};
 			target = FB9261092D96A84B0003B2FF /* HGArt */;
 		};
+		FBDA81EB2E65DB18006A5255 /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				UI/Components/PaddedLabelText.swift,
+			);
+			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "weart" target */,
+				FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */,
 			);
 			path = HGARtAppClip;
 			sourceTree = "<group>";
@@ -99,7 +106,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */,
-				FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "weart" target */,
+				FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "HGArtClip" target */,
+				FBDA81EB2E65DB18006A5255 /* Exceptions for "HGARtApp" folder in "HGArtTests" target */,
 			);
 			path = HGARtApp;
 			sourceTree = "<group>";
@@ -114,25 +122,19 @@
 /* Begin PBXFrameworksBuildPhase section */
 		FB2D9F8D2D9C577A00CBAD8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FB9261072D96A84B0003B2FF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				FB2372B72E447DEE00DD2A17 /* ARKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FBF674CF2DB1FCAE00F84E99 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -148,11 +150,11 @@
 		FB9261012D96A84B0003B2FF = {
 			isa = PBXGroup;
 			children = (
-				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
-				FBF674D32DB1FCAE00F84E99 /* Tests */,
 				FB3E601B2D96B226006EDCDA /* Frameworks */,
-				FB92610B2D96A84B0003B2FF /* Products */,
 				FB92610C2D96A84B0003B2FF /* HGARtApp */,
+				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
+				FB92610B2D96A84B0003B2FF /* Products */,
+				FBF674D32DB1FCAE00F84E99 /* Tests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -160,7 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				FB92610A2D96A84B0003B2FF /* HGArt.app */,
-				FB2D9F902D9C577A00CBAD8C /* weart.app */,
+				FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */,
 				FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */,
 			);
 			name = Products;
@@ -169,9 +171,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FB2D9F8F2D9C577A00CBAD8C /* weart */ = {
+		FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FB2D9FC32D9C577B00CBAD8C /* Build configuration list for PBXNativeTarget "weart" */;
+			buildConfigurationList = FB2D9FC32D9C577B00CBAD8C /* Build configuration list for PBXNativeTarget "HGArtClip" */;
 			buildPhases = (
 				FB2D9F8C2D9C577A00CBAD8C /* Sources */,
 				FB2D9F8D2D9C577A00CBAD8C /* Frameworks */,
@@ -179,16 +181,12 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
 				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
 			);
-			name = weart;
-			packageProductDependencies = (
-			);
+			name = HGArtClip;
 			productName = weart;
-			productReference = FB2D9F902D9C577A00CBAD8C /* weart.app */;
+			productReference = FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */;
 			productType = "com.apple.product-type.application.on-demand-install-capable";
 		};
 		FB9261092D96A84B0003B2FF /* HGArt */ = {
@@ -209,8 +207,6 @@
 				FB92610C2D96A84B0003B2FF /* HGARtApp */,
 			);
 			name = HGArt;
-			packageProductDependencies = (
-			);
 			productName = ARKitVideoOverlay;
 			productReference = FB92610A2D96A84B0003B2FF /* HGArt.app */;
 			productType = "com.apple.product-type.application";
@@ -232,8 +228,6 @@
 				FBF674D32DB1FCAE00F84E99 /* Tests */,
 			);
 			name = HGArtTests;
-			packageProductDependencies = (
-			);
 			productName = ARKitVideoOverlayTests;
 			productReference = FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -272,13 +266,13 @@
 			packageReferences = (
 				FB198AAB2DB16B5000B30012 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = FB92610B2D96A84B0003B2FF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				FB9261092D96A84B0003B2FF /* HGArt */,
-				FB2D9F8F2D9C577A00CBAD8C /* weart */,
+				FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */,
 				FBF674D12DB1FCAE00F84E99 /* HGArtTests */,
 			);
 		};
@@ -287,55 +281,43 @@
 /* Begin PBXResourcesBuildPhase section */
 		FB2D9F8E2D9C577A00CBAD8C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FB9261082D96A84B0003B2FF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FBF674D02DB1FCAE00F84E99 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FB2D9F8C2D9C577A00CBAD8C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FB9261062D96A84B0003B2FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FBF674CE2DB1FCAE00F84E99 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		FB2D9FB92D9C577B00CBAD8C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FB2D9F8F2D9C577A00CBAD8C /* weart */;
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
 			targetProxy = FB2D9FB82D9C577B00CBAD8C /* PBXContainerItemProxy */;
 		};
 		FBF674D72DB1FCAE00F84E99 /* PBXTargetDependency */ = {
@@ -346,7 +328,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		FB2D9FBC2D9C577B00CBAD8C /* Debug */ = {
+		FB2D9FBC2D9C577B00CBAD8C /* Debug configuration for PBXNativeTarget "HGArtClip" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppClipIcon;
@@ -384,7 +366,7 @@
 			};
 			name = Debug;
 		};
-		FB2D9FBD2D9C577B00CBAD8C /* Release */ = {
+		FB2D9FBD2D9C577B00CBAD8C /* Release configuration for PBXNativeTarget "HGArtClip" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppClipIcon;
@@ -421,7 +403,7 @@
 			};
 			name = Release;
 		};
-		FB9261312D96A84C0003B2FF /* Debug */ = {
+		FB9261312D96A84C0003B2FF /* Debug configuration for PBXProject "HGArt" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -487,7 +469,7 @@
 			};
 			name = Debug;
 		};
-		FB9261322D96A84C0003B2FF /* Release */ = {
+		FB9261322D96A84C0003B2FF /* Release configuration for PBXProject "HGArt" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -547,7 +529,7 @@
 			};
 			name = Release;
 		};
-		FB9261342D96A84C0003B2FF /* Debug */ = {
+		FB9261342D96A84C0003B2FF /* Debug configuration for PBXNativeTarget "HGArt" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -586,7 +568,7 @@
 			};
 			name = Debug;
 		};
-		FB9261352D96A84C0003B2FF /* Release */ = {
+		FB9261352D96A84C0003B2FF /* Release configuration for PBXNativeTarget "HGArt" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -625,7 +607,7 @@
 			};
 			name = Release;
 		};
-		FBF674D92DB1FCAE00F84E99 /* Debug */ = {
+		FBF674D92DB1FCAE00F84E99 /* Debug configuration for PBXNativeTarget "HGArtTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -648,7 +630,7 @@
 			};
 			name = Debug;
 		};
-		FBF674DA2DB1FCAE00F84E99 /* Release */ = {
+		FBF674DA2DB1FCAE00F84E99 /* Release configuration for PBXNativeTarget "HGArtTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -674,40 +656,36 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FB2D9FC32D9C577B00CBAD8C /* Build configuration list for PBXNativeTarget "weart" */ = {
+		FB2D9FC32D9C577B00CBAD8C /* Build configuration list for PBXNativeTarget "HGArtClip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB2D9FBC2D9C577B00CBAD8C /* Debug */,
-				FB2D9FBD2D9C577B00CBAD8C /* Release */,
+				FB2D9FBC2D9C577B00CBAD8C /* Debug configuration for PBXNativeTarget "HGArtClip" */,
+				FB2D9FBD2D9C577B00CBAD8C /* Release configuration for PBXNativeTarget "HGArtClip" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FB9261052D96A84B0003B2FF /* Build configuration list for PBXProject "HGArt" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB9261312D96A84C0003B2FF /* Debug */,
-				FB9261322D96A84C0003B2FF /* Release */,
+				FB9261312D96A84C0003B2FF /* Debug configuration for PBXProject "HGArt" */,
+				FB9261322D96A84C0003B2FF /* Release configuration for PBXProject "HGArt" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FB9261332D96A84C0003B2FF /* Build configuration list for PBXNativeTarget "HGArt" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB9261342D96A84C0003B2FF /* Debug */,
-				FB9261352D96A84C0003B2FF /* Release */,
+				FB9261342D96A84C0003B2FF /* Debug configuration for PBXNativeTarget "HGArt" */,
+				FB9261352D96A84C0003B2FF /* Release configuration for PBXNativeTarget "HGArt" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FBF674D82DB1FCAE00F84E99 /* Build configuration list for PBXNativeTarget "HGArtTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FBF674D92DB1FCAE00F84E99 /* Debug */,
-				FBF674DA2DB1FCAE00F84E99 /* Release */,
+				FBF674D92DB1FCAE00F84E99 /* Debug configuration for PBXNativeTarget "HGArtTests" */,
+				FBF674DA2DB1FCAE00F84E99 /* Release configuration for PBXNativeTarget "HGArtTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

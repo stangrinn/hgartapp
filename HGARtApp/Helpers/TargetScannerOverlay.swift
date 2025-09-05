@@ -19,6 +19,17 @@ final class TargetScannerOverlay: UIView {
         setupBorder()
         setupScanLine()
         startScanAnimation()
+        
+        NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(appDidBecomeActive),
+                name: UIApplication.didBecomeActiveNotification,
+                object: nil
+            )
+    }
+    
+    @objc private func appDidBecomeActive() {
+        startScanAnimation()
     }
 
     required init?(coder: NSCoder) {
@@ -65,6 +76,8 @@ final class TargetScannerOverlay: UIView {
         if let animation = scanAnimation {
             scanLine.layer.add(animation, forKey: "scan")
         }
+        
+        print("TargetScannerOverlay: startScanAnimation", rect)
     }
 
     func stopAndRemove() {
@@ -117,4 +130,17 @@ final class TargetScannerOverlay: UIView {
             layer.addSublayer(line)
         }
     }
+    
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil {
+            startScanAnimation()
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
+
+
