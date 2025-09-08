@@ -28,62 +28,93 @@ final class TargetScannerOverlay: UIView {
             )
     }
     
-    @objc private func appDidBecomeActive() {
-        startScanAnimation()
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil, !isHidden {
+            startScanAnimation()
+        } else {
+            stopScanning()
+        }
     }
+    
+    
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 
-    private func setupBorder() {
-        let maxWidth = bounds.width * 0.8
-        let width = maxWidth
-        let height = width * 4 / 3
-
-        let originX = (bounds.width - width) / 2
-        let originY = (bounds.height - height) / 2
-        let borderRect = CGRect(x: originX, y: originY, width: width, height: height)
-
-        let path = UIBezierPath(rect: borderRect)
-        borderLayer.path = path.cgPath
-        borderLayer.strokeColor = UIColor.clear.cgColor
-        borderLayer.fillColor = UIColor.clear.cgColor
-        layer.addSublayer(borderLayer)
-        addCornerIndicators(in: borderRect)
-    }
-
-    private func setupScanLine() {
-        guard let path = borderLayer.path else { return }
-        let rect = path.boundingBox
-
-        scanLine.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-        scanLine.frame = CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: 2)
-        addSubview(scanLine)
-    }
-
-    private func startScanAnimation() {
-        guard let path = borderLayer.path else { return }
-        let rect = path.boundingBox
-
-        scanAnimation = CABasicAnimation(keyPath: "position.y")
-        scanAnimation?.fromValue = rect.minY + 1
-        scanAnimation?.toValue = rect.maxY - 1
-        scanAnimation?.duration = 1.0
-        scanAnimation?.repeatCount = .infinity
-        scanAnimation?.autoreverses = true
-
-        if let animation = scanAnimation {
-            scanLine.layer.add(animation, forKey: "scan")
+    func startScanAnimation() {
+        guard scanLine.layer.animation(forKey: "scan") == nil else {
+            return // already running
         }
-        
-        print("TargetScannerOverlay: startScanAnimation", rect)
+        guard let path = borderLayer.path else { return }
+        let rect = path.boundingBox
+
+        // reset start position
+        scanLine.frame = CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: 2)
+
+        let animation = CABasicAnimation(keyPath: "position.y")
+        animation.fromValue = rect.minY + 1
+        animation.toValue = rect.maxY - 1
+        animation.duration = 1.0
+        animation.repeatCount = .infinity
+        animation.autoreverses = true
+        scanAnimation = animation
+        scanLine.layer.add(animation, forKey: "scan")
     }
 
-    func stopAndRemove() {
+    /// Stop only the scanning animation, keep overlay in the view hierarchy
+    func stopScanning() {
         DispatchQueue.main.async {
             self.scanLine.layer.removeAnimation(forKey: "scan")
-            self.removeFromSuperview()
+            self.scanAnimation = nil
+        }
+    }
+
+    /// Hide scanner (overlay) and stop animation
+    func hideScanner(animated: Bool = true) {
+        DispatchQueue.main.async {
+            self.stopScanning()
+            let performHide = {
+                self.isHidden = true
+            }
+            if animated {
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.alpha = 0
+                }, completion: { _ in
+                    performHide()
+                })
+            } else {
+                performHide()
+            }
+        }
+    }
+
+    /// Show scanner (overlay) and start animation
+    func showScanner(animated: Bool = true) {
+        DispatchQueue.main.async {
+            self.isHidden = false
+            let performShow = {
+                self.alpha = 1
+                self.startScanAnimation()
+            }
+            if animated {
+                self.alpha = 0
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.alpha = 1
+                }, completion: { _ in
+                    performShow()
+                })
+            } else {
+                performShow()
+            }
+        }
+    }
+    
+    @objc private func appDidBecomeActive() {
+        if !isHidden {
+            startScanAnimation()
         }
     }
 
@@ -131,12 +162,32 @@ final class TargetScannerOverlay: UIView {
         }
     }
     
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if window != nil {
-            startScanAnimation()
-        }
+    private func setupBorder() {
+        let maxWidth = bounds.width * 0.8
+        let width = maxWidth
+        let height = width * 4 / 3
+
+        let originX = (bounds.width - width) / 2
+        let originY = (bounds.height - height) / 2
+        let borderRect = CGRect(x: originX, y: originY, width: width, height: height)
+
+        let path = UIBezierPath(rect: borderRect)
+        borderLayer.path = path.cgPath
+        borderLayer.strokeColor = UIColor.clear.cgColor
+        borderLayer.fillColor = UIColor.clear.cgColor
+        layer.addSublayer(borderLayer)
+        addCornerIndicators(in: borderRect)
     }
+
+    private func setupScanLine() {
+        guard let path = borderLayer.path else { return }
+        let rect = path.boundingBox
+
+        scanLine.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        scanLine.frame = CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: 2)
+        addSubview(scanLine)
+    }
+    
     
     deinit {
         NotificationCenter.default.removeObserver(self)

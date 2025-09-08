@@ -63,10 +63,10 @@
 				Helpers/TargetScannerOverlay.swift,
 				Managers/ARSceneManager.swift,
 				Managers/ARSessionManager.swift,
-				Managers/RecordingManager.swift,
+				Managers/ARVideoOverlayManager.swift,
 				Managers/VideoManager.swift,
-				Managers/VideoOverlayManager.swift,
 				Models/ARTarget.swift,
+				"Resources/ar-config.json",
 				UI/Assets/Loader.mp4,
 				UI/Components/PaddedLabelText.swift,
 				UI/Components/ToggleIconButton.swift,
@@ -87,6 +87,7 @@
 		FBDA81EB2E65DB18006A5255 /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Resources/ar-config.json",
 				UI/Components/PaddedLabelText.swift,
 			);
 			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;

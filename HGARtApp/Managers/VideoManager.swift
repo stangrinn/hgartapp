@@ -21,10 +21,9 @@ class VideoManager {
     }
     
     func setupControls(view: UIView) {
-        VideoOverlayManager.setupControls(
+        ARVideoOverlayManager.setupControls(
             view: view,
             target: self,
-//            playPauseSelector: #selector(togglePlayPause),
             muteSelector: #selector(toggleMute),
             isMuted: { [weak self] in self?.isMuted ?? false },
             isPlaying: { [weak self] in self?.isPlaying ?? false }
@@ -42,12 +41,12 @@ class VideoManager {
             
             currentAnchorID = anchor.identifier
             
-            VideoOverlayManager.setControlsVisible(true)
+            ARVideoOverlayManager.setControlsVisible(true)
             
             return nil
         }
 
-        if let result = VideoOverlayManager.createMainOverlay(for: anchor, targets: targets) {
+        if let result = ARVideoOverlayManager.createMainOverlay(for: anchor, targets: targets) {
             
             currentAnchorID = anchor.identifier
             
@@ -63,16 +62,14 @@ class VideoManager {
                 player?.seek(to: .zero)
             }
             
-            VideoOverlayManager.updateMuteIcon(isMuted: result.player.isMuted)
+            ARVideoOverlayManager.updateMuteIcon(isMuted: result.player.isMuted)
             
-//            VideoOverlayManager.updatePlayPauseIcon(isPlaying: true)
-            
-            VideoOverlayManager.setControlsVisible(true)
+            ARVideoOverlayManager.setControlsVisible(true)
             
             return result.node
         }
         
-        VideoOverlayManager.setControlsVisible(false)
+        ARVideoOverlayManager.setControlsVisible(false)
 
         return nil
     }
@@ -84,7 +81,7 @@ class VideoManager {
             player.seek(to: .zero)
         }
         
-        VideoOverlayManager.setControlsVisible(false)
+        ARVideoOverlayManager.setControlsVisible(false)
         
 //        VideoOverlayManager.updatePlayPauseIcon(isPlaying: false)
     }
@@ -111,11 +108,11 @@ class VideoManager {
         
         isMuted = player.isMuted
         
-        VideoOverlayManager.updateMuteIcon(isMuted: player.isMuted)
+        ARVideoOverlayManager.updateMuteIcon(isMuted: player.isMuted)
     }
     
     func clearCurrentAnchor() {
         currentAnchorID = nil
-        VideoOverlayManager.setControlsVisible(false)
+        ARVideoOverlayManager.setControlsVisible(false)
     }
 }

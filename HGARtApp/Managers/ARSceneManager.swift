@@ -32,9 +32,11 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             print("ARSceneManager: node created for anchor: \(anchor.identifier)")
             trackedNodes[anchor.identifier] = node
 
-            scannerOverlay.stopAndRemove()
+            scannerOverlay.hideScanner()
             return node
         }
+        
+        
         
         print("ARSceneManager: no node created for anchor: \(anchor.identifier)")
         return nil
@@ -49,7 +51,9 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         if !imageAnchor.isTracked {
             videoManager?.setToStartAndPauseVideo(for: anchor.identifier)
             videoManager?.clearCurrentAnchor()
+            scannerOverlay.showScanner()
         } else {
+            scannerOverlay.hideScanner()
             _ = videoManager?.createOrPlayMainOverlay(for: imageAnchor, targets: targets)
         }
     }

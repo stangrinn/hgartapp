@@ -10,12 +10,19 @@ import ARKit
 import UIKit
 import SceneKit
 
+private extension Bundle {
+    var appBuild: String {
+        object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
+    }
+}
+
 class ARSessionManager: NSObject {
 
     private var targets: [ARTarget] = []
     private var referenceImages: Set<ARReferenceImage> = []
     private let sceneView: ARSCNView
-    private let CONFIG_URL: String = "https://helenagrinshpun.art/wp-content/themes/kahlo/assets/config.json"
+    
+    
     
     init(sceneView: ARSCNView) {
         self.sceneView = sceneView
@@ -29,66 +36,95 @@ class ARSessionManager: NSObject {
     */
     func loadTargetsAndStartSession(completion: @escaping ([ARTarget]) -> Void) {
         
-        guard let url = URL(string: CONFIG_URL) else {
-            print("ARSessionManager: Invalid CONFIG_URL")
+        // Load config.json from the application bundle
+        guard let url = Bundle.main.url(forResource: "ar-config", withExtension: "json") else {
+            print("ARSessionManager: config.json not found in app bundle")
             return
         }
-    
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                print("ARSessionManager: Failed to fetch config: \(error?.localizedDescription ?? "unknown error")")
-                return
-            }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let decoded = try JSONDecoder().decode([String: [ARTarget]].self, from: data)
+            self.targets = decoded["targets"] ?? []
             
-            do {
-                let decoded = try JSONDecoder().decode([String: [ARTarget]].self, from: data)
-                self.targets = decoded["targets"] ?? []
+            let group = DispatchGroup()
+            self.referenceImages.removeAll()
+            
+            for target in self.targets {
+                guard let imageUrl = URL(string: target.imageUrl) else {
+                    print("ARSessionManager: Invalid image URL for target: \(target.name)")
+                    continue
+                }
                 
-                let group = DispatchGroup()
+                group.enter()
                 
-                for target in self.targets {
-                    guard let imageUrl = URL(string: target.imageUrl) else {
-                        print("ARSessionManager: Invalid image URL for target: \(target.name)")
-                        continue
+                // Keep cache-busting for images to avoid CDN-propagation issues during development
+                let effectiveImageURL = self.urlByAddingBuster(imageUrl.absoluteString) ?? imageUrl
+                let imageRequest = self.nonCachingRequest(url: effectiveImageURL)
+                
+                self.noCacheSession.dataTask(with: imageRequest) { imageData, response, error in
+                    defer { group.leave() }
+                    
+                    if let error = error {
+                        print("ARSessionManager: Failed to load image for target \(target.name): \(error.localizedDescription)")
+                        return
                     }
                     
-                    group.enter()
+                    guard let imageData = imageData,
+                          let uiImage = UIImage(data: imageData),
+                          let cgImage = uiImage.cgImage else {
+                        print("ARSessionManager: Failed to create image for target \(target.name)")
+                        return
+                    }
                     
-                    URLSession.shared.dataTask(with: imageUrl) { imageData, _, error in
-                        defer { group.leave() }
-                        
-                        if let error = error {
-                            print("ARSessionManager: Failed to load image for target \(target.name): \(error.localizedDescription)")
-                            return
-                        }
-                        
-                        guard let imageData = imageData,
-                              let uiImage = UIImage(data: imageData),
-                              let cgImage = uiImage.cgImage else {
-                            print("ARSessionManager: Failed to create image for target \(target.name)")
-                            return
-                        }
-                        
-                        let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
-                        arImage.name = target.name
-                        self.referenceImages.insert(arImage)
-                        
-                    }.resume()
-                }
-                
-                group.notify(queue: .main) {
-                    let configuration = ARImageTrackingConfiguration()
-                    configuration.trackingImages = self.referenceImages
-                    configuration.maximumNumberOfTrackedImages = self.referenceImages.count
+                    let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
+                    arImage.name = target.name
+                    self.referenceImages.insert(arImage)
                     
-                    self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-                    
-                    completion(self.targets)
-                }
-                
-            } catch {
-                print("ARSessionManager: Failed to decode config: \(error.localizedDescription)")
+                }.resume()
             }
-        }.resume()
+            
+            group.notify(queue: .main) {
+                let configuration = ARImageTrackingConfiguration()
+                configuration.trackingImages = self.referenceImages
+                configuration.maximumNumberOfTrackedImages = self.referenceImages.count
+                
+                self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+                
+                completion(self.targets)
+            }
+            
+        } catch {
+            print("ARSessionManager: Failed to read bundled config: \(error.localizedDescription)")
+        }
+    }
+    
+    private lazy var noCacheSession: URLSession = {
+        let cfg = URLSessionConfiguration.default
+        cfg.requestCachePolicy = .reloadIgnoringLocalCacheData
+        cfg.urlCache = nil
+        cfg.httpAdditionalHeaders = [
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache"
+        ]
+        return URLSession(configuration: cfg)
+    }()
+
+    private func urlByAddingBuster(_ raw: String, key: String = "v") -> URL? {
+        guard var comps = URLComponents(string: raw) else { return nil }
+        var q = comps.queryItems ?? []
+        // Use build number as a stable buster per build; fallback to timestamp during dev runs
+        let value = Bundle.main.appBuild.isEmpty ? String(Int(Date().timeIntervalSince1970)) : Bundle.main.appBuild
+        q.append(URLQueryItem(name: key, value: value))
+        comps.queryItems = q
+        return comps.url
+    }
+
+    private func nonCachingRequest(url: URL) -> URLRequest {
+        var req = URLRequest(url: url)
+        req.cachePolicy = .reloadIgnoringLocalCacheData
+        req.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
+        req.setValue("no-cache", forHTTPHeaderField: "Pragma")
+        return req
     }
 }

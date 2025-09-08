@@ -12,3 +12,7 @@ struct ARTarget: Decodable {
     let videoUrl: String
     let physicalWidth: Float
 }
+
+struct ARTargetsConfig: Decodable {
+    let targets: [ARTarget]
+}

@@ -12,7 +12,7 @@ import ARKit
 import Foundation
 import CoreMedia
 
-class VideoOverlayManager {
+class ARVideoOverlayManager {
 
     private static var playPauseButton: UIButton?
     private static var muteButton: UIButton?
@@ -56,14 +56,32 @@ class VideoOverlayManager {
             return nil
         }
 
-        let plane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width,
+        let plane = createPlane(width: imageAnchor.referenceImage.physicalSize.width,
                              height: imageAnchor.referenceImage.physicalSize.height)
         
-        plane.firstMaterial?.diffuse.contents = UIColor.clear
-        plane.firstMaterial?.isDoubleSided = true
-        plane.firstMaterial?.transparency = 1.0
-        plane.firstMaterial?.writesToDepthBuffer = false
+        let player = createOrGetPlayer(url: url, target: target)
 
+        plane.firstMaterial?.diffuse.contents = player
+
+        player.play()
+
+        if player.currentItem?.status == .readyToPlay {
+            print("⚠️ Player not ready: \(player.currentItem?.status.rawValue ?? -1)")
+        }
+
+        let planeNode: SCNNode = SCNNode(geometry: plane)
+        // Draw after other geometry to reduce z-fighting/edge artifacts
+        planeNode.renderingOrder = 2000
+        planeNode.eulerAngles.x = -.pi / 2
+
+        let parentNode: SCNNode = SCNNode()
+
+        parentNode.addChildNode(planeNode)
+
+        return (parentNode, player)
+    }
+    
+    private static func createOrGetPlayer(url: URL, target: ARTarget) -> AVPlayer {
         let player: AVPlayer
 
         if let existing = players[target.name] {
@@ -87,68 +105,32 @@ class VideoOverlayManager {
                 currentItem.addObserver(observer, forKeyPath: "status", options: [.new, .initial], context: nil)
             }
         }
-
-        let videoNode: SKVideoNode = SKVideoNode(avPlayer: player)
-
-        player.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
-
-        print("🎥 Preparing AVPlayer with URL: \(url)")
-
-        Task { @MainActor in
-            do {
-                let asset = AVURLAsset(url: url)
-
-                let tracks = try await asset.loadTracks(withMediaType: .video)
-
-                guard let track = tracks.first else { return }
-
-                let size = try await track.load(.naturalSize)
-
-                let transform = try await track.load(.preferredTransform)
-
-                let transformedSize = size.applying(transform)
-
-                let width = abs(transformedSize.width)
-
-                let height = abs(transformedSize.height)
-
-                let videoScene = SKScene(size: CGSize(width: width, height: height))
-
-                videoNode.position = CGPoint(x: width / 2, y: height / 2)
-
-                videoNode.size = CGSize(width: width, height: height)
-
-                videoNode.yScale = -1
-
-                videoScene.addChild(videoNode)
-
-                print("✅ Video scene created, assigning to plane")
-
-                plane.firstMaterial?.diffuse.contents = videoScene
-
-                if player.currentItem?.status == .readyToPlay {
-                    print("⚠️ Player not ready: \(player.currentItem?.status.rawValue ?? -1)")
-                }
-            } catch {
-                print("Failed to load video size: \(error)")
-                print("❌ Error loading asset track info: \(error.localizedDescription)")
-            }
-        }
-
-        let planeNode: SCNNode = SCNNode(geometry: plane)
-
-        planeNode.eulerAngles.x = -.pi / 2
-
-        let parentNode: SCNNode = SCNNode()
-
-        parentNode.addChildNode(planeNode)
-
-        return (parentNode, player)
+        
+        return player
+    }
+    
+    private static func createPlane(width: CGFloat, height: CGFloat) -> SCNPlane {
+        let plane = SCNPlane(width: width, height: height)
+        
+        plane.firstMaterial?.diffuse.contents = UIColor.clear
+        plane.firstMaterial?.isDoubleSided = false
+        plane.firstMaterial?.transparency = 1.0
+        plane.firstMaterial?.writesToDepthBuffer = false
+        // Prefer constant lighting and clamp sampling to reduce edge shimmer
+        plane.firstMaterial?.lightingModel = .constant
+        
+        plane.firstMaterial?.readsFromDepthBuffer = false
+        plane.firstMaterial?.diffuse.wrapS = .clamp
+        plane.firstMaterial?.diffuse.wrapT = .clamp
+        plane.firstMaterial?.diffuse.mipFilter = .linear
+        plane.firstMaterial?.diffuse.minificationFilter = .linear
+        plane.firstMaterial?.diffuse.magnificationFilter = .linear
+        
+        return plane
     }
 
     static func setupControls(view: UIView,
                               target: Any,
-//                              playPauseSelector: Selector,
                               muteSelector: Selector,
                               isMuted: @escaping () -> Bool,
                               isPlaying: @escaping () -> Bool) {

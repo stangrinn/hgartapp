@@ -7,7 +7,6 @@ class ViewController: UIViewController {
 
     private var arSessionManager: ARSessionManager!
     private var videoManager: VideoManager!
-    private var recordingManager: RecordingManager!
     private var scannerOverlay: TargetScannerOverlay!
     private var arSceneManager: ARSceneManager!
     private var sceneView: ARSCNView!
@@ -39,6 +38,8 @@ class ViewController: UIViewController {
         sceneView = ARSCNView(frame: view.frame)
         view.addSubview(sceneView)
         sceneView.scene = SCNScene()
+        sceneView.antialiasingMode = .multisampling4X
+        sceneView.preferredFramesPerSecond = 60  
     }
     
     private func setupManagers() {
@@ -84,7 +85,7 @@ class ViewController: UIViewController {
     }
     
     private func setupUI() {
-        VideoOverlayManager.createPreloaderOverlay(view: view)
+        ARVideoOverlayManager.createPreloaderOverlay(view: view)
         videoManager.setupControls(view: view)
     }
     
