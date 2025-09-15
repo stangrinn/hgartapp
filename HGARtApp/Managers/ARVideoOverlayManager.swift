@@ -56,8 +56,12 @@ class ARVideoOverlayManager {
             return nil
         }
 
-        let plane = createPlane(width: imageAnchor.referenceImage.physicalSize.width,
-                             height: imageAnchor.referenceImage.physicalSize.height)
+    // Add a small padding so the plane fully covers the reference image
+    let padding: CGFloat = 0.01
+    let planeWidth = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
+    let planeHeight = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
+
+    let plane = createPlane(width: planeWidth, height: planeHeight)
         
         let player = createOrGetPlayer(url: url, target: target)
 
@@ -111,15 +115,19 @@ class ARVideoOverlayManager {
     
     private static func createPlane(width: CGFloat, height: CGFloat) -> SCNPlane {
         let plane = SCNPlane(width: width, height: height)
-        
-        plane.firstMaterial?.diffuse.contents = UIColor.clear
-        plane.firstMaterial?.isDoubleSided = false
+        // Use an opaque black material so the plane occludes the real-world background
+        plane.firstMaterial?.diffuse.contents = UIColor.black
+        // Make the plane double-sided so it is visible from both sides of the anchor
+        plane.firstMaterial?.isDoubleSided = true
+        // Ensure the material is fully opaque
         plane.firstMaterial?.transparency = 1.0
-        plane.firstMaterial?.writesToDepthBuffer = false
+        // Write to depth buffer so the plane properly occludes content behind it
+        plane.firstMaterial?.writesToDepthBuffer = true
         // Prefer constant lighting and clamp sampling to reduce edge shimmer
         plane.firstMaterial?.lightingModel = .constant
-        
-        plane.firstMaterial?.readsFromDepthBuffer = false
+
+        // Read from depth buffer to participate in depth testing
+        plane.firstMaterial?.readsFromDepthBuffer = true
         plane.firstMaterial?.diffuse.wrapS = .clamp
         plane.firstMaterial?.diffuse.wrapT = .clamp
         plane.firstMaterial?.diffuse.mipFilter = .linear
