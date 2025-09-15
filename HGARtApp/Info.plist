@@ -33,7 +33,7 @@
 		<string>arkit</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>We use the camera to view AR content, which is placed over your real-world surroundings.</string>
+	<string>We use the camera to view AR content, which is placed over Helena Grinshpun arts.</string>
 	<key>CFBundleDisplayName</key>
 	<string></string>
 	<key>LSApplicationCategoryType</key>

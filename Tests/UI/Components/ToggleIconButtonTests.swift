@@ -1,6 +1,6 @@
 import XCTest
 import UIKit
-@testable import ARKitVideoOverlay
+@testable import HGArt
 
 final class ToggleIconButtonTests: XCTestCase {
     var toggleButton: ToggledIconButton!

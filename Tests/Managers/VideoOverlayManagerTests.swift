@@ -1,7 +1,7 @@
 import XCTest
 import ARKit
 import AVFoundation
-@testable import ARKitVideoOverlay
+@testable import HGArt
 
 final class VideoOverlayManagerTests: XCTestCase {
     var mockView: UIView!

@@ -1,6 +1,6 @@
 import XCTest
 import AVFoundation
-@testable import ARKitVideoOverlay
+@testable import HGArt
 
 final class PlayerObserverTests: XCTestCase {
     var playerObserver: PlayerObserver!
