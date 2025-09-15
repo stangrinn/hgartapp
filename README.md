@@ -1,6 +1,6 @@
 # HGARt
 
-HGARt is an iOS application that uses augmented reality to overlay videos and 3d animations on real-world objects. 
+HGARt is an iOS application that uses augmented reality to overlay videos and 3d animations on real-world art objects and places. 
 The app recognizes predefined image targets and plays corresponding videos on top of them, creating an immersive AR experience.
 
 ## Features
@@ -17,7 +17,6 @@ The application follows a modular architecture with specialized managers for dif
 
 - **ARSessionManager**: Handles AR session configuration, image target loading, and tracking setup
 - **ARSceneManager**: Manages AR scene elements, node creation, and scene graph updates
-- **VideoManager**: Controls video playback, state management, and player controls
 - **VideoOverlayManager**: Creates and manages video overlays on detected targets
 - **RecordingManager**: Handles screen recording functionality
 - **PlayerObserver**: Observes player state changes using KVO
@@ -26,14 +25,12 @@ The application follows a modular architecture with specialized managers for dif
 
 - **Frameworks**: ARKit, SceneKit, AVFoundation, SpriteKit, ReplayKit
 - **Minimum iOS Version**: 15.0
-- **Target Devices**: iPhone and iPad
+- **Target Devices**: iPhone (ARKit-compatible)
 - **Swift Version**: 5.5+
 
 ## Setup and Configuration
 
 ### Target Configuration
-
-The app loads targets from a remote JSON configuration:
 
 ```json
 {
@@ -64,13 +61,15 @@ Each target has:
 ## Project Structure
 
 ```
-ARKitVideoOverlay/
+HGARtApp/
+├── AppDelegate.swift
+├── ViewController.swift
 ├── Managers/
 │   ├── ARSceneManager.swift
 │   ├── ARSessionManager.swift
+│   ├── ARVideoOverlayManager.swift
 │   ├── RecordingManager.swift
-│   ├── VideoManager.swift
-│   └── VideoOverlayManager.swift
+│   └── VideoManager.swift
 ├── Helpers/
 │   ├── PlayerObserver.swift
 │   └── TargetScannerOverlay.swift
@@ -80,8 +79,30 @@ ARKitVideoOverlay/
 │   ├── Assets/
 │   │   └── Loader.mp4
 │   └── Components/
-│       └── ToggledIconButton.swift
-└── ViewController.swift
+│       ├── PaddedLabelText.swift
+│       └── ToggleIconButton.swift
+├── Resources/
+│   └── ar-config.json
+└── Info.plist
+
+HGARtAppClip/
+├── AppDelegate.swift
+├── Info.plist
+└── Assets.xcassets/
+
+Tests/
+├── ARKitVideoOverlayTests.swift
+├── Managers/
+│   ├── ARSceneManagerTests.swift
+│   ├── ARSessionManagerTests.swift
+│   ├── VideoManagerTests.swift
++│   └── VideoOverlayManagerTests.swift
+├── Helpers/
+│   ├── PlayerObserverTests.swift
+│   └── TargetScannerOverlayTests.swift
+└── UI/
+  └── Components/
+    └── ToggleIconButtonTests.swift
 ```
 
 ## Testing
@@ -109,7 +130,8 @@ ARKitVideoOverlayTests/
 - iOS 15.0+
 - Swift 5.5+
 - Device with ARKit support
+ - iPhone with ARKit support
 
 ## License
 
-Copyright © 2025 weARt. All rights reserved. 
+Copyright © 2025 HGARt. All rights reserved. 
