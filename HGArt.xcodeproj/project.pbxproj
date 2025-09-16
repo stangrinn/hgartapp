@@ -47,69 +47,14 @@
 		FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGArtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
-		};
-		FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "HGArtClip" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Controllers/CameraPermissionDeniedViewController.swift,
-				Helpers/PlayerObserver.swift,
-				Helpers/TargetScannerOverlay.swift,
-				Managers/ARSceneManager.swift,
-				Managers/ARSessionManager.swift,
-				Managers/ARVideoOverlayManager.swift,
-				Managers/VideoManager.swift,
-				Models/ARTarget.swift,
-				"Resources/ar-config.json",
-				UI/Assets/Loader.mp4,
-				UI/Components/PaddedLabelText.swift,
-				UI/Components/ToggleIconButton.swift,
-				ViewController.swift,
-			);
-			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
-		};
-		FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			platformFiltersByRelativePath = {
-				"/Localized: LaunchScreen.storyboard" = (ios, );
-			};
-			target = FB9261092D96A84B0003B2FF /* HGArt */;
-		};
-		FBDA81EB2E65DB18006A5255 /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Resources/ar-config.json",
-				UI/Components/PaddedLabelText.swift,
-			);
-			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */,
-			);
 			path = HGARtAppClip;
 			sourceTree = "<group>";
 		};
 		FB92610C2D96A84B0003B2FF /* HGARtApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */,
-				FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "HGArtClip" target */,
-				FBDA81EB2E65DB18006A5255 /* Exceptions for "HGARtApp" folder in "HGArtTests" target */,
-			);
 			path = HGARtApp;
 			sourceTree = "<group>";
 		};
