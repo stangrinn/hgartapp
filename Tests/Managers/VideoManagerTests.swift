@@ -1,7 +1,7 @@
 import XCTest
 import AVFoundation
 import ARKit
-@testable import ARKitVideoOverlay
+@testable import HGArt
 
 final class VideoManagerTests: XCTestCase {
     var videoManager: VideoManager!

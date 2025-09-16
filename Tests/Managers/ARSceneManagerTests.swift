@@ -1,7 +1,7 @@
 import XCTest
 import ARKit
 import SceneKit
-@testable import ARKitVideoOverlay
+@testable import HGArt
 
 final class ARSceneManagerTests: XCTestCase {
     var arSceneManager: ARSceneManager!

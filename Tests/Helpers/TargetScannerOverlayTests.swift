@@ -1,7 +1,7 @@
 import XCTest
 import ARKit
 import UIKit
-@testable import ARKitVideoOverlay
+@testable import HGArt
 
 final class TargetScannerOverlayTests: XCTestCase {
     var targetScannerOverlay: TargetScannerOverlay!
@@ -22,12 +22,12 @@ final class TargetScannerOverlayTests: XCTestCase {
         XCTAssertNotNil(targetScannerOverlay)
     }
     
-    func testStopAndRemove() {
+    func stopScanning() {
         // Check that the method doesn't throw exceptions
-        targetScannerOverlay.stopAndRemove()
+        targetScannerOverlay.stopScanning()
         // Since the method deals with UI and contains asynchronous calls,
         // it's difficult to directly test its results in unit tests
-        XCTAssertTrue(true, "stopAndRemove() method executed without errors")
+        XCTAssertTrue(true, "stopScanning() method executed without errors")
     }
     
     func testViewHierarchy() {

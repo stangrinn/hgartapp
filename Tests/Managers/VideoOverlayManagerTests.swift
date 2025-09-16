@@ -21,24 +21,24 @@ final class VideoOverlayManagerTests: XCTestCase {
     
     func testSetControlsVisibility() {
         // Testing control elements visibility
-        VideoOverlayManager.setControlsVisible(true)
-        VideoOverlayManager.setControlsVisible(false)
+        ARVideoOverlayManager.setControlsVisible(true)
+        ARVideoOverlayManager.setControlsVisible(false)
         // Difficult to verify as it changes the internal state of a static class
         XCTAssertTrue(true)
     }
     
     func testUpdateMuteIcon() {
         // Testing mute icon update
-        VideoOverlayManager.updateMuteIcon(isMuted: true)
-        VideoOverlayManager.updateMuteIcon(isMuted: false)
+        ARVideoOverlayManager.updateMuteIcon(isMuted: true)
+        ARVideoOverlayManager.updateMuteIcon(isMuted: false)
         // Difficult to verify as it changes the internal state of a static class
         XCTAssertTrue(true)
     }
     
     func testUpdatePlayPauseIcon() {
         // Testing play/pause icon update
-        VideoOverlayManager.updatePlayPauseIcon(isPlaying: true)
-        VideoOverlayManager.updatePlayPauseIcon(isPlaying: false)
+        ARVideoOverlayManager.updatePlayPauseIcon(isPlaying: true)
+        ARVideoOverlayManager.updatePlayPauseIcon(isPlaying: false)
         // Difficult to verify as it changes the internal state of a static class
         XCTAssertTrue(true)
     }

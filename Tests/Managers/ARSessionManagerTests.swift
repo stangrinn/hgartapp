@@ -1,6 +1,6 @@
 import XCTest
 import ARKit
-@testable import ARKitVideoOverlay
+@testable import HGArt
 
 final class ARSessionManagerTests: XCTestCase {
     var arSessionManager: ARSessionManager!
