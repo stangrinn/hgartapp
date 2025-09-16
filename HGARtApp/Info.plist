@@ -33,9 +33,9 @@
 		<string>arkit</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>We use the camera to view AR content, which is placed over Helena Grinshpun arts.</string>
+	<string>We use the camera to view AR content that is placed on top of HG AR Arts.</string>
 	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>HGARt</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.entertainment</string>
 </dict>
