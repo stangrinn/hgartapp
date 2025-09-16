@@ -1,0 +1,706 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 90;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FB2372B72E447DEE00DD2A17 /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB3E601C2D96B226006EDCDA /* ARKit.framework */; };
+		FB2D9FBB2D9C577B00CBAD8C /* HGArtClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FB2D9FB82D9C577B00CBAD8C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FB9261022D96A84B0003B2FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FB2D9F8F2D9C577A00CBAD8C;
+			remoteInfo = weart;
+		};
+		FBF674D62DB1FCAE00F84E99 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FB9261022D96A84B0003B2FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FB9261092D96A84B0003B2FF;
+			remoteInfo = ARKitVideoOverlay;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FB2D9FBA2D9C577B00CBAD8C /* Embed App Clips */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
+			dstSubfolder = Product;
+			files = (
+				FB2D9FBB2D9C577B00CBAD8C /* HGArtClip.app in Embed App Clips */,
+			);
+			name = "Embed App Clips";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArtClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB3E601C2D96B226006EDCDA /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
+		FB92610A2D96A84B0003B2FF /* HGArt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArt.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGArtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
+		};
+		FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "HGArtClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Controllers/CameraPermissionDeniedViewController.swift,
+				Helpers/PlayerObserver.swift,
+				Helpers/TargetScannerOverlay.swift,
+				Managers/ARSceneManager.swift,
+				Managers/ARSessionManager.swift,
+				Managers/ARVideoOverlayManager.swift,
+				Managers/VideoManager.swift,
+				Models/ARTarget.swift,
+				"Resources/ar-config.json",
+				UI/Assets/Loader.mp4,
+				UI/Components/PaddedLabelText.swift,
+				UI/Components/ToggleIconButton.swift,
+				ViewController.swift,
+			);
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
+		};
+		FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			platformFiltersByRelativePath = {
+				"/Localized: LaunchScreen.storyboard" = (ios, );
+			};
+			target = FB9261092D96A84B0003B2FF /* HGArt */;
+		};
+		FBDA81EB2E65DB18006A5255 /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Resources/ar-config.json",
+				UI/Components/PaddedLabelText.swift,
+			);
+			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FB2D9FC22D9C577B00CBAD8C /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */,
+			);
+			path = HGARtAppClip;
+			sourceTree = "<group>";
+		};
+		FB92610C2D96A84B0003B2FF /* HGARtApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FBD5816D2E45E852004DE3CA /* Exceptions for "HGARtApp" folder in "HGArt" target */,
+				FB2D9FC72D9C685E00CBAD8C /* Exceptions for "HGARtApp" folder in "HGArtClip" target */,
+				FBDA81EB2E65DB18006A5255 /* Exceptions for "HGARtApp" folder in "HGArtTests" target */,
+			);
+			path = HGARtApp;
+			sourceTree = "<group>";
+		};
+		FBF674D32DB1FCAE00F84E99 /* Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FB2D9F8D2D9C577A00CBAD8C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		FB9261072D96A84B0003B2FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				FB2372B72E447DEE00DD2A17 /* ARKit.framework in Frameworks */,
+			);
+		};
+		FBF674CF2DB1FCAE00F84E99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FB3E601B2D96B226006EDCDA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FB3E601C2D96B226006EDCDA /* ARKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FB9261012D96A84B0003B2FF = {
+			isa = PBXGroup;
+			children = (
+				FB3E601B2D96B226006EDCDA /* Frameworks */,
+				FB92610C2D96A84B0003B2FF /* HGARtApp */,
+				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
+				FB92610B2D96A84B0003B2FF /* Products */,
+				FBF674D32DB1FCAE00F84E99 /* Tests */,
+			);
+			sourceTree = "<group>";
+		};
+		FB92610B2D96A84B0003B2FF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FB92610A2D96A84B0003B2FF /* HGArt.app */,
+				FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */,
+				FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB2D9FC32D9C577B00CBAD8C /* Build configuration list for PBXNativeTarget "HGArtClip" */;
+			buildPhases = (
+				FB2D9F8C2D9C577A00CBAD8C /* Sources */,
+				FB2D9F8D2D9C577A00CBAD8C /* Frameworks */,
+				FB2D9F8E2D9C577A00CBAD8C /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
+			);
+			name = HGArtClip;
+			productName = weart;
+			productReference = FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */;
+			productType = "com.apple.product-type.application.on-demand-install-capable";
+		};
+		FB9261092D96A84B0003B2FF /* HGArt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB9261332D96A84C0003B2FF /* Build configuration list for PBXNativeTarget "HGArt" */;
+			buildPhases = (
+				FB9261062D96A84B0003B2FF /* Sources */,
+				FB9261072D96A84B0003B2FF /* Frameworks */,
+				FB9261082D96A84B0003B2FF /* Resources */,
+				FB2D9FBA2D9C577B00CBAD8C /* Embed App Clips */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FB2D9FB92D9C577B00CBAD8C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FB92610C2D96A84B0003B2FF /* HGARtApp */,
+			);
+			name = HGArt;
+			productName = ARKitVideoOverlay;
+			productReference = FB92610A2D96A84B0003B2FF /* HGArt.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FBF674D12DB1FCAE00F84E99 /* HGArtTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBF674D82DB1FCAE00F84E99 /* Build configuration list for PBXNativeTarget "HGArtTests" */;
+			buildPhases = (
+				FBF674CE2DB1FCAE00F84E99 /* Sources */,
+				FBF674CF2DB1FCAE00F84E99 /* Frameworks */,
+				FBF674D02DB1FCAE00F84E99 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FBF674D72DB1FCAE00F84E99 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FBF674D32DB1FCAE00F84E99 /* Tests */,
+			);
+			name = HGArtTests;
+			productName = ARKitVideoOverlayTests;
+			productReference = FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FB9261022D96A84B0003B2FF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					FB2D9F8F2D9C577A00CBAD8C = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					FB9261092D96A84B0003B2FF = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					FBF674D12DB1FCAE00F84E99 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = FB9261092D96A84B0003B2FF;
+					};
+				};
+			};
+			buildConfigurationList = FB9261052D96A84B0003B2FF /* Build configuration list for PBXProject "HGArt" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FB9261012D96A84B0003B2FF;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FB198AAB2DB16B5000B30012 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+			);
+			preferredProjectObjectVersion = 90;
+			productRefGroup = FB92610B2D96A84B0003B2FF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FB9261092D96A84B0003B2FF /* HGArt */,
+				FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */,
+				FBF674D12DB1FCAE00F84E99 /* HGArtTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FB2D9F8E2D9C577A00CBAD8C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		FB9261082D96A84B0003B2FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		FBF674D02DB1FCAE00F84E99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FB2D9F8C2D9C577A00CBAD8C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		FB9261062D96A84B0003B2FF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		FBF674CE2DB1FCAE00F84E99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FB2D9FB92D9C577B00CBAD8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
+			targetProxy = FB2D9FB82D9C577B00CBAD8C /* PBXContainerItemProxy */;
+		};
+		FBF674D72DB1FCAE00F84E99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FB9261092D96A84B0003B2FF /* HGArt */;
+			targetProxy = FBF674D62DB1FCAE00F84E99 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FB2D9FBC2D9C577B00CBAD8C /* Debug configuration for PBXNativeTarget "HGArtClip" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppClipIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HGArtAppClip/HGArtAppClip.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG Art Clip";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay.HGARtClip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS[arch=*]" = "\"APPCLIP\"";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FB2D9FBD2D9C577B00CBAD8C /* Release configuration for PBXNativeTarget "HGArtClip" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppClipIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HGArtAppClip/HGArtAppClip.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG Art Clip";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay.HGARtClip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FB9261312D96A84C0003B2FF /* Debug configuration for PBXProject "HGArt" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FB9261322D96A84C0003B2FF /* Release configuration for PBXProject "HGArt" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FB9261342D96A84C0003B2FF /* Debug configuration for PBXNativeTarget "HGArt" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG Art";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FB9261352D96A84C0003B2FF /* Release configuration for PBXNativeTarget "HGArt" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG Art";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FBF674D92DB1FCAE00F84E99 /* Debug configuration for PBXNativeTarget "HGArtTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HGArt.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HGArt";
+			};
+			name = Debug;
+		};
+		FBF674DA2DB1FCAE00F84E99 /* Release configuration for PBXNativeTarget "HGArtTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HGArt.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HGArt";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FB2D9FC32D9C577B00CBAD8C /* Build configuration list for PBXNativeTarget "HGArtClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB2D9FBC2D9C577B00CBAD8C /* Debug configuration for PBXNativeTarget "HGArtClip" */,
+				FB2D9FBD2D9C577B00CBAD8C /* Release configuration for PBXNativeTarget "HGArtClip" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		FB9261052D96A84B0003B2FF /* Build configuration list for PBXProject "HGArt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB9261312D96A84C0003B2FF /* Debug configuration for PBXProject "HGArt" */,
+				FB9261322D96A84C0003B2FF /* Release configuration for PBXProject "HGArt" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		FB9261332D96A84C0003B2FF /* Build configuration list for PBXNativeTarget "HGArt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB9261342D96A84C0003B2FF /* Debug configuration for PBXNativeTarget "HGArt" */,
+				FB9261352D96A84C0003B2FF /* Release configuration for PBXNativeTarget "HGArt" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		FBF674D82DB1FCAE00F84E99 /* Build configuration list for PBXNativeTarget "HGArtTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBF674D92DB1FCAE00F84E99 /* Debug configuration for PBXNativeTarget "HGArtTests" */,
+				FBF674DA2DB1FCAE00F84E99 /* Release configuration for PBXNativeTarget "HGArtTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FB198AAB2DB16B5000B30012 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+	};
+	rootObject = FB9261022D96A84B0003B2FF /* Project object */;
+}

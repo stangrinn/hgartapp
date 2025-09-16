@@ -1,0 +1,28 @@
+{
+  "targets": [
+    {
+      "name": "Emperor",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Emperor.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Emperor.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "Magician",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Magician.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Magician.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "Empress",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Empress.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Empress.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "Fool",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Fool.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Fool.mp4",
+      "physicalWidth": 0.42
+    }
+  ]
+}

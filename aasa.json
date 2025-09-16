@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "VWR38Q45WB.weart.ARKitVideoOverlay",
+        "paths": [ "/ar-clip/*", "/" ]
+      }
+    ]
+  }
+}
