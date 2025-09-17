@@ -47,14 +47,55 @@
 		FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGArtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FB9261092D96A84B0003B2FF /* HGArt */;
+		};
+		FBAACA342E7AF05F004CF90E /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
+		};
+		FBAACA3A2E7AF47E004CF90E /* Exceptions for "HGARtApp" folder in "HGArtClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Controllers/CameraPermissionDeniedViewController.swift,
+				Helpers/PlayerObserver.swift,
+				Helpers/TargetScannerOverlay.swift,
+				Managers/ARSceneManager.swift,
+				Managers/ARSessionManager.swift,
+				Managers/ARVideoOverlayManager.swift,
+				Managers/VideoManager.swift,
+				Models/ARTarget.swift,
+				UI/Components/PaddedLabelText.swift,
+				UI/Components/ToggleIconButton.swift,
+				ViewController.swift,
+			);
+			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FBAACA342E7AF05F004CF90E /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */,
+			);
 			path = HGARtAppClip;
 			sourceTree = "<group>";
 		};
 		FB92610C2D96A84B0003B2FF /* HGARtApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */,
+				FBAACA3A2E7AF47E004CF90E /* Exceptions for "HGARtApp" folder in "HGArtClip" target */,
+			);
 			path = HGARtApp;
 			sourceTree = "<group>";
 		};
