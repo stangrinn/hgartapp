@@ -73,6 +73,8 @@
 				Managers/ARVideoOverlayManager.swift,
 				Managers/VideoManager.swift,
 				Models/ARTarget.swift,
+				"Resources/ar-config.json",
+				UI/Assets/Loader.mp4,
 				UI/Components/PaddedLabelText.swift,
 				UI/Components/ToggleIconButton.swift,
 				ViewController.swift,
