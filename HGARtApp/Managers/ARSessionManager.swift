@@ -1,6 +1,6 @@
 //
 //  Untitled.swift
-//  ARKitVideoOverlay
+//  HGARt
 //
 //  Created by Web TL AE Stanislav Grinshpun on 2025-04-13.
 //

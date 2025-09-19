@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  ARKitVideoOverlay
+//  HGARt
 //
 //  Created by Stanislav Grinshpun on 28/03/2025.
 //

@@ -1,6 +1,6 @@
 //
 //  VideoOverlayManager.swift
-//  ARKitVideoOverlay
+//  HGARt
 //
 //  Created by Stanislav Grinshpun on 2025-04-06.
 //

@@ -1,6 +1,6 @@
 //
 //  TargetScanner.swift
-//  ARKitVideoOverlay
+//  HGARt
 //
 //  Created by AE Stanislav Grinshpun on 2025-04-17.
 //

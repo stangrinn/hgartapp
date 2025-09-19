@@ -1,6 +1,6 @@
 //
 //  ARTarget.swift
-//  ARKitVideoOverlay
+//  HGARt
 //  model
 //  Created by Stanislav Grinshpun on 2025-04-07.
 //

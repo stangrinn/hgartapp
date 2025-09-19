@@ -1,6 +1,6 @@
 //
 //  ToggleIconButton.swift
-//  ARKitVideoOverlay
+//  HGARt
 //
 //  Created by Stanislav Grinshpun on 2025-04-13.
 //
