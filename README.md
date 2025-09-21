@@ -91,7 +91,7 @@ HGARtAppClip/
 └── Assets.xcassets/
 
 Tests/
-├── ARKitVideoOverlayTests.swift
+├── HGARtTests.swift
 ├── Managers/
 │   ├── ARSceneManagerTests.swift
 │   ├── ARSessionManagerTests.swift
@@ -110,7 +110,7 @@ Tests/
 The project includes comprehensive unit tests for all major components. Tests are organized to mirror the structure of the main application:
 
 ```
-ARKitVideoOverlayTests/
+HGARtTests/
 ├── Managers/
 │   ├── ARSceneManagerTests.swift
 │   ├── ARSessionManagerTests.swift
