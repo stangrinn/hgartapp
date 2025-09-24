@@ -69,7 +69,7 @@ class ARVideoOverlayManager {
 
         player.play()
 
-        if player.currentItem?.status == .readyToPlay {
+        if player.currentItem?.status != .readyToPlay {
             print("⚠️ Player not ready: \(player.currentItem?.status.rawValue ?? -1)")
         }
 
@@ -89,24 +89,29 @@ class ARVideoOverlayManager {
         let player: AVPlayer
 
         if let existing = players[target.name] {
-
             player = existing
-
             print("♻️ Reusing AVPlayer for \(target.name)")
         } else {
-
             player = AVPlayer(url: url)
-
             players[target.name] = player
-
             print("🎥 Creating new AVPlayer for \(target.name)")
 
             let observer: PlayerObserver = PlayerObserver(player: player)
-
             observers.append(observer)
 
             if let currentItem: AVPlayerItem = player.currentItem {
                 currentItem.addObserver(observer, forKeyPath: "status", options: [.new, .initial], context: nil)
+                
+                // Add error handling for player items
+                NotificationCenter.default.addObserver(
+                    forName: .AVPlayerItemFailedToPlayToEndTime,
+                    object: currentItem,
+                    queue: .main
+                ) { notification in
+                    if let error = notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error {
+                        print("❌ Player failed to play: \(error.localizedDescription)")
+                    }
+                }
             }
         }
         
