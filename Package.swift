@@ -2,22 +2,22 @@
 import PackageDescription
 
 let package: Package = Package(
-    name: "ARKitVideoOverlay",
+    name: "HGARt",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v15)
     ],
     products: [
         .library(
-            name: "ARKitVideoOverlay",
-            targets: ["ARKitVideoOverlay"])
+            name: "HGARtApp",
+            targets: ["HGARtApp"])
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "ARKitVideoOverlay",
+            name: "HGARtApp",
             dependencies: [],
-            path: "ARKitVideoOverlay",
+            path: "HGARtApp",
             resources: [
                 .process("UI/Assets/Loader.mp4"),
                 .process("Assets.xcassets")
@@ -30,9 +30,9 @@ let package: Package = Package(
             ]
         ),
         .testTarget(
-            name: "ARKitVideoOverlayTests",
-            dependencies: ["ARKitVideoOverlay"],
-            path: "ARKitVideoOverlayTests"
+            name: "HGARtTests",
+            dependencies: ["HGARtApp"],
+            path: "Tests"
         )
     ]
 )
