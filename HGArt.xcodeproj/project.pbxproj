@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FB2372B72E447DEE00DD2A17 /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB3E601C2D96B226006EDCDA /* ARKit.framework */; };
 		FB2D9FBB2D9C577B00CBAD8C /* HGArtClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FB90B6032E8589B70036A281 /* HGArtKidsClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = FB90B5EF2E8589B60036A281 /* HGArtKidsClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -18,6 +19,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FB2D9F8F2D9C577A00CBAD8C;
 			remoteInfo = weart;
+		};
+		FB90B6012E8589B70036A281 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FB9261022D96A84B0003B2FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FB90B5EE2E8589B60036A281;
+			remoteInfo = HGArtKidsClip;
 		};
 		FBF674D62DB1FCAE00F84E99 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -35,6 +43,7 @@
 			dstSubfolder = Product;
 			files = (
 				FB2D9FBB2D9C577B00CBAD8C /* HGArtClip.app in Embed App Clips */,
+				FB90B6032E8589B70036A281 /* HGArtKidsClip.app in Embed App Clips */,
 			);
 			name = "Embed App Clips";
 		};
@@ -44,11 +53,39 @@
 		FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArtClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB3E601C2D96B226006EDCDA /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 		FB6531032E802C07003BFCDA /* HGArtRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HGArtRelease.entitlements; sourceTree = "<group>"; };
+		FB90B5EF2E8589B60036A281 /* HGArtKidsClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArtKidsClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB92610A2D96A84B0003B2FF /* HGArt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGArtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FB90B6092E858C220036A281 /* Exceptions for "HGARtApp" folder in "HGArtKidsClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Controllers/CameraPermissionDeniedViewController.swift,
+				Helpers/PlayerObserver.swift,
+				Helpers/TargetScannerOverlay.swift,
+				Managers/ARSceneManager.swift,
+				Managers/ARSessionManager.swift,
+				Managers/ARVideoOverlayManager.swift,
+				Managers/RecordingManager.swift,
+				Managers/VideoManager.swift,
+				Models/ARTarget.swift,
+				"Resources/ar-config.json",
+				UI/Assets/Loader.mp4,
+				UI/Components/PaddedLabelText.swift,
+				UI/Components/ToggleIconButton.swift,
+				ViewController.swift,
+			);
+			target = FB90B5EE2E8589B60036A281 /* HGArtKidsClip */;
+		};
+		FB90B60A2E858C230036A281 /* Exceptions for "HGArtKidsClip" folder in "HGArtKidsClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FB90B5EE2E8589B60036A281 /* HGArtKidsClip */;
+		};
 		FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -72,6 +109,7 @@
 				Managers/ARSceneManager.swift,
 				Managers/ARSessionManager.swift,
 				Managers/ARVideoOverlayManager.swift,
+				Managers/RecordingManager.swift,
 				Managers/VideoManager.swift,
 				Models/ARTarget.swift,
 				"Resources/ar-config.json",
@@ -93,11 +131,20 @@
 			path = HGARtAppClip;
 			sourceTree = "<group>";
 		};
+		FB90B5F02E8589B60036A281 /* HGArtKidsClip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FB90B60A2E858C230036A281 /* Exceptions for "HGArtKidsClip" folder in "HGArtKidsClip" target */,
+			);
+			path = HGArtKidsClip;
+			sourceTree = "<group>";
+		};
 		FB92610C2D96A84B0003B2FF /* HGARtApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */,
 				FBAACA3A2E7AF47E004CF90E /* Exceptions for "HGARtApp" folder in "HGArtClip" target */,
+				FB90B6092E858C220036A281 /* Exceptions for "HGARtApp" folder in "HGArtKidsClip" target */,
 			);
 			path = HGARtApp;
 			sourceTree = "<group>";
@@ -111,6 +158,11 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		FB2D9F8D2D9C577A00CBAD8C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		FB90B5EC2E8589B60036A281 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
 			);
@@ -144,6 +196,7 @@
 				FB3E601B2D96B226006EDCDA /* Frameworks */,
 				FB92610C2D96A84B0003B2FF /* HGARtApp */,
 				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
+				FB90B5F02E8589B60036A281 /* HGArtKidsClip */,
 				FB92610B2D96A84B0003B2FF /* Products */,
 				FBF674D32DB1FCAE00F84E99 /* Tests */,
 			);
@@ -155,6 +208,7 @@
 				FB92610A2D96A84B0003B2FF /* HGArt.app */,
 				FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */,
 				FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */,
+				FB90B5EF2E8589B60036A281 /* HGArtKidsClip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -180,6 +234,24 @@
 			productReference = FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */;
 			productType = "com.apple.product-type.application.on-demand-install-capable";
 		};
+		FB90B5EE2E8589B60036A281 /* HGArtKidsClip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB90B6072E8589B70036A281 /* Build configuration list for PBXNativeTarget "HGArtKidsClip" */;
+			buildPhases = (
+				FB90B5EB2E8589B60036A281 /* Sources */,
+				FB90B5EC2E8589B60036A281 /* Frameworks */,
+				FB90B5ED2E8589B60036A281 /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				FB90B5F02E8589B60036A281 /* HGArtKidsClip */,
+			);
+			name = HGArtKidsClip;
+			productName = HGArtKidsClip;
+			productReference = FB90B5EF2E8589B60036A281 /* HGArtKidsClip.app */;
+			productType = "com.apple.product-type.application.on-demand-install-capable";
+		};
 		FB9261092D96A84B0003B2FF /* HGArt */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FB9261332D96A84C0003B2FF /* Build configuration list for PBXNativeTarget "HGArt" */;
@@ -193,6 +265,7 @@
 			);
 			dependencies = (
 				FB2D9FB92D9C577B00CBAD8C /* PBXTargetDependency */,
+				FB90B6022E8589B70036A281 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FB92610C2D96A84B0003B2FF /* HGARtApp */,
@@ -230,11 +303,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					FB2D9F8F2D9C577A00CBAD8C = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					FB90B5EE2E8589B60036A281 = {
+						CreatedOnToolsVersion = 16.4;
 					};
 					FB9261092D96A84B0003B2FF = {
 						CreatedOnToolsVersion = 16.2;
@@ -264,6 +340,7 @@
 			targets = (
 				FB9261092D96A84B0003B2FF /* HGArt */,
 				FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */,
+				FB90B5EE2E8589B60036A281 /* HGArtKidsClip */,
 				FBF674D12DB1FCAE00F84E99 /* HGArtTests */,
 			);
 		};
@@ -271,6 +348,11 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		FB2D9F8E2D9C577A00CBAD8C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		FB90B5ED2E8589B60036A281 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -293,6 +375,11 @@
 			files = (
 			);
 		};
+		FB90B5EB2E8589B60036A281 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 		FB9261062D96A84B0003B2FF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
@@ -310,6 +397,11 @@
 			isa = PBXTargetDependency;
 			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
 			targetProxy = FB2D9FB82D9C577B00CBAD8C /* PBXContainerItemProxy */;
+		};
+		FB90B6022E8589B70036A281 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FB90B5EE2E8589B60036A281 /* HGArtKidsClip */;
+			targetProxy = FB90B6012E8589B70036A281 /* PBXContainerItemProxy */;
 		};
 		FBF674D72DB1FCAE00F84E99 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -387,6 +479,82 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "HGARt AppClip Profile";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FB90B6042E8589B70036A281 /* Debug configuration for PBXNativeTarget "HGArtKidsClip" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HGArtKidsClip/HGArtKidsClip.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HGArtKidsClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HGArt;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay.HGARtKidsClip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FB90B6052E8589B70036A281 /* Release configuration for PBXNativeTarget "HGArtKidsClip" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = HGArtKidsClip/HGArtKidsClip.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VWR38Q45WB;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HGArtKidsClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HGArt;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay.HGARtKidsClip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "HGARt KidsAppClip Profile";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -659,6 +827,14 @@
 			buildConfigurations = (
 				FB2D9FBC2D9C577B00CBAD8C /* Debug configuration for PBXNativeTarget "HGArtClip" */,
 				FB2D9FBD2D9C577B00CBAD8C /* Release configuration for PBXNativeTarget "HGArtClip" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		FB90B6072E8589B70036A281 /* Build configuration list for PBXNativeTarget "HGArtKidsClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB90B6042E8589B70036A281 /* Debug configuration for PBXNativeTarget "HGArtKidsClip" */,
+				FB90B6052E8589B70036A281 /* Release configuration for PBXNativeTarget "HGArtKidsClip" */,
 			);
 			defaultConfigurationName = Release;
 		};
