@@ -54,6 +54,7 @@
 		FB3E601C2D96B226006EDCDA /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 		FB6531032E802C07003BFCDA /* HGArtRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HGArtRelease.entitlements; sourceTree = "<group>"; };
 		FB90B5EF2E8589B60036A281 /* HGArtKidsClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArtKidsClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB90B7DE2E8597C70036A281 /* HGArtKidsClipRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HGArtKidsClipRelease.entitlements; sourceTree = "<group>"; };
 		FB92610A2D96A84B0003B2FF /* HGArt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGArtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -79,7 +80,7 @@
 			);
 			target = FB90B5EE2E8589B60036A281 /* HGArtKidsClip */;
 		};
-		FB90B60A2E858C230036A281 /* Exceptions for "HGArtKidsClip" folder in "HGArtKidsClip" target */ = {
+		FB90B60A2E858C230036A281 /* Exceptions for "HGARtKidsAppClip" folder in "HGArtKidsClip" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -92,13 +93,6 @@
 				Info.plist,
 			);
 			target = FB9261092D96A84B0003B2FF /* HGArt */;
-		};
-		FBAACA342E7AF05F004CF90E /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
 		};
 		FBAACA3A2E7AF47E004CF90E /* Exceptions for "HGARtApp" folder in "HGArtClip" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -125,18 +119,15 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				FBAACA342E7AF05F004CF90E /* Exceptions for "HGARtAppClip" folder in "HGArtClip" target */,
-			);
 			path = HGARtAppClip;
 			sourceTree = "<group>";
 		};
-		FB90B5F02E8589B60036A281 /* HGArtKidsClip */ = {
+		FB90B5F02E8589B60036A281 /* HGARtKidsAppClip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FB90B60A2E858C230036A281 /* Exceptions for "HGArtKidsClip" folder in "HGArtKidsClip" target */,
+				FB90B60A2E858C230036A281 /* Exceptions for "HGARtKidsAppClip" folder in "HGArtKidsClip" target */,
 			);
-			path = HGArtKidsClip;
+			path = HGARtKidsAppClip;
 			sourceTree = "<group>";
 		};
 		FB92610C2D96A84B0003B2FF /* HGARtApp */ = {
@@ -192,11 +183,12 @@
 		FB9261012D96A84B0003B2FF = {
 			isa = PBXGroup;
 			children = (
+				FB90B7DE2E8597C70036A281 /* HGArtKidsClipRelease.entitlements */,
 				FB6531032E802C07003BFCDA /* HGArtRelease.entitlements */,
 				FB3E601B2D96B226006EDCDA /* Frameworks */,
 				FB92610C2D96A84B0003B2FF /* HGARtApp */,
 				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
-				FB90B5F02E8589B60036A281 /* HGArtKidsClip */,
+				FB90B5F02E8589B60036A281 /* HGARtKidsAppClip */,
 				FB92610B2D96A84B0003B2FF /* Products */,
 				FBF674D32DB1FCAE00F84E99 /* Tests */,
 			);
@@ -245,7 +237,7 @@
 			buildRules = (
 			);
 			fileSystemSynchronizedGroups = (
-				FB90B5F02E8589B60036A281 /* HGArtKidsClip */,
+				FB90B5F02E8589B60036A281 /* HGARtKidsAppClip */,
 			);
 			name = HGArtKidsClip;
 			productName = HGArtKidsClip;
@@ -494,19 +486,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HGArtKidsClip/HGArtKidsClip.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HGArtKidsAppClip/HGArtKidsClip.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = HGArtKidsClip/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = HGArt;
+				INFOPLIST_FILE = HGArtKidsAppClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids Clip";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use the camera to view AR content that is placed on top of HG AR Arts.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -530,7 +526,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HGArtKidsClip/HGArtKidsClip.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HGArtKidsClipRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
@@ -538,13 +534,17 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = HGArtKidsClip/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = HGArt;
+				INFOPLIST_FILE = HGArtKidsAppClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids Clip";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use the camera to view AR content that is placed on top of HG AR Arts.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
