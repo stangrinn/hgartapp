@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  weart
+//  HGArtClip
 //
 //  Created by Stanislav Grinshpun on 01/04/2025.
 //

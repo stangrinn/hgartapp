@@ -18,9 +18,41 @@ class ARVideoOverlayManager {
     private static var muteButton: UIButton?
     private static var players: [String: AVPlayer] = [:]
     private static var observers: [PlayerObserver] = []
+    
+    // MARK: - App Clip Detection
+    
+    /// Determines if the app is running as an App Clip
+    static var isRunningInAppClip: Bool {
+        // Method 1: Check for NSAppClip key in Info.plist (most reliable)
+        if Bundle.main.object(forInfoDictionaryKey: "NSAppClip") != nil {
+            return true
+        }
+        
+        // Method 2: Check bundle identifier contains "Clip"
+        if let bundleId = Bundle.main.bundleIdentifier,
+            bundleId.contains("Clip") {
+            return true
+        }
+        
+        return false
+    }
 
     static func createPreloaderOverlay(view: UIView) {
-        guard let path: String = Bundle.main.path(forResource: "Loader", ofType: "mp4") else {
+        var forResource: String
+        var bgColor: CGColor = UIColor.black.cgColor
+        
+        // Check if running in App Clip for different behavior
+        if isRunningInAppClip {
+            print("🎬 Running in App Clip - using KIDS preloader")
+            forResource = "Loader-kids"
+            bgColor = UIColor(red: 254/255, green: 250/255, blue: 235/255, alpha: 1.0).cgColor
+        } else {
+            print("🎬 Running in main app - using full preloader")
+            forResource = "Loader"
+        }
+        
+        
+        guard let path: String = Bundle.main.path(forResource: forResource, ofType: "mp4") else {
             print("Intro video not found")
             return
         }
@@ -31,8 +63,27 @@ class ARVideoOverlayManager {
         playerLayer.frame = view.bounds
         playerLayer.videoGravity = .resizeAspect
         playerLayer.zPosition = 999
-        playerLayer.backgroundColor = UIColor.black.cgColor
+        
+        // Synchronize color spaces to avoid visual differences
+        if #available(iOS 10.0, *) {
+            playerLayer.pixelBufferAttributes = [
+                kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)
+            ]
+        }
+        
+        // Create color with same color space as video
+        let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpace.init(name: CGColorSpace.displayP3)!
+        let components: [CGFloat] = [254/255, 250/255, 235/255, 1.0]
+        let matchedBgColor = CGColor(colorSpace: colorSpace, components: components) ?? bgColor
+        
+        playerLayer.backgroundColor = matchedBgColor
+        playerLayer.frame = view.bounds.insetBy(dx: -1, dy: -1) // Expand by 1 pixel to avoid edge artifacts
 
+        // Additional rendering settings to match colors
+        view.layer.backgroundColor = matchedBgColor
+        
+        view.backgroundColor = UIColor(cgColor: matchedBgColor)
+        
         view.layer.addSublayer(playerLayer)
 
         player.play()
@@ -56,13 +107,13 @@ class ARVideoOverlayManager {
             return nil
         }
 
-    // Add a small padding so the plane fully covers the reference image
-    let padding: CGFloat = 0.01
-    let planeWidth = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
-    let planeHeight = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
+        // Add a small padding so the plane fully covers the reference image
+        let padding: CGFloat = 0.01
+        let planeWidth = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
+        let planeHeight = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
 
-    let plane = createPlane(width: planeWidth, height: planeHeight)
-        
+        let plane = createPlane(width: planeWidth, height: planeHeight)
+            
         let player = createOrGetPlayer(url: url, target: target)
 
         plane.firstMaterial?.diffuse.contents = player
@@ -74,6 +125,7 @@ class ARVideoOverlayManager {
         }
 
         let planeNode: SCNNode = SCNNode(geometry: plane)
+        
         // Draw after other geometry to reduce z-fighting/edge artifacts
         planeNode.renderingOrder = 2000
         planeNode.eulerAngles.x = -.pi / 2
