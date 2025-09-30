@@ -39,18 +39,21 @@ class ARVideoOverlayManager {
 
     static func createPreloaderOverlay(view: UIView) {
         var forResource: String
-        var bgColor: CGColor = UIColor.black.cgColor
+        var bgColor: CGColor
+        var videoColor: [CGFloat]
         
         // Check if running in App Clip for different behavior
         if isRunningInAppClip {
             print("🎬 Running in App Clip - using KIDS preloader")
             forResource = "Loader-kids"
             bgColor = UIColor(red: 254/255, green: 250/255, blue: 235/255, alpha: 1.0).cgColor
+            videoColor = [254.0/255.0, 250.0/255.0, 235.0/255.0, 1.0]
         } else {
             print("🎬 Running in main app - using full preloader")
             forResource = "Loader"
+            bgColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0).cgColor
+            videoColor = [0.0/255.0, 0.0/255.0, 0.0/255.0, 1.0]
         }
-        
         
         guard let path: String = Bundle.main.path(forResource: forResource, ofType: "mp4") else {
             print("Intro video not found")
@@ -73,7 +76,7 @@ class ARVideoOverlayManager {
         
         // Create color with same color space as video
         let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpace.init(name: CGColorSpace.displayP3)!
-        let components: [CGFloat] = [254/255, 250/255, 235/255, 1.0]
+        let components: [CGFloat] = videoColor
         let matchedBgColor = CGColor(colorSpace: colorSpace, components: components) ?? bgColor
         
         playerLayer.backgroundColor = matchedBgColor
