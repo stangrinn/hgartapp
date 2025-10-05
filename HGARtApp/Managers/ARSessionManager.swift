@@ -2,7 +2,7 @@
 //  Untitled.swift
 //  HGARt
 //
-//  Created by Web TL AE Stanislav Grinshpun on 2025-04-13.
+//  Created by  Stanislav Grinshpun on 2025-04-13.
 //
 
 import Foundation
@@ -21,8 +21,6 @@ class ARSessionManager: NSObject {
     private var targets: [ARTarget] = []
     private var referenceImages: Set<ARReferenceImage> = []
     private let sceneView: ARSCNView
-    
-    
     
     init(sceneView: ARSCNView) {
         self.sceneView = sceneView

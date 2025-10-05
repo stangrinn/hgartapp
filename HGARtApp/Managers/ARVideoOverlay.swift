@@ -12,30 +12,16 @@ import ARKit
 import Foundation
 import CoreMedia
 
-class ARVideoOverlayManager {
+class ARVideoOverlay {
 
     private static var playPauseButton: UIButton?
     private static var muteButton: UIButton?
     private static var players: [String: AVPlayer] = [:]
     private static var observers: [PlayerObserver] = []
+    private weak var videoManager: ARVideoManager?
     
-    // MARK: - App Clip Detection
-    
-    /// Determines if the app is running as an App Clip
-    static var isRunningInAppClip: Bool {
-        // Method 1: Check for NSAppClip key in Info.plist (most reliable)
-        if Bundle.main.object(forInfoDictionaryKey: "NSAppClip") != nil {
-            return true
-        }
-        
-        // Method 2: Check bundle identifier contains "Clip"
-        if let bundleId = Bundle.main.bundleIdentifier,
-            bundleId.contains("Clip") {
-            return true
-        }
-        
-        return false
-    }
+    /// MARK: - App Clip Detection
+
 
     static func createPreloaderOverlay(view: UIView) {
         var forResource: String
@@ -61,6 +47,7 @@ class ARVideoOverlayManager {
         }
 
         let player: AVPlayer = AVPlayer(url: URL(fileURLWithPath: path))
+        
         let playerLayer: AVPlayerLayer = AVPlayerLayer(player: player)
 
         playerLayer.frame = view.bounds
@@ -100,6 +87,8 @@ class ARVideoOverlayManager {
                 playerLayer.removeFromSuperlayer()
             }
         }
+        
+        
     }
 
     static func createMainOverlay(for imageAnchor: ARImageAnchor, targets: [ARTarget]) -> (node: SCNNode, player: AVPlayer)? {
@@ -110,12 +99,7 @@ class ARVideoOverlayManager {
             return nil
         }
 
-        // Add a small padding so the plane fully covers the reference image
-        let padding: CGFloat = 0.01
-        let planeWidth = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
-        let planeHeight = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
-
-        let plane = createPlane(width: planeWidth, height: planeHeight)
+        let plane = createPlane(imageAnchor: imageAnchor)
             
         let player = createOrGetPlayer(url: url, target: target)
 
@@ -144,14 +128,20 @@ class ARVideoOverlayManager {
         let player: AVPlayer
 
         if let existing = players[target.name] {
+        
             player = existing
+            
             print("♻️ Reusing AVPlayer for \(target.name)")
+            
         } else {
             player = AVPlayer(url: url)
+            
             players[target.name] = player
+            
             print("🎥 Creating new AVPlayer for \(target.name)")
 
             let observer: PlayerObserver = PlayerObserver(player: player)
+            
             observers.append(observer)
 
             if let currentItem: AVPlayerItem = player.currentItem {
@@ -173,7 +163,12 @@ class ARVideoOverlayManager {
         return player
     }
     
-    private static func createPlane(width: CGFloat, height: CGFloat) -> SCNPlane {
+    private static func createPlane(imageAnchor: ARImageAnchor) -> SCNPlane {
+        
+        let padding: CGFloat = 0.01
+        let width = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
+        let height = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
+        
         let plane = SCNPlane(width: width, height: height)
         // Use an opaque black material so the plane occludes the real-world background
         plane.firstMaterial?.diffuse.contents = UIColor.black
@@ -197,56 +192,20 @@ class ARVideoOverlayManager {
         return plane
     }
 
-    static func setupControls(view: UIView,
-                              target: Any,
-                              muteSelector: Selector,
-                              isMuted: @escaping () -> Bool,
-                              isPlaying: @escaping () -> Bool) {
-
-        let muteButton = ToggledIconButton(
-            defaultIconName: "speaker.wave.2.fill",
-            toggledIconName: "speaker.slash.fill",
-            backgroundColor: UIColor.black.withAlphaComponent(0.4),
-            symbolSize: 14
-        )
-
-        muteButton.attach(to: view, target: target, action: muteSelector, toggled: isMuted(), xOffset: 32, yOffset: 32, alignRight: true)
-        muteButton.isHidden = true
-
-        self.muteButton = muteButton
-    }
-
-    static func setControlsVisible(_ visible: Bool) {
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.5, animations: {
-                muteButton?.alpha = visible ? 1.0 : 0.0
-            }, completion: { _ in
-                muteButton?.isHidden = !visible
-            })
+    
+    // Determines if the app is running as an App Clip
+    static var isRunningInAppClip: Bool {
+        // Method 1: Check for NSAppClip key in Info.plist (most reliable)
+        if Bundle.main.object(forInfoDictionaryKey: "NSAppClip") != nil {
+            return true
         }
-    }
-
-    static func updatePlayPauseIcon(isPlaying: Bool) {
-        let iconName: String = isPlaying ? "pause.fill" : "play.fill"
-
-        DispatchQueue.main.async {
-            if var config = playPauseButton?.configuration {
-                config.image = UIImage(systemName: iconName)
-                config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 14, weight: .regular)
-                playPauseButton?.configuration = config
-            }
+        
+        // Method 2: Check bundle identifier contains "Clip"
+        if let bundleId = Bundle.main.bundleIdentifier,
+            bundleId.contains("Clip") {
+            return true
         }
-    }
-
-    static func updateMuteIcon(isMuted: Bool) {
-        let icon: String = isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill"
-
-        DispatchQueue.main.async {
-            if var config = muteButton?.configuration {
-                config.image = UIImage(systemName: icon)
-                config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 14, weight: .regular)
-                muteButton?.configuration = config
-            }
-        }
+        
+        return false
     }
 }

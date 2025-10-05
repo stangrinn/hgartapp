@@ -6,8 +6,6 @@ import ReplayKit
 class ViewController: UIViewController {
 
     private var arSessionManager: ARSessionManager!
-    private var videoManager: VideoManager!
-    private var scannerOverlay: TargetScannerOverlay!
     private var arSceneManager: ARSceneManager!
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
@@ -34,7 +32,6 @@ class ViewController: UIViewController {
     }
     
     private func setupSceneView() {
-        
         sceneView = ARSCNView(frame: view.frame)
         view.addSubview(sceneView)
         sceneView.scene = SCNScene()
@@ -64,13 +61,8 @@ class ViewController: UIViewController {
             }
             return
         } else {
-            videoManager = VideoManager(view: view)
             
-            scannerOverlay = TargetScannerOverlay(frame: view.bounds)
-            
-            view.addSubview(scannerOverlay)
-            
-            arSceneManager = ARSceneManager(videoManager: videoManager, scannerOverlay: scannerOverlay)
+            arSceneManager = ARSceneManager(view: view) // set scene
             
             sceneView.delegate = arSceneManager
             
@@ -78,15 +70,10 @@ class ViewController: UIViewController {
             
             arSessionManager.loadTargetsAndStartSession { [weak self] loadedTargets in
                 self?.arSceneManager.setTargets(loadedTargets)
+                //set targets runs the AR scene and put there target references
             }
             
-            setupUI()
         }
-    }
-    
-    private func setupUI() {
-        ARVideoOverlayManager.createPreloaderOverlay(view: view)
-        videoManager.setupControls(view: view)
     }
     
     override func viewWillAppear(_ animated: Bool) {

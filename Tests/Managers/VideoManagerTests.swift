@@ -4,13 +4,13 @@ import ARKit
 @testable import HGArt
 
 final class VideoManagerTests: XCTestCase {
-    var videoManager: VideoManager!
+    var videoManager: ARVideoManager!
     var mockView: UIView!
     
     override func setUp() {
         super.setUp()
         mockView = UIView()
-        videoManager = VideoManager(view: mockView)
+        videoManager = ARVideoManager(view: mockView)
     }
     
     override func tearDown() {
@@ -25,7 +25,7 @@ final class VideoManagerTests: XCTestCase {
     
     func testSetupControls() {
         // Test the control elements setup
-        videoManager.setupControls(view: mockView)
+        videoManager.setupControls()
         // Verification is difficult here due to the dependency on VideoOverlayManager
     }
     

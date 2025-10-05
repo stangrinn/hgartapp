@@ -2,7 +2,7 @@
 //  CameraPermissionDeniedViewController.swift
 //  HGArt
 //
-//  Created by Web TL AE Stanislav Grinshpun on 2025-09-01.
+//  Created by  Stanislav Grinshpun on 2025-09-01.
 //
 
 import UIKit

@@ -39,13 +39,13 @@ class PlayerObserver: NSObject {
         change: [NSKeyValueChangeKey : Any]?,
         context: UnsafeMutableRawPointer?
     ) {
-        guard keyPath == "status",
-              let item = object as? AVPlayerItem else { return }
+        guard keyPath == "status", let item = object as? AVPlayerItem else { return }
 
         if item.status == .readyToPlay {
             print("🎬 Player item is ready. Starting playback.")
             self._player.play()
-        } else if item.status == .failed {
+        }
+        else if item.status == .failed {
             print("❌ AVPlayerItem failed:", item.error?.localizedDescription ?? "Unknown error")
         }
     }
