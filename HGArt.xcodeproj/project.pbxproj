@@ -69,6 +69,7 @@
 				Controllers/CameraPermissionDeniedViewController.swift,
 				Helpers/PlayerObserver.swift,
 				Helpers/TargetScannerOverlay.swift,
+				Managers/AppPreloaderOverlay.swift,
 				Managers/ARSceneManager.swift,
 				Managers/ARSessionManager.swift,
 				Managers/ARVideoControls.swift,

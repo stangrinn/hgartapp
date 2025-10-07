@@ -27,8 +27,15 @@
     {
       "name": "Alphabet",
       "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids.mp4",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids1.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "I am brave",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Brave-kids.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Brave-kids.mp4",
       "physicalWidth": 0.42
     }
+    
   ]
 }
