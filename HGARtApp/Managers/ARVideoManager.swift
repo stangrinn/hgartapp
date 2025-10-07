@@ -27,36 +27,66 @@ class ARVideoManager {
         setupControls()
     }
     
-    // This funcion calls everytime when a camera see the target
+    // This function calls every time when a camera sees the target
     func createOverlayVideoPlane(for anchor: ARImageAnchor, targets: [ARTarget]) -> SCNNode? {
         
-        if let player = playersByAnchor[anchor.identifier] {
-            
+        // If player already exists, just start it
+        if playersByAnchor[anchor.identifier] != nil {
             startVideo(for: anchor.identifier)
-            
             return nil
         }
 
+        // Try synchronous version first (for remote URLs)
         if let mainOverlay = ARVideoOverlay.createMainOverlay(for: anchor, targets: targets) {
             
             currentAnchorID = anchor.identifier
-            
             playersByAnchor[anchor.identifier] = mainOverlay.player
-            
-            mainOverlay.player.isMuted = (isMuted == nil ? true : isMuted!)  /// Set muted due to the best practicies
+            mainOverlay.player.isMuted = (isMuted == nil ? true : isMuted!)
             
             ARVideoControls.updateMuteIcon(isMuted: mainOverlay.player.isMuted)
-            
             ARVideoControls.setControlsVisible(true)
             
-            print("💣 Video is playing")
+            print("💣 Video is playing (sync)")
             
             return mainOverlay.node
         }
         
         ARVideoControls.setControlsVisible(false)
-
         return nil
+    }
+    
+    // Async version with video caching
+    func createOverlayVideoPlaneAsync(for anchor: ARImageAnchor, targets: [ARTarget], parentNode: SCNNode) async {
+        
+        // If player already exists, just start it
+        if playersByAnchor[anchor.identifier] != nil {
+            await MainActor.run {
+                startVideo(for: anchor.identifier)
+            }
+            return
+        }
+
+        // Use async version with caching
+        if let mainOverlay = await ARVideoOverlay.createMainOverlayAsync(for: anchor, targets: targets) {
+            
+            await MainActor.run {
+                currentAnchorID = anchor.identifier
+                playersByAnchor[anchor.identifier] = mainOverlay.player
+                mainOverlay.player.isMuted = (isMuted == nil ? true : isMuted!)
+                
+                ARVideoControls.updateMuteIcon(isMuted: mainOverlay.player.isMuted)
+                ARVideoControls.setControlsVisible(true)
+                
+                // Add node to parent
+                parentNode.addChildNode(mainOverlay.node)
+                
+                print("💣 Video is playing (async, cached)")
+            }
+        } else {
+            await MainActor.run {
+                ARVideoControls.setControlsVisible(false)
+            }
+        }
     }
 
     func stopVideo(for anchorID: UUID) {
@@ -81,9 +111,9 @@ class ARVideoManager {
         
         guard let player = playersByAnchor[anchorID] else { return }
         
-        if isPlaying { return }
+        if player.timeControlStatus == .playing  || player.timeControlStatus == .waitingToPlayAtSpecifiedRate { return }
         
-        print("✅ StartVideo is player playing: \(isPlaying)")
+        print("✅ StartVideo is player playing: \(player.timeControlStatus)")
         
 //        player.seek(to: .zero)
         

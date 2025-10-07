@@ -33,25 +33,25 @@ class ARVideoOverlay {
         }
 
         let plane = createPlane(imageAnchor: imageAnchor)
-        
+
         let player = createOrGetQueuePlayer(url: url, target: target)
 
         // Create SKVideoNode-based scene for stable rendering
         let videoNode = SKVideoNode(avPlayer: player)
-        
+
         videoNode.yScale = -1 // Flip to match SceneKit coordinates
 
         let sceneSize = CGSize(width: 1280, height: 720)
         let spriteScene = SKScene(size: sceneSize)
         spriteScene.scaleMode = .aspectFit
-        
+
         videoNode.position = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
         videoNode.size = sceneSize
-        
+
         spriteScene.addChild(videoNode)
 
         plane.firstMaterial?.diffuse.contents = spriteScene
-        
+
         skVideoNodes[target.name] = videoNode
 
         let planeNode = SCNNode(geometry: plane)
@@ -62,74 +62,112 @@ class ARVideoOverlay {
         parentNode.addChildNode(planeNode)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            
+
             if player.timeControlStatus != .playing {
                 player.play()
             }
-            
+
             videoNode.play()
-            
+
             print("🎬 SKVideoNode started for \(target.name), \(player)")
         }
 
         return (parentNode, player)
     }
-    
-    // MARK: - Local Video Cache
-    static func cachedURL(for target: ARTarget, completion: @escaping (URL?) -> Void) {
+
+    // MARK: - Async version with caching
+    static func createMainOverlayAsync(for imageAnchor: ARImageAnchor, targets: [ARTarget]) async -> (
+        node: SCNNode, player: AVQueuePlayer
+    )? {
+        guard let name = imageAnchor.referenceImage.name,
+              let target = targets.first(where: { $0.name == name }) else {
+            return nil
+        }
+
+        let plane = createPlane(imageAnchor: imageAnchor)
+        
+        let parentNode = SCNNode()
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.renderingOrder = 2000
+        planeNode.eulerAngles.x = -.pi / 2
+        parentNode.addChildNode(planeNode)
+
+        // Wait for the video to be cached (async/await - ЖДЕМ пока скачается!)
+        guard let url = try? await cachedURL(for: target) else {
+            print("⚠️ Could not load or cache video for \(target.name)")
+            return nil
+        }
+
+        // NOW we have the URL and can create the player
+        let player = createOrGetQueuePlayer(url: url, target: target)
+
+        // Create video node and scene on main actor
+        await MainActor.run {
+            let videoNode = SKVideoNode(avPlayer: player)
+            videoNode.yScale = -1
+
+            let sceneSize = CGSize(width: 1280, height: 720)
+            let spriteScene = SKScene(size: sceneSize)
+            spriteScene.scaleMode = .aspectFit
+            videoNode.position = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
+            videoNode.size = sceneSize
+            spriteScene.addChild(videoNode)
+
+            plane.firstMaterial?.diffuse.contents = spriteScene
+            
+            skVideoNodes[target.name] = videoNode
+        }
+
+        // Start playback on main thread
+        await MainActor.run {
+            if let videoNode = skVideoNodes[target.name] {
+                if player.timeControlStatus != .playing {
+                    player.play()
+                }
+                
+                videoNode.play()
+            
+                print("🎬 SKVideoNode started for \(target.name) (cached: \(url.isFileURL))")
+            }
+        }
+
+        // Return REAL player (not empty!)
+        return (parentNode, player)
+    }
+//    
+    // MARK: - Local Video Cache (async/await version)
+    static func cachedURL(for target: ARTarget) async throws -> URL {
         
         guard let remoteURL = URL(string: target.videoUrl) else {
-            
             print("❌ Invalid video URL for \(target.name)")
-            
-            completion(nil)
-            
-            return
+            throw NSError(domain: "ARVideoOverlay", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
 
         let fileManager = FileManager.default
-        
         let cacheDir = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        
         let folderURL = cacheDir.appendingPathComponent("ARVideos", isDirectory: true)
-        
         let fileURL = folderURL.appendingPathComponent(remoteURL.lastPathComponent)
 
-        // If the file already exists, we return the local path
+        // If the file already exists, return the local path immediately
         if fileManager.fileExists(atPath: fileURL.path) {
-            
             print("📦 Using cached video for \(target.name)")
-            
-            completion(fileURL)
-            
-            return
+            return fileURL
         }
 
-        // Create folder if demand
+        // Create folder if needed
         if !fileManager.fileExists(atPath: folderURL.path) {
-            try? fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
+            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
         }
 
-        // Dowload and cache videos
+        // Download and cache video (async)
         print("⬇️ Downloading video for \(target.name)...")
         
-        let task = URLSession.shared.downloadTask(with: remoteURL) { tempURL, _, error in
+        let (tempURL, _) = try await URLSession.shared.download(from: remoteURL)
         
-            if let tempURL = tempURL, error == nil {
-                do {
-                    try fileManager.moveItem(at: tempURL, to: fileURL)
-                    print("✅ Cached video for \(target.name)")
-                    DispatchQueue.main.async { completion(fileURL) }
-                } catch {
-                    print("❌ Failed to move cached file: \(error)")
-                    DispatchQueue.main.async { completion(nil) }
-                }
-            } else {
-                print("❌ Failed to download video for \(target.name): \(error?.localizedDescription ?? "unknown error")")
-                DispatchQueue.main.async { completion(nil) }
-            }
-        }
-        task.resume()
+        try fileManager.moveItem(at: tempURL, to: fileURL)
+        print("✅ Cached video for \(target.name)")
+        
+        return fileURL
     }
 
     // MARK: - Looper Creation

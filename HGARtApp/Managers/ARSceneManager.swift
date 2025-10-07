@@ -41,24 +41,30 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         guard let imageAnchor = anchor as? ARImageAnchor else {
             print("💩 1 ARSceneManager: anchor is not ARImageAnchor")
-            
             return nil
         }
         
-        if let node = videoManager.createOverlayVideoPlane(for: imageAnchor, targets: targets) {
+        
+        let parentNode = SCNNode()
+        
+        trackedNodes[anchor.identifier] = parentNode
+        
+        Task {
+            await videoManager.createOverlayVideoPlaneAsync(
+                for: imageAnchor,
+                targets: targets,
+                parentNode: parentNode
+            )
             
-            trackedNodes[anchor.identifier] = node
-            
-            scannerOverlay.hideScanner()
-            
-            print("✅ 1 ARSceneManager: node CREATED for anchor: \(anchor.identifier)")
-            
-            return node
+            await MainActor.run {
+                scannerOverlay.hideScanner()
+                print("✅ 1 ARSceneManager: async node CREATED for anchor: \(anchor.identifier)")
+            }
         }
         
-        print("💩 1 ARSceneManager: no node created for anchor: \(anchor.identifier)")
+        print("� 1 ARSceneManager: async loading started for anchor: \(anchor.identifier)")
         
-        return nil
+        return parentNode
     }
     
     // This function calls every frame when the camera tracks the target
@@ -75,7 +81,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             
             scannerOverlay.showScanner()
             
-            print("✅ ∞ ARSceneManager: anchor is NOT TRACKED")
+//            print("✅ ∞ ARSceneManager: anchor is NOT TRACKED")
             
         } else {
             
@@ -83,7 +89,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             
             scannerOverlay.hideScanner()
             
-            print("✅ ∞ ARSceneManager: anchor is TRACKED")
+//            print("✅ ∞ ARSceneManager: anchor is TRACKED")
         }
     }
 } 
