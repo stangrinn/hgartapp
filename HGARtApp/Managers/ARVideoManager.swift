@@ -113,9 +113,7 @@ class ARVideoManager {
         
         if player.timeControlStatus == .playing  || player.timeControlStatus == .waitingToPlayAtSpecifiedRate { return }
         
-        print("✅ StartVideo is player playing: \(player.timeControlStatus)")
-        
-//        player.seek(to: .zero)
+        print("✅ StartVideo")
         
         player.play()
         

@@ -79,7 +79,6 @@
 				Models/ARTarget.swift,
 				"Resources/ar-config.json",
 				"UI/Assets/Loader-kids.mp4",
-				UI/Assets/Loader.mp4,
 				UI/Components/PaddedLabelText.swift,
 				UI/Components/ToggleIconButton.swift,
 				ViewController.swift,

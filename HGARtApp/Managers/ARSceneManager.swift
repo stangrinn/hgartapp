@@ -43,8 +43,16 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             print("💩 1 ARSceneManager: anchor is not ARImageAnchor")
             return nil
         }
+//        
+//        // Try synchronous first (for already playing or remote URLs)
+//        if let node = videoManager.createOverlayVideoPlane(for: imageAnchor, targets: targets) {
+//            trackedNodes[anchor.identifier] = node
+//            scannerOverlay.hideScanner()
+//            print("✅ 1 ARSceneManager: node CREATED for anchor: \(anchor.identifier)")
+//            return node
+//        }
         
-        
+        // If sync didn't work, try async with caching
         let parentNode = SCNNode()
         
         trackedNodes[anchor.identifier] = parentNode
@@ -62,7 +70,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             }
         }
         
-        print("� 1 ARSceneManager: async loading started for anchor: \(anchor.identifier)")
+        print("✅ 1 ARSceneManager: async loading started for anchor: \(anchor.identifier)")
         
         return parentNode
     }

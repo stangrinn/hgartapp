@@ -29,22 +29,9 @@ class AppPreloaderOverlay {
     // MARK: - Preloader Overlay
     static func run(view: UIView) {
         
-        var forResource: String, bgColor: CGColor
+        let (path, matchedBgColor) = getResourcesByInstance()
         
-        if isRunningInAppClip {
-            print("🎬 Running in App Clip - using KIDS preloader")
-            forResource = "Loader-kids"
-            bgColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0).cgColor
-        } else {
-            print("🎬 Running in main app - using full preloader")
-            forResource = "Loader"
-            bgColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0).cgColor
-        }
-        
-        guard let path = Bundle.main.path(forResource: forResource, ofType: "mp4") else {
-            print("Intro video not found")
-            return
-        }
+        if(path.isEmpty) { return }
         
         let player = AVPlayer(url: URL(fileURLWithPath: path))
 
@@ -53,11 +40,11 @@ class AppPreloaderOverlay {
         playerLayer.frame = view.bounds
         playerLayer.videoGravity = .resizeAspect
         playerLayer.zPosition = 999
-        playerLayer.backgroundColor = bgColor
+        playerLayer.backgroundColor = matchedBgColor
         playerLayer.frame = view.bounds.insetBy(dx: -1, dy: -1)
         
-        view.layer.backgroundColor = bgColor
-        view.backgroundColor = UIColor(cgColor: bgColor)
+        view.layer.backgroundColor = matchedBgColor
+        view.backgroundColor = UIColor(cgColor: matchedBgColor)
         view.layer.addSublayer(playerLayer)
         
         player.play()
@@ -65,7 +52,48 @@ class AppPreloaderOverlay {
         removePreloaderOverlay(whenEndOf: player, remove: playerLayer)
     }
     
-    
+    static private func getResourcesByInstance() -> (String, CGColor) {
+        
+        var forResource: String
+        var bgColor: CGColor
+        var videoColor: [CGFloat]
+                
+        if isRunningInAppClip {
+            
+            print("🎬 Running in App Clip - using KIDS preloader")
+            
+            forResource = "Loader-kids"
+            
+            bgColor = UIColor(red: 254/255, green: 250/255, blue: 235/255, alpha: 1.0).cgColor
+        
+            videoColor = [254.0/255.0, 250.0/255.0, 235.0/255.0, 1.0]
+            
+        } else {
+            print("🎬 Running in main app - using full preloader")
+            
+            forResource = "Loader"
+            
+            bgColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0).cgColor
+            
+            videoColor = [0.0/255.0, 0.0/255.0, 0.0/255.0, 1.0]
+        }
+        
+        // Get the full path to the video file
+        guard let path = Bundle.main.path(forResource: forResource, ofType: "mp4") else {
+            
+            print("❌ Video file '\(forResource).mp4' not found in bundle")
+            
+            return ("", bgColor)
+        }
+        
+        let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpace.init(name: CGColorSpace.displayP3)!
+        
+        let components: [CGFloat] = videoColor
+        
+        let matchedBgColor = CGColor(colorSpace: colorSpace, components: components) ?? bgColor
+                
+        return (path, matchedBgColor)
+    }
     
     static private func removePreloaderOverlay(whenEndOf player: AVPlayer, remove playerLayer: AVPlayerLayer) {
         NotificationCenter.default.addObserver(

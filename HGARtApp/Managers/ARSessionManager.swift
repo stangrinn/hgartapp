@@ -10,12 +10,6 @@ import ARKit
 import UIKit
 import SceneKit
 
-private extension Bundle {
-    var appBuild: String {
-        object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
-    }
-}
-
 class ARSessionManager: NSObject {
 
     private var targets: [ARTarget] = []

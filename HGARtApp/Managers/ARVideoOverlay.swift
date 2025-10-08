@@ -139,18 +139,25 @@ class ARVideoOverlay {
     static func cachedURL(for target: ARTarget) async throws -> URL {
         
         guard let remoteURL = URL(string: target.videoUrl) else {
+            
             print("❌ Invalid video URL for \(target.name)")
+            
             throw NSError(domain: "ARVideoOverlay", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
 
         let fileManager = FileManager.default
+        
         let cacheDir = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        
         let folderURL = cacheDir.appendingPathComponent("ARVideos", isDirectory: true)
+        
         let fileURL = folderURL.appendingPathComponent(remoteURL.lastPathComponent)
 
         // If the file already exists, return the local path immediately
         if fileManager.fileExists(atPath: fileURL.path) {
+            
             print("📦 Using cached video for \(target.name)")
+            
             return fileURL
         }
 
@@ -165,6 +172,7 @@ class ARVideoOverlay {
         let (tempURL, _) = try await URLSession.shared.download(from: remoteURL)
         
         try fileManager.moveItem(at: tempURL, to: fileURL)
+        
         print("✅ Cached video for \(target.name)")
         
         return fileURL
