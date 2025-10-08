@@ -5,7 +5,6 @@
 //  Created by AE Stanislav Grinshpun on 2025-04-17.
 //
 
-
 import ARKit
 
 final class TargetScannerOverlay: UIView {
@@ -15,21 +14,32 @@ final class TargetScannerOverlay: UIView {
     private var scanAnimation: CABasicAnimation?
 
     override init(frame: CGRect) {
+        
         super.init(frame: frame)
+        
         setupBorder()
+        
         setupScanLine()
+        
         startScanAnimation()
         
+        setCallToRestart()
+    }
+
+    /// Set up call to restart scanning when app becomes active
+    private func setCallToRestart() {
         NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(appDidBecomeActive),
-                name: UIApplication.didBecomeActiveNotification,
-                object: nil
-            )
+            self,
+            selector: #selector(appDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
     }
     
     override func didMoveToWindow() {
+        
         super.didMoveToWindow()
+        
         if window != nil, !isHidden {
             startScanAnimation()
         } else {
@@ -37,8 +47,6 @@ final class TargetScannerOverlay: UIView {
         }
     }
     
-    
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -119,8 +127,11 @@ final class TargetScannerOverlay: UIView {
     }
 
     private func addCornerIndicators(in rect: CGRect) {
+        
         let length: CGFloat = 20.0
+        
         let thickness: CGFloat = 2.0
+        
         let color = UIColor.black.cgColor
 
         let positions: [(CGPoint, CGPoint)] = [

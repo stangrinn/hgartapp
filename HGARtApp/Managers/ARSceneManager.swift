@@ -43,15 +43,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             print("💩 1 ARSceneManager: anchor is not ARImageAnchor")
             return nil
         }
-//        
-//        // Try synchronous first (for already playing or remote URLs)
-//        if let node = videoManager.createOverlayVideoPlane(for: imageAnchor, targets: targets) {
-//            trackedNodes[anchor.identifier] = node
-//            scannerOverlay.hideScanner()
-//            print("✅ 1 ARSceneManager: node CREATED for anchor: \(anchor.identifier)")
-//            return node
-//        }
-        
+
         // If sync didn't work, try async with caching
         let parentNode = SCNNode()
         
@@ -65,7 +57,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             )
             
             await MainActor.run {
-                scannerOverlay.hideScanner()
+//                scannerOverlay.hideScanner()
                 print("✅ 1 ARSceneManager: async node CREATED for anchor: \(anchor.identifier)")
             }
         }
@@ -75,13 +67,13 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         return parentNode
     }
     
-    // This function calls every frame when the camera tracks the target
+    // This function calls every frame when the camera tracks the target 60fps
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         
         guard let imageAnchor = anchor as? ARImageAnchor else {
             print("💩 ∞ ARSceneManager: anchor is not ARImageAnchor")
             
-                return
+            return
         }
         
         if !imageAnchor.isTracked {

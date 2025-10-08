@@ -75,7 +75,7 @@
 				Managers/ARVideoControls.swift,
 				Managers/ARVideoManager.swift,
 				Managers/ARVideoOverlay.swift,
-				Managers/RecordingManager.swift,
+				Managers/ARVideoPreloader.swift,
 				Models/ARTarget.swift,
 				"Resources/ar-config.json",
 				"UI/Assets/Loader-kids.mp4",

@@ -7,7 +7,7 @@
 
 import ARKit
 
-final class ARScenePreloader: UIView {
+final class ARVideoPreloader: UIView {
 
     private let borderLayer = CAShapeLayer()
     
@@ -24,7 +24,7 @@ final class ARScenePreloader: UIView {
         setupScanLine()
         
         startScanAnimation()
-    
+        
     }
     
     required init?(coder: NSCoder) {
@@ -48,6 +48,7 @@ final class ARScenePreloader: UIView {
         animation.duration = 1.0
         animation.repeatCount = .infinity
         animation.autoreverses = true
+        
         scanAnimation = animation
         scanLine.layer.add(animation, forKey: "scan")
     }

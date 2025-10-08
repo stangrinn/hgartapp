@@ -106,7 +106,9 @@ class ARSessionManager: NSObject {
         guard var comps = URLComponents(string: raw) else { return nil }
         var q = comps.queryItems ?? []
         // Use build number as a stable buster per build; fallback to timestamp during dev runs
-        let value = Bundle.main.appBuild.isEmpty ? String(Int(Date().timeIntervalSince1970)) : Bundle.main.appBuild
+        // Local fallback for app build number (avoid depending on external Bundle extension)
+        let build = (Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String) ?? ""
+        let value = build.isEmpty ? String(Int(Date().timeIntervalSince1970)) : build
         q.append(URLQueryItem(name: key, value: value))
         comps.queryItems = q
         return comps.url

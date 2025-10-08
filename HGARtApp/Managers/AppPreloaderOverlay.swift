@@ -14,18 +14,6 @@ import SpriteKit
 
 class AppPreloaderOverlay {
     
-    // MARK: - App Clip Detection // make some external fuction for all members of application
-    static var isRunningInAppClip: Bool {
-        if Bundle.main.object(forInfoDictionaryKey: "NSAppClip") != nil {
-            return true
-        }
-        if let bundleId = Bundle.main.bundleIdentifier,
-           bundleId.contains("Clip") {
-            return true
-        }
-        return false
-    }
-    
     // MARK: - Preloader Overlay
     static func run(view: UIView) {
         
@@ -58,7 +46,14 @@ class AppPreloaderOverlay {
         var bgColor: CGColor
         var videoColor: [CGFloat]
                 
-        if isRunningInAppClip {
+        // Local fallback for App Clip detection: prefer Bundle extension when available
+        let runningInAppClip: Bool = {
+            if Bundle.main.object(forInfoDictionaryKey: "NSAppClip") != nil { return true }
+            if let bundleId = Bundle.main.bundleIdentifier { return bundleId.contains("Clip") }
+            return false
+        }()
+
+        if runningInAppClip {
             
             print("🎬 Running in App Clip - using KIDS preloader")
             

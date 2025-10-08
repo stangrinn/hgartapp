@@ -27,34 +27,6 @@ class ARVideoManager {
         setupControls()
     }
     
-    // This function calls every time when a camera sees the target
-    func createOverlayVideoPlane(for anchor: ARImageAnchor, targets: [ARTarget]) -> SCNNode? {
-        
-        // If player already exists, just start it
-        if playersByAnchor[anchor.identifier] != nil {
-            startVideo(for: anchor.identifier)
-            return nil
-        }
-
-        // Try synchronous version first (for remote URLs)
-        if let mainOverlay = ARVideoOverlay.createMainOverlay(for: anchor, targets: targets) {
-            
-            currentAnchorID = anchor.identifier
-            playersByAnchor[anchor.identifier] = mainOverlay.player
-            mainOverlay.player.isMuted = (isMuted == nil ? true : isMuted!)
-            
-            ARVideoControls.updateMuteIcon(isMuted: mainOverlay.player.isMuted)
-            ARVideoControls.setControlsVisible(true)
-            
-            print("💣 Video is playing (sync)")
-            
-            return mainOverlay.node
-        }
-        
-        ARVideoControls.setControlsVisible(false)
-        return nil
-    }
-    
     // Async version with video caching
     func createOverlayVideoPlaneAsync(for anchor: ARImageAnchor, targets: [ARTarget], parentNode: SCNNode) async {
         
