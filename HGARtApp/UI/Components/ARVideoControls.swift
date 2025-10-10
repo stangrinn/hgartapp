@@ -12,10 +12,10 @@ import ARKit
 
 class ARVideoControls {
     
-    private static var playPauseButton: UIButton?
-    private static var muteButton: UIButton?
+    private var playPauseButton: UIButton?
+    private var muteButton: UIButton?
     
-    static func setupControls(view: UIView,
+    func setup(view: UIView,
                               target: Any,
                               muteSelector: Selector,
                               isMuted: @escaping () -> Bool,
@@ -35,36 +35,36 @@ class ARVideoControls {
         self.muteButton = muteButton
     }
 
-    static func setControlsVisible(_ visible: Bool) {
+    func setControlsVisible(_ visible: Bool) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.5, animations: {
-                muteButton?.alpha = visible ? 1.0 : 0.0
+                self.muteButton?.alpha = visible ? 1.0 : 0.0
             }, completion: { _ in
-                muteButton?.isHidden = !visible
+                self.muteButton?.isHidden = !visible
             })
         }
     }
 
-    static func updatePlayPauseIcon(isPlaying: Bool) {
+    func updatePlayPauseIcon(isPlaying: Bool) {
         let iconName: String = isPlaying ? "pause.fill" : "play.fill"
 
         DispatchQueue.main.async {
-            if var config = playPauseButton?.configuration {
+            if var config = self.playPauseButton?.configuration {
                 config.image = UIImage(systemName: iconName)
                 config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 14, weight: .regular)
-                playPauseButton?.configuration = config
+                self.playPauseButton?.configuration = config
             }
         }
     }
 
-    static func updateMuteIcon(isMuted: Bool) {
+    func updateMuteIcon(isMuted: Bool) {
         let icon: String = isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill"
 
         DispatchQueue.main.async {
-            if var config = muteButton?.configuration {
+            if var config = self.muteButton?.configuration {
                 config.image = UIImage(systemName: icon)
                 config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 14, weight: .regular)
-                muteButton?.configuration = config
+                self.muteButton?.configuration = config
             }
         }
     }

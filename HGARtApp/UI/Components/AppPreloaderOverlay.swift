@@ -15,7 +15,7 @@ import SpriteKit
 class AppPreloaderOverlay {
     
     // MARK: - App Clip Detection // make some external fuction for all members of application
-    static var isRunningInAppClip: Bool {
+    var isRunningInAppClip: Bool {
         if Bundle.main.object(forInfoDictionaryKey: "NSAppClip") != nil {
             return true
         }
@@ -27,7 +27,7 @@ class AppPreloaderOverlay {
     }
     
     // MARK: - Preloader Overlay
-    static func run(view: UIView) {
+    init(view: UIView) {
         
         var forResource: String, bgColor: CGColor
         
@@ -67,7 +67,7 @@ class AppPreloaderOverlay {
     
     
     
-    static private func removePreloaderOverlay(whenEndOf player: AVPlayer, remove playerLayer: AVPlayerLayer) {
+    private func removePreloaderOverlay(whenEndOf player: AVPlayer, remove playerLayer: AVPlayerLayer) {
         NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: player.currentItem,

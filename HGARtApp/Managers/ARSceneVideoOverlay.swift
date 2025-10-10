@@ -12,71 +12,16 @@ import Foundation
 import SceneKit
 import SpriteKit
 
-class ARVideoOverlay {
+class ARSceneVideoOverlay {
 
-    private static var players: [String: AVPlayer] = [:]
-    private static var playerObservers: [PlayerObserver] = []
-    private static var avPlayerLoopers: [String: AVPlayerLooper] = [:]
-    private static var avQueueLoopers: [String: AVQueuePlayer] = [:]
-    private static var skVideoNodes: [String: SKVideoNode] = [:]
+    private var players: [String: AVPlayer] = [:]
+    private var playerObservers: [PlayerObserver] = []
+    private var avPlayerLoopers: [String: AVPlayerLooper] = [:]
+    private var avQueueLoopers: [String: AVQueuePlayer] = [:]
+    private var skVideoNodes: [String: SKVideoNode] = [:]
     
-    // MARK: - Main Overlay with SKVideoNode
-    static func createMainOverlay(for imageAnchor: ARImageAnchor, targets: [ARTarget]) -> (
-        node: SCNNode, player: AVQueuePlayer
-    )? {
-
-        guard let name = imageAnchor.referenceImage.name,
-              let target = targets.first(where: { $0.name == name }),
-              let url = URL(string: target.videoUrl)
-        else {
-            return nil
-        }
-
-        let plane = createPlane(imageAnchor: imageAnchor)
-
-        let player = createOrGetQueuePlayer(url: url, target: target)
-
-        // Create SKVideoNode-based scene for stable rendering
-        let videoNode = SKVideoNode(avPlayer: player)
-
-        videoNode.yScale = -1 // Flip to match SceneKit coordinates
-
-        let sceneSize = CGSize(width: 1280, height: 720)
-        let spriteScene = SKScene(size: sceneSize)
-        spriteScene.scaleMode = .aspectFit
-
-        videoNode.position = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
-        videoNode.size = sceneSize
-
-        spriteScene.addChild(videoNode)
-
-        plane.firstMaterial?.diffuse.contents = spriteScene
-
-        skVideoNodes[target.name] = videoNode
-
-        let planeNode = SCNNode(geometry: plane)
-        planeNode.renderingOrder = 2000
-        planeNode.eulerAngles.x = -.pi / 2
-
-        let parentNode = SCNNode()
-        parentNode.addChildNode(planeNode)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-
-            if player.timeControlStatus != .playing {
-                player.play()
-            }
-
-            videoNode.play()
-
-            print("🎬 SKVideoNode started for \(target.name), \(player)")
-        }
-
-        return (parentNode, player)
-    }
-
     // MARK: - Async version with caching
-    static func createMainOverlayAsync(for imageAnchor: ARImageAnchor, targets: [ARTarget]) async -> (
+    func createMainOverlayAsync(for imageAnchor: ARImageAnchor, targets: [ARTarget]) async -> (
         node: SCNNode, player: AVQueuePlayer
     )? {
         guard let name = imageAnchor.referenceImage.name,
@@ -91,12 +36,16 @@ class ARVideoOverlay {
         planeNode.renderingOrder = 2000
         planeNode.eulerAngles.x = -.pi / 2
         parentNode.addChildNode(planeNode)
+        
+        print("Plane BG BEFORE: \(String(describing: plane.firstMaterial?.diffuse.contents))")
 
-        // Wait for the video to be cached (async/await - ЖДЕМ пока скачается!)
+        // Wait for the video to be cached
         guard let url = try? await cachedURL(for: target) else {
             print("⚠️ Could not load or cache video for \(target.name)")
             return nil
         }
+        
+        
 
         // NOW we have the URL and can create the player
         let player = createOrGetQueuePlayer(url: url, target: target)
@@ -104,16 +53,24 @@ class ARVideoOverlay {
         // Create video node and scene on main actor
         await MainActor.run {
             let videoNode = SKVideoNode(avPlayer: player)
+            
             videoNode.yScale = -1
 
             let sceneSize = CGSize(width: 1280, height: 720)
+            
             let spriteScene = SKScene(size: sceneSize)
+            
             spriteScene.scaleMode = .aspectFit
+            
             videoNode.position = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
+            
             videoNode.size = sceneSize
+            
             spriteScene.addChild(videoNode)
 
             plane.firstMaterial?.diffuse.contents = spriteScene
+            
+            print("Plane BG AFTER: \(String(describing: plane.firstMaterial?.diffuse.contents))")
             
             skVideoNodes[target.name] = videoNode
         }
@@ -131,12 +88,12 @@ class ARVideoOverlay {
             }
         }
 
-        // Return REAL player (not empty!)
+        
         return (parentNode, player)
     }
-//    
+    
     // MARK: - Local Video Cache (async/await version)
-    static func cachedURL(for target: ARTarget) async throws -> URL {
+    func cachedURL(for target: ARTarget) async throws -> URL {
         
         guard let remoteURL = URL(string: target.videoUrl) else {
             print("❌ Invalid video URL for \(target.name)")
@@ -144,8 +101,11 @@ class ARVideoOverlay {
         }
 
         let fileManager = FileManager.default
+        
         let cacheDir = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        
         let folderURL = cacheDir.appendingPathComponent("ARVideos", isDirectory: true)
+        
         let fileURL = folderURL.appendingPathComponent(remoteURL.lastPathComponent)
 
         // If the file already exists, return the local path immediately
@@ -165,13 +125,14 @@ class ARVideoOverlay {
         let (tempURL, _) = try await URLSession.shared.download(from: remoteURL)
         
         try fileManager.moveItem(at: tempURL, to: fileURL)
+        
         print("✅ Cached video for \(target.name)")
         
         return fileURL
     }
 
     // MARK: - Looper Creation
-    private static func createOrGetQueuePlayer(url: URL, target: ARTarget) -> AVQueuePlayer {
+    private func createOrGetQueuePlayer(url: URL, target: ARTarget) -> AVQueuePlayer {
         
         let player: AVQueuePlayer
 
@@ -201,31 +162,7 @@ class ARVideoOverlay {
         return player
     }
 
-    // MARK: - Utilities
-    private static func createOrGetPlayer(url: URL, target: ARTarget) -> AVPlayer {
-        
-        let player: AVPlayer
-        
-        if let existing = players[target.name] {
-            
-            player = existing
-        
-            print("♻️ Reusing AVPlayer for \(target.name)")
-            
-        } else {
-            
-            player = AVPlayer(url: url)
-            
-            players[target.name] = player
-            
-            print("🎥 Creating new AVPlayer for \(target.name)")
-            
-            playerObservers.append(PlayerObserver(player: player))
-        }
-        return player
-    }
-
-    private static func createPlane(imageAnchor: ARImageAnchor) -> SCNPlane {
+    private func createPlane(imageAnchor: ARImageAnchor) -> SCNPlane {
         let padding: CGFloat = 0.01
         let width = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
         let height = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)

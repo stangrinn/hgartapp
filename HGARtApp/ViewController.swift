@@ -5,8 +5,8 @@ import ReplayKit
 
 class ViewController: UIViewController {
 
-    private var arSessionManager: ARSessionManager!
     private var arSceneManager: ARSceneManager!
+    private var arDataManager: ARSceneDataManager!
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
     
@@ -36,18 +36,25 @@ class ViewController: UIViewController {
         view.addSubview(sceneView)
         sceneView.scene = SCNScene()
         sceneView.antialiasingMode = .multisampling4X
-        sceneView.preferredFramesPerSecond = 60  
+        sceneView.preferredFramesPerSecond = 60
+        
+        print("View \(view!)")
     }
     
     private func setupManagers() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
        
         if status == .denied || status == .restricted {
+            
             let deniedVC = CameraPermissionDeniedViewController()
+            
             deniedVC.modalPresentationStyle = .fullScreen
+            
             present(deniedVC, animated: true, completion: nil)
+            
             return
         } else if status == .notDetermined {
+            
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 DispatchQueue.main.async {
                     if !granted {
@@ -66,9 +73,9 @@ class ViewController: UIViewController {
             
             sceneView.delegate = arSceneManager
             
-            arSessionManager = ARSessionManager(sceneView: sceneView)
+            arDataManager = ARSceneDataManager(sceneView: sceneView)
             
-            arSessionManager.loadTargetsAndStartSession { [weak self] loadedTargets in
+            arDataManager.loadTargetsAndStartSession { [weak self] loadedTargets in
                 self?.arSceneManager.setTargets(loadedTargets)
                 //set targets runs the AR scene and put there target references
             }

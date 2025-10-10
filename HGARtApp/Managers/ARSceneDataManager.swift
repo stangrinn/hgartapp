@@ -16,7 +16,7 @@ private extension Bundle {
     }
 }
 
-class ARSessionManager: NSObject {
+class ARSceneDataManager: NSObject {
 
     private var targets: [ARTarget] = []
     private var referenceImages: Set<ARReferenceImage> = []

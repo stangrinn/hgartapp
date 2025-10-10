@@ -9,21 +9,23 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     
     private var targets: [ARTarget] = []
     
-    private var videoManager: ARVideoManager!
+    private var videoManager: ARSceneVideoManager!
     
     private var scannerOverlay: TargetScannerOverlay!
+    
+    private var appPreloaderOverlay: AppPreloaderOverlay!
     
     init(view: UIView) {
         
         print("🚀 Initializing ARSceneManager")
         
-        self.videoManager = ARVideoManager(view: view)
+        self.appPreloaderOverlay = AppPreloaderOverlay(view: view)
+        
+        self.videoManager = ARSceneVideoManager(view: view)
         
         self.scannerOverlay = TargetScannerOverlay(frame: view.bounds)
         
         view.addSubview(scannerOverlay)
-        
-        AppPreloaderOverlay.run(view: view)
         
         super.init()
     }
@@ -62,7 +64,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             }
         }
         
-        print("� 1 ARSceneManager: async loading started for anchor: \(anchor.identifier)")
+        print("😇 1 ARSceneManager: async loading started for anchor: \(anchor.identifier)")
         
         return parentNode
     }
