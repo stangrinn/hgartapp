@@ -20,45 +20,46 @@ class ARSceneVideoOverlay {
     private var avQueueLoopers: [String: AVQueuePlayer] = [:]
     private var skVideoNodes: [String: SKVideoNode] = [:]
     
-    // MARK: - Async version with caching
-    func createMainOverlayAsync(for imageAnchor: ARImageAnchor, targets: [ARTarget]) async -> (
-        node: SCNNode, player: AVQueuePlayer
-    )? {
-        guard let name = imageAnchor.referenceImage.name,
+    // MARK: - Async version with caching (updates existing parentNode)
+    func createMainOverlayAsync(for imageAnchor: ARImageAnchor,
+                                targets: [ARTarget],
+                                parentNode: SCNNode) async -> AVQueuePlayer?
+        {
+            
+            guard let name = imageAnchor.referenceImage.name,
               let target = targets.first(where: { $0.name == name }) else {
             return nil
         }
 
-        let plane = createPlane(imageAnchor: imageAnchor)
+        print("⬇️ Starting video load for \(target.name)")
         
-        let parentNode = SCNNode()
-        let planeNode = SCNNode(geometry: plane)
-        planeNode.renderingOrder = 2000
-        planeNode.eulerAngles.x = -.pi / 2
-        parentNode.addChildNode(planeNode)
-        
-        print("Plane BG BEFORE: \(String(describing: plane.firstMaterial?.diffuse.contents))")
-
         // Wait for the video to be cached
         guard let url = try? await cachedURL(for: target) else {
             print("⚠️ Could not load or cache video for \(target.name)")
             return nil
         }
         
-        
-
-        // NOW we have the URL and can create the player
+        // Create player with cached URL
         let player = createOrGetQueuePlayer(url: url, target: target)
-
-        // Create video node and scene on main actor
+        
+        // Find the plane node in parentNode (it should be the first child)
+        guard let planeNode = parentNode.childNodes.first,
+              let plane = planeNode.geometry as? SCNPlane else {
+            print("⚠️ Could not find plane node in parentNode")
+            return nil
+        }
+        
+        // Create video node and replace placeholder
         await MainActor.run {
             let videoNode = SKVideoNode(avPlayer: player)
             
             videoNode.yScale = -1
-
+            
             let sceneSize = CGSize(width: 1280, height: 720)
             
             let spriteScene = SKScene(size: sceneSize)
+            
+            spriteScene.backgroundColor = .clear
             
             spriteScene.scaleMode = .aspectFit
             
@@ -67,29 +68,22 @@ class ARSceneVideoOverlay {
             videoNode.size = sceneSize
             
             spriteScene.addChild(videoNode)
-
+            
             plane.firstMaterial?.diffuse.contents = spriteScene
             
-            print("Plane BG AFTER: \(String(describing: plane.firstMaterial?.diffuse.contents))")
-            
             skVideoNodes[target.name] = videoNode
-        }
-
-        // Start playback on main thread
-        await MainActor.run {
-            if let videoNode = skVideoNodes[target.name] {
-                if player.timeControlStatus != .playing {
-                    player.play()
-                }
-                
-                videoNode.play()
             
-                print("🎬 SKVideoNode started for \(target.name) (cached: \(url.isFileURL))")
+            // Start playback
+            if player.timeControlStatus != .playing {
+                player.play()
             }
+            
+            videoNode.play()
+            
+            print("🎬 Video loaded and playing for \(target.name) (cached: \(url.isFileURL))")
         }
-
         
-        return (parentNode, player)
+        return player
     }
     
     // MARK: - Local Video Cache (async/await version)
@@ -168,7 +162,7 @@ class ARSceneVideoOverlay {
         let height = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
 
         let plane = SCNPlane(width: width, height: height)
-        plane.firstMaterial?.diffuse.contents = UIColor.black
+        plane.firstMaterial?.diffuse.contents = UIColor.white
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.transparency = 1.0
         plane.firstMaterial?.writesToDepthBuffer = true

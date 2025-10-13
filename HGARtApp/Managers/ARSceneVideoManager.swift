@@ -41,33 +41,33 @@ class ARSceneVideoManager {
     // Async version with video caching
     func createOverlayVideoPlaneAsync(for anchor: ARImageAnchor, targets: [ARTarget], parentNode: SCNNode) async {
         
-        // If player already exists, just start it
-        if playersByAnchor[anchor.identifier] != nil {
-            
+        // If player already exists, just start it on the main actor
+        let hasExistingPlayer: Bool = await MainActor.run { [weak self] in
+            guard let self else { return false }
+            return self.playersByAnchor[anchor.identifier] != nil
+        }
+        
+        if hasExistingPlayer {
             await MainActor.run {
                 startVideo(for: anchor.identifier)
             }
-            
             return
         }
 
-        // Use async version with caching
-        if let mainOverlay = await self.arVideoOverlay.createMainOverlayAsync(for: anchor, targets: targets) {
+        // Use async version with caching (updates existing parentNode)
+        if let player = await self.arVideoOverlay.createMainOverlayAsync(for: anchor, targets: targets, parentNode: parentNode) {
             
             await MainActor.run {
                 
                 currentAnchorID = anchor.identifier
                 
-                playersByAnchor[anchor.identifier] = mainOverlay.player
+                playersByAnchor[anchor.identifier] = player
                 
-                mainOverlay.player.isMuted = (isMuted == nil ? true : isMuted!)
+                player.isMuted = (isMuted == nil ? true : isMuted!)
                 
-                self.controls.updateMuteIcon(isMuted: mainOverlay.player.isMuted)
+                self.controls.updateMuteIcon(isMuted: player.isMuted)
                 
                 self.controls.setControlsVisible(true)
-                
-                // Add node to parent
-                parentNode.addChildNode(mainOverlay.node)
                 
                 print("📽️ Video is playing (async, cached)")
             }
@@ -78,6 +78,7 @@ class ARSceneVideoManager {
         }
     }
 
+    @MainActor
     func stopVideo(for anchorID: UUID) {
         
         if let player: AVPlayer = playersByAnchor[anchorID] {
@@ -96,6 +97,7 @@ class ARSceneVideoManager {
     
     }
     
+    @MainActor
     func startVideo(for anchorID: UUID) {
         
         guard let player = playersByAnchor[anchorID] else { return }
@@ -112,6 +114,7 @@ class ARSceneVideoManager {
         
     }
     
+    @MainActor
     private func clearCurrentAnchor() {
         
         currentAnchorID = nil

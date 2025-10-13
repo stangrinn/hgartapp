@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import ARKit
 import SceneKit
+import SpriteKit
 
 class ARSceneManager: NSObject, ARSCNViewDelegate {
     
@@ -46,11 +47,36 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             return nil
         }
         
-        
         let parentNode = SCNNode()
         
         trackedNodes[anchor.identifier] = parentNode
         
+        // Create placeholder plane immediately
+        let padding: CGFloat = 0.01
+
+        let width = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
+
+        let height = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
+
+        let plane = SCNPlane(width: width, height: height)
+        
+        plane.firstMaterial?.diffuse.contents = preloaderScene()
+        
+        plane.firstMaterial?.isDoubleSided = true
+        
+        plane.firstMaterial?.lightingModel = .constant
+        
+        let planeNode = SCNNode(geometry: plane)
+        
+        planeNode.renderingOrder = 2000
+        
+        planeNode.eulerAngles.x = -.pi / 2
+        
+        parentNode.addChildNode(planeNode)
+        
+        print("📦 Placeholder node created and added immediately")
+        
+        // Load video asynchronously and update the plane
         Task {
             await videoManager.createOverlayVideoPlaneAsync(
                 for: imageAnchor,
@@ -60,7 +86,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             
             await MainActor.run {
                 scannerOverlay.hideScanner()
-                print("✅ 1 ARSceneManager: async node CREATED for anchor: \(anchor.identifier)")
+                print("✅ 1 ARSceneManager: async video loaded for anchor: \(anchor.identifier)")
             }
         }
         
@@ -75,23 +101,47 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         guard let imageAnchor = anchor as? ARImageAnchor else {
             print("💩 ∞ ARSceneManager: anchor is not ARImageAnchor")
             
-                return
+            return
         }
         
         if !imageAnchor.isTracked {
-            videoManager.stopVideo(for: anchor.identifier)
-            
-            scannerOverlay.showScanner()
-            
-//            print("✅ ∞ ARSceneManager: anchor is NOT TRACKED")
-            
+            Task { @MainActor in
+                self.videoManager.stopVideo(for: anchor.identifier)
+                self.scannerOverlay.showScanner()
+            }
         } else {
-            
-            videoManager.startVideo(for: anchor.identifier)
-            
-            scannerOverlay.hideScanner()
-            
-//            print("✅ ∞ ARSceneManager: anchor is TRACKED")
+            Task { @MainActor in
+                self.videoManager.startVideo(for: anchor.identifier)
+                self.scannerOverlay.hideScanner()
+            }
         }
+    }
+
+    private func preloaderScene() -> SKScene {
+        let sceneSize = CGSize(width: 1280, height: 720)
+        let scene = SKScene(size: sceneSize)
+        scene.scaleMode = .aspectFit
+        scene.backgroundColor = UIColor(white: 255.0, alpha: 0.5)
+
+        guard let image = UIImage(named: "ARVideoPreloader") else {
+            print("⚠️ ARVideoPreloader asset not found")
+            return scene
+        }
+
+        let texture = SKTexture(image: image)
+        let sprite = SKSpriteNode(texture: texture)
+        sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        sprite.position = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
+
+        let fitsWidth = sceneSize.width / texture.size().width
+        let fitsHeight = sceneSize.height / texture.size().height
+        let maxScale = min(fitsWidth, fitsHeight) * 0.8
+        let appliedScale = min(1.0, maxScale)
+        sprite.xScale = appliedScale
+        sprite.yScale = -appliedScale
+
+        scene.addChild(sprite)
+
+        return scene
     }
 } 
