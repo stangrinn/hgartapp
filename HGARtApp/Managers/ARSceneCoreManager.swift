@@ -16,7 +16,7 @@ private extension Bundle {
     }
 }
 
-class ARSceneDataManager: NSObject {
+class ARSceneCoreManager: NSObject {
 
     private var targets: [ARTarget] = []
     private var referenceImages: Set<ARReferenceImage> = []
@@ -42,13 +42,17 @@ class ARSceneDataManager: NSObject {
         
         do {
             let data = try Data(contentsOf: url)
+            
             let decoded = try JSONDecoder().decode([String: [ARTarget]].self, from: data)
+            
             self.targets = decoded["targets"] ?? []
             
             let group = DispatchGroup()
+            
             self.referenceImages.removeAll()
             
             for target in self.targets {
+                
                 guard let imageUrl = URL(string: target.imageUrl) else {
                     print("ARSessionManager: Invalid image URL for target: \(target.name)")
                     continue
@@ -56,11 +60,17 @@ class ARSceneDataManager: NSObject {
                 
                 group.enter()
                 
-                // Keep cache-busting for images to avoid CDN-propagation issues during development
+                // Use cache-buster only in DEBUG builds to avoid unnecessary reloads in production
+                #if DEBUG
                 let effectiveImageURL = self.urlByAddingBuster(imageUrl.absoluteString) ?? imageUrl
+                #else
+                let effectiveImageURL = imageUrl
+                #endif
+                
                 let imageRequest = self.nonCachingRequest(url: effectiveImageURL)
                 
                 self.noCacheSession.dataTask(with: imageRequest) { imageData, response, error in
+                    
                     defer { group.leave() }
                     
                     if let error = error {
@@ -71,20 +81,28 @@ class ARSceneDataManager: NSObject {
                     guard let imageData = imageData,
                           let uiImage = UIImage(data: imageData),
                           let cgImage = uiImage.cgImage else {
+                            
                         print("ARSessionManager: Failed to create image for target \(target.name)")
+                            
                         return
                     }
                     
                     let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
+                    
                     arImage.name = target.name
+                    
                     self.referenceImages.insert(arImage)
+                    
+                    print("ARSessionManager: ARReferenceImage for target \(arImage)")
                     
                 }.resume()
             }
             
             group.notify(queue: .main) {
                 let configuration = ARImageTrackingConfiguration()
+                
                 configuration.trackingImages = self.referenceImages
+                
                 configuration.maximumNumberOfTrackedImages = self.referenceImages.count
                 
                 self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
@@ -99,12 +117,14 @@ class ARSceneDataManager: NSObject {
     
     private lazy var noCacheSession: URLSession = {
         let cfg = URLSessionConfiguration.default
-        cfg.requestCachePolicy = .reloadIgnoringLocalCacheData
-        cfg.urlCache = nil
-        cfg.httpAdditionalHeaders = [
-            "Cache-Control": "no-cache",
-            "Pragma": "no-cache"
-        ]
+        // Allow caching but revalidate - faster on subsequent loads
+        cfg.requestCachePolicy = .returnCacheDataElseLoad
+        cfg.urlCache = URLCache.shared
+        // Increase timeout for slow connections
+        cfg.timeoutIntervalForRequest = 15
+        cfg.timeoutIntervalForResource = 30
+        // Prefer HTTP/2 over HTTP/3 (QUIC) to avoid connection issues
+        cfg.httpShouldUsePipelining = false
         return URLSession(configuration: cfg)
     }()
 
@@ -120,9 +140,10 @@ class ARSceneDataManager: NSObject {
 
     private func nonCachingRequest(url: URL) -> URLRequest {
         var req = URLRequest(url: url)
-        req.cachePolicy = .reloadIgnoringLocalCacheData
-        req.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
-        req.setValue("no-cache", forHTTPHeaderField: "Pragma")
+        // Use cache when available for faster loads
+        req.cachePolicy = .returnCacheDataElseLoad
+        // Set timeout for network request
+        req.timeoutInterval = 15
         return req
     }
 }

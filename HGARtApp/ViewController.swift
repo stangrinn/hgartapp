@@ -6,7 +6,7 @@ import ReplayKit
 class ViewController: UIViewController {
 
     private var arSceneManager: ARSceneManager!
-    private var arDataManager: ARSceneDataManager!
+    private var arDataManager: ARSceneCoreManager!
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
     
@@ -32,10 +32,15 @@ class ViewController: UIViewController {
     }
     
     private func setupSceneView() {
+        
         sceneView = ARSCNView(frame: view.frame)
+        
         view.addSubview(sceneView)
+        
         sceneView.scene = SCNScene()
+        
         sceneView.antialiasingMode = .multisampling4X
+        
         sceneView.preferredFramesPerSecond = 60
         
         print("View \(view!)")
@@ -73,7 +78,7 @@ class ViewController: UIViewController {
             
             sceneView.delegate = arSceneManager
             
-            arDataManager = ARSceneDataManager(sceneView: sceneView)
+            arDataManager = ARSceneCoreManager(sceneView: sceneView)
             
             arDataManager.loadTargetsAndStartSession { [weak self] loadedTargets in
                 self?.arSceneManager.setTargets(loadedTargets)

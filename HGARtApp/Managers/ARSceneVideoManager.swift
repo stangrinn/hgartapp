@@ -39,7 +39,10 @@ class ARSceneVideoManager {
     }
     
     // Async version with video caching
-    func createOverlayVideoPlaneAsync(for anchor: ARImageAnchor, targets: [ARTarget], parentNode: SCNNode) async {
+    func createOverlayVideoPlaneAsync(for anchor: ARImageAnchor,
+                                      targets: [ARTarget],
+                                      parentNode: SCNNode,
+                                      onProgress: @escaping (Double) -> Void) async -> Bool {
         
         // If player already exists, just start it on the main actor
         let hasExistingPlayer: Bool = await MainActor.run { [weak self] in
@@ -51,11 +54,14 @@ class ARSceneVideoManager {
             await MainActor.run {
                 startVideo(for: anchor.identifier)
             }
-            return
+            return true
         }
 
         // Use async version with caching (updates existing parentNode)
-        if let player = await self.arVideoOverlay.createMainOverlayAsync(for: anchor, targets: targets, parentNode: parentNode) {
+        if let player = await self.arVideoOverlay.createMainOverlayAsync(for: anchor,
+                                    targets: targets,
+                                    parentNode: parentNode,
+                                    onProgress: onProgress) {
             
             await MainActor.run {
                 
@@ -71,10 +77,12 @@ class ARSceneVideoManager {
                 
                 print("📽️ Video is playing (async, cached)")
             }
+            return true
         } else {
             await MainActor.run {
                 self.controls.setControlsVisible(false)
             }
+            return false
         }
     }
 

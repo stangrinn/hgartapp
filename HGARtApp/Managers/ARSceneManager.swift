@@ -16,6 +16,10 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     
     private var appPreloaderOverlay: AppPreloaderOverlay!
     
+    // Debounce tracking start/stop to avoid thrashing
+    private var startWorkItems: [UUID: DispatchWorkItem] = [:]
+    private var stopWorkItems: [UUID: DispatchWorkItem] = [:]
+    
     init(view: UIView) {
         
         print("🚀 Initializing ARSceneManager")
@@ -53,14 +57,25 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         // Create placeholder plane immediately
         let padding: CGFloat = 0.01
-
+        
         let width = imageAnchor.referenceImage.physicalSize.width * (1.0 + padding)
-
+        
         let height = imageAnchor.referenceImage.physicalSize.height * (1.0 + padding)
-
+        
         let plane = SCNPlane(width: width, height: height)
         
-        plane.firstMaterial?.diffuse.contents = preloaderScene()
+        let ps = PreloaderScene(anchorID: anchor.identifier)
+        
+        var preScene: SKScene!
+        
+        DispatchQueue.main.sync { preScene = ps.getScene() }
+        
+        plane.firstMaterial?.diffuse.contents = preScene
+        
+        print("🎨 Preloader scene assigned to material: \(preScene!)")
+        
+        // No transform - let PreloaderScene handle flipping internally
+        plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Identity
         
         plane.firstMaterial?.isDoubleSided = true
         
@@ -70,6 +85,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         planeNode.renderingOrder = 2000
         
+        // Standard rotation to align with image anchor
         planeNode.eulerAngles.x = -.pi / 2
         
         parentNode.addChildNode(planeNode)
@@ -78,15 +94,26 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         // Load video asynchronously and update the plane
         Task {
-            await videoManager.createOverlayVideoPlaneAsync(
+            let ok = await videoManager.createOverlayVideoPlaneAsync(
                 for: imageAnchor,
                 targets: targets,
-                parentNode: parentNode
+                parentNode: parentNode,
+                onProgress: { [weak ps] progress in
+                    ps?.updatePreloaderProgress(for: anchor.identifier, progress: progress)
+                }
             )
             
             await MainActor.run {
-                scannerOverlay.hideScanner()
-                print("✅ 1 ARSceneManager: async video loaded for anchor: \(anchor.identifier)")
+                if ok {
+                    // success: hide scanner and optionally fade preloader
+                    ps.fadeOutPreloader(for: anchor.identifier)
+                    self.scannerOverlay.hideScanner()
+                    print("✅ 1 ARSceneManager: async video loaded for anchor: \(anchor.identifier)")
+                } else {
+                    // failure: keep preloader label with message
+                    ps.setPreloaderFailed(for: anchor.identifier)
+                    print("⚠️ ARSceneManager: video failed for anchor: \(anchor.identifier)")
+                }
             }
         }
         
@@ -97,51 +124,49 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     
     // This function calls every frame when the camera tracks the target
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        
-        guard let imageAnchor = anchor as? ARImageAnchor else {
-            print("💩 ∞ ARSceneManager: anchor is not ARImageAnchor")
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard let imageAnchor = anchor as? ARImageAnchor else {
+                print("⚠️ ∞ ARSceneManager: anchor is not ARImageAnchor")
+                return
+            }
             
-            return
-        }
-        
-        if !imageAnchor.isTracked {
-            Task { @MainActor in
-                self.videoManager.stopVideo(for: anchor.identifier)
-                self.scannerOverlay.showScanner()
-            }
-        } else {
-            Task { @MainActor in
-                self.videoManager.startVideo(for: anchor.identifier)
-                self.scannerOverlay.hideScanner()
+            let id = anchor.identifier
+            
+            if !imageAnchor.isTracked {
+                // Cancel any pending start; schedule a delayed stop
+                if let start = self.startWorkItems.removeValue(forKey: id) { start.cancel() }
+                
+                if self.stopWorkItems[id] == nil {
+                    let work = DispatchWorkItem { [weak self] in
+                        guard let self else { return }
+                        Task { @MainActor in
+                            self.videoManager.stopVideo(for: id)
+                            self.scannerOverlay.showScanner()
+                        }
+                        self.stopWorkItems.removeValue(forKey: id)
+                    }
+                    self.stopWorkItems[id] = work
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: work)
+                }
+                
+            } else {
+                // Cancel any pending stop; schedule a delayed start
+                if let stop = self.stopWorkItems.removeValue(forKey: id) { stop.cancel() }
+            
+                if self.startWorkItems[id] == nil {
+                    let work = DispatchWorkItem { [weak self] in
+                        guard let self else { return }
+                        Task { @MainActor in
+                            self.videoManager.startVideo(for: id)
+                            self.scannerOverlay.hideScanner()
+                        }
+                        self.startWorkItems.removeValue(forKey: id)
+                    }
+                    self.startWorkItems[id] = work
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: work)
+                }
             }
         }
     }
-
-    private func preloaderScene() -> SKScene {
-        let sceneSize = CGSize(width: 1280, height: 720)
-        let scene = SKScene(size: sceneSize)
-        scene.scaleMode = .aspectFit
-        scene.backgroundColor = UIColor(white: 255.0, alpha: 0.5)
-
-        guard let image = UIImage(named: "ARVideoPreloader") else {
-            print("⚠️ ARVideoPreloader asset not found")
-            return scene
-        }
-
-        let texture = SKTexture(image: image)
-        let sprite = SKSpriteNode(texture: texture)
-        sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        sprite.position = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
-
-        let fitsWidth = sceneSize.width / texture.size().width
-        let fitsHeight = sceneSize.height / texture.size().height
-        let maxScale = min(fitsWidth, fitsHeight) * 0.8
-        let appliedScale = min(1.0, maxScale)
-        sprite.xScale = appliedScale
-        sprite.yScale = -appliedScale
-
-        scene.addChild(sprite)
-
-        return scene
-    }
-} 
+}

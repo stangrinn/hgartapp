@@ -68,7 +68,8 @@
 			membershipExceptions = (
 				Controllers/CameraPermissionDeniedViewController.swift,
 				Helpers/PlayerObserver.swift,
-				Managers/ARSceneDataManager.swift,
+				Helpers/PreloaderScene.swift,
+				Managers/ARSceneCoreManager.swift,
 				Managers/ARSceneManager.swift,
 				Managers/ARSceneVideoManager.swift,
 				Managers/ARSceneVideoOverlay.swift,
