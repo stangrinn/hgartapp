@@ -37,6 +37,10 @@
 	<array>
 		<string>arkit</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Baloo-Regular.ttf</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

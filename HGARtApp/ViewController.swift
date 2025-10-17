@@ -6,7 +6,7 @@ import ReplayKit
 class ViewController: UIViewController {
 
     private var arSceneManager: ARSceneManager!
-    private var arDataManager: ARSceneCoreManager!
+    private var arCoreManager: ARSceneCoreManager!
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
     
@@ -78,11 +78,11 @@ class ViewController: UIViewController {
             
             sceneView.delegate = arSceneManager
             
-            arDataManager = ARSceneCoreManager(sceneView: sceneView)
+            arCoreManager = ARSceneCoreManager(sceneView: sceneView)
             
-            arDataManager.loadTargetsAndStartSession { [weak self] loadedTargets in
+            arCoreManager.loadTargetsAndStartARSession { [weak self] loadedTargets in
                 self?.arSceneManager.setTargets(loadedTargets)
-                //set targets runs the AR scene and put there target references
+                //sets targets and runs the AR scene and puts there target references
             }
             
         }

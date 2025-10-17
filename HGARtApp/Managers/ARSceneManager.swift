@@ -64,7 +64,8 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         let plane = SCNPlane(width: width, height: height)
         
-        let ps = PreloaderScene(anchorID: anchor.identifier)
+        // Pass actual physical dimensions to PreloaderScene for correct proportions
+        let ps = PreloaderScene(anchorID: anchor.identifier, width: width, height: height)
         
         var preScene: SKScene!
         
@@ -72,7 +73,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         plane.firstMaterial?.diffuse.contents = preScene
         
-        print("🎨 Preloader scene assigned to material: \(preScene!)")
+//        print("🎨 Preloader scene assigned to material: \(preScene!)")
         
         // No transform - let PreloaderScene handle flipping internally
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Identity
@@ -90,7 +91,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         parentNode.addChildNode(planeNode)
         
-        print("📦 Placeholder node created and added immediately")
+//        print("📦 Placeholder node created and added immediately")
         
         // Load video asynchronously and update the plane
         Task {

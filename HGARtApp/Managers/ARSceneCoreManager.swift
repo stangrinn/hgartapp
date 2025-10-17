@@ -32,7 +32,7 @@ class ARSceneCoreManager: NSObject {
             - completion: A closure that is called when the targets are loaded and the session is started.
             - Returns: An array of targets.
     */
-    func loadTargetsAndStartSession(completion: @escaping ([ARTarget]) -> Void) {
+    func loadTargetsAndStartARSession(completion: @escaping ([ARTarget]) -> Void) {
         
         // Load config.json from the application bundle
         guard let url = Bundle.main.url(forResource: "ar-config", withExtension: "json") else {
@@ -99,6 +99,7 @@ class ARSceneCoreManager: NSObject {
             }
             
             group.notify(queue: .main) {
+                
                 let configuration = ARImageTrackingConfiguration()
                 
                 configuration.trackingImages = self.referenceImages
@@ -117,6 +118,7 @@ class ARSceneCoreManager: NSObject {
     
     private lazy var noCacheSession: URLSession = {
         let cfg = URLSessionConfiguration.default
+        
         // Allow caching but revalidate - faster on subsequent loads
         cfg.requestCachePolicy = .returnCacheDataElseLoad
         cfg.urlCache = URLCache.shared
@@ -125,6 +127,7 @@ class ARSceneCoreManager: NSObject {
         cfg.timeoutIntervalForResource = 30
         // Prefer HTTP/2 over HTTP/3 (QUIC) to avoid connection issues
         cfg.httpShouldUsePipelining = false
+        
         return URLSession(configuration: cfg)
     }()
 

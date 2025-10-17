@@ -73,7 +73,7 @@ class AppPreloaderOverlay {
             object: player.currentItem,
             queue: .main
         ) { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 playerLayer.removeFromSuperlayer()
             }
         }

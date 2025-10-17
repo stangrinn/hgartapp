@@ -56,6 +56,13 @@
 			);
 			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
 		};
+		FB9CE95E2EA27E42007B429A /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"UI/Assets/fonts/Baloo-Regular.ttf",
+			);
+			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
+		};
 		FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -75,6 +82,7 @@
 				Managers/ARSceneVideoOverlay.swift,
 				Models/ARTarget.swift,
 				"Resources/ar-config.json",
+				"UI/Assets/fonts/Baloo-Regular.ttf",
 				"UI/Assets/Loader-kids.mp4",
 				UI/Assets/Loader.mp4,
 				UI/Components/AppPreloaderOverlay.swift,
@@ -103,6 +111,7 @@
 			exceptions = (
 				FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */,
 				FBAACA3A2E7AF47E004CF90E /* Exceptions for "HGARtApp" folder in "HGArtClip" target */,
+				FB9CE95E2EA27E42007B429A /* Exceptions for "HGARtApp" folder in "HGArtTests" target */,
 			);
 			path = HGARtApp;
 			sourceTree = "<group>";
@@ -354,7 +363,6 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				"SWIFT_ACTIVE_COMPILATION_CONDITIONS[arch=*]" = "\"APPCLIP\"";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
