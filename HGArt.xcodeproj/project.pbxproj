@@ -56,6 +56,14 @@
 			);
 			target = FB2D9F8F2D9C577A00CBAD8C /* HGArtClip */;
 		};
+		FB9CE95E2EA27E42007B429A /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Helpers/AppEnvironment.swift,
+				"UI/Assets/fonts/Baloo-Regular.ttf",
+			);
+			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
+		};
 		FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -67,18 +75,23 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Controllers/CameraPermissionDeniedViewController.swift,
+				Helpers/AppEnvironment.swift,
 				Helpers/PlayerObserver.swift,
-				Helpers/TargetScannerOverlay.swift,
+				Helpers/PreloaderScene.swift,
+				Managers/ARSceneCoreManager.swift,
 				Managers/ARSceneManager.swift,
-				Managers/ARSessionManager.swift,
-				Managers/ARVideoOverlayManager.swift,
-				Managers/RecordingManager.swift,
-				Managers/VideoManager.swift,
+				Managers/ARSceneVideoManager.swift,
+				Managers/ARSceneVideoOverlay.swift,
 				Models/ARTarget.swift,
 				"Resources/ar-config.json",
+				"UI/Assets/fonts/Baloo-Regular.ttf",
 				"UI/Assets/Loader-kids.mp4",
 				UI/Assets/Loader.mp4,
+				UI/Components/AppPreloaderOverlay.swift,
+				UI/Components/ARVideoControls.swift,
+				UI/Components/ARVideoPreloader.swift,
 				UI/Components/PaddedLabelText.swift,
+				UI/Components/TargetScannerOverlay.swift,
 				UI/Components/ToggleIconButton.swift,
 				ViewController.swift,
 			);
@@ -100,6 +113,7 @@
 			exceptions = (
 				FBAACA332E7AF05B004CF90E /* Exceptions for "HGARtApp" folder in "HGArt" target */,
 				FBAACA3A2E7AF47E004CF90E /* Exceptions for "HGARtApp" folder in "HGArtClip" target */,
+				FB9CE95E2EA27E42007B429A /* Exceptions for "HGARtApp" folder in "HGArtTests" target */,
 			);
 			path = HGARtApp;
 			sourceTree = "<group>";
@@ -233,7 +247,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					FB2D9F8F2D9C577A00CBAD8C = {
 						CreatedOnToolsVersion = 16.2;
@@ -351,7 +365,6 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				"SWIFT_ACTIVE_COMPILATION_CONDITIONS[arch=*]" = "\"APPCLIP\"";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -455,6 +468,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -515,6 +529,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -531,7 +546,7 @@
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -570,7 +585,7 @@
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

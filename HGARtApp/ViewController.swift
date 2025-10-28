@@ -5,16 +5,14 @@ import ReplayKit
 
 class ViewController: UIViewController {
 
-    private var arSessionManager: ARSessionManager!
-    private var videoManager: VideoManager!
-    private var scannerOverlay: TargetScannerOverlay!
     private var arSceneManager: ARSceneManager!
+    private var arCoreManager: ARSceneCoreManager!
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0)
         setupSceneView()
         setupManagers()
         
@@ -36,21 +34,32 @@ class ViewController: UIViewController {
     private func setupSceneView() {
         
         sceneView = ARSCNView(frame: view.frame)
+        
         view.addSubview(sceneView)
+        
         sceneView.scene = SCNScene()
+        
         sceneView.antialiasingMode = .multisampling4X
-        sceneView.preferredFramesPerSecond = 60  
+        
+        sceneView.preferredFramesPerSecond = 60
+        
+        print("View \(view!)")
     }
     
     private func setupManagers() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
        
         if status == .denied || status == .restricted {
+            
             let deniedVC = CameraPermissionDeniedViewController()
+            
             deniedVC.modalPresentationStyle = .fullScreen
+            
             present(deniedVC, animated: true, completion: nil)
+            
             return
         } else if status == .notDetermined {
+            
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 DispatchQueue.main.async {
                     if !granted {
@@ -64,29 +73,19 @@ class ViewController: UIViewController {
             }
             return
         } else {
-            videoManager = VideoManager(view: view)
             
-            scannerOverlay = TargetScannerOverlay(frame: view.bounds)
-            
-            view.addSubview(scannerOverlay)
-            
-            arSceneManager = ARSceneManager(videoManager: videoManager, scannerOverlay: scannerOverlay)
+            arSceneManager = ARSceneManager(view: view) // set scene
             
             sceneView.delegate = arSceneManager
             
-            arSessionManager = ARSessionManager(sceneView: sceneView)
+            arCoreManager = ARSceneCoreManager(sceneView: sceneView)
             
-            arSessionManager.loadTargetsAndStartSession { [weak self] loadedTargets in
+            arCoreManager.loadTargetsAndStartARSession { [weak self] loadedTargets in
                 self?.arSceneManager.setTargets(loadedTargets)
+                //sets targets and runs the AR scene and puts there target references
             }
             
-            setupUI()
         }
-    }
-    
-    private func setupUI() {
-        ARVideoOverlayManager.createPreloaderOverlay(view: view)
-        videoManager.setupControls(view: view)
     }
     
     override func viewWillAppear(_ animated: Bool) {

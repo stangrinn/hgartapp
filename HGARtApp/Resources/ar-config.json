@@ -1,34 +1,65 @@
 {
   "targets": [
     {
-      "name": "Emperor",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Emperor.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Emperor.mp4",
-      "physicalWidth": 0.42
-    },
-    {
-      "name": "Magician",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Magician.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Magician.mp4",
-      "physicalWidth": 0.42
-    },
-    {
-      "name": "Empress",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Empress.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Empress.mp4",
-      "physicalWidth": 0.42
-    },
-    {
-      "name": "Fool",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Fool.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/04/Fool.mp4",
-      "physicalWidth": 0.42
-    },
-    {
       "name": "Alphabet",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/09/Alphabet-kids.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/09/Alphabet-kids.mp4",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids1.mp4",
       "physicalWidth": 0.42
+    },
+    {
+      "name": "Alphabet Hebrew",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids-HE.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids-HE.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "I am brave",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Brave-kids.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Brave-kids.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "Numbers",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Numbers-kids.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Numbers-kids.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "Morning Routine",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Morning-kids.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Morning-kids.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "Evening Routine",
+      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Evening-kids.png",
+      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Evening-kids.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+        "name": "I am creative",
+        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Creative-kids.png",
+        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Creative-kids.mp4",
+        "physicalWidth": 0.42
+        
+    },
+    {
+        "name": "Happy birthday #1",
+        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-1-kids.png",
+        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-1-kids.mp4",
+        "physicalWidth": 0.42
+    },
+    {
+        "name": "Happy birthday #2",
+        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-2-kids.png",
+        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-2-kids.mp4",
+        "physicalWidth": 0.42
+    },
+    {
+        "name": "Shapes",
+        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Shapes-kids.png",
+        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Shapes-kids.mp4",
+        "physicalWidth": 0.42
     }
   ]
 }
