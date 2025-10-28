@@ -47,7 +47,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         print("✅ 1 ARSceneManager: RENDER TRY CREATE node for anchor: \(anchor)")
         
         guard let imageAnchor = anchor as? ARImageAnchor else {
-            print("💩 1 ARSceneManager: anchor is not ARImageAnchor")
+            print("❌ 1 ARSceneManager: anchor is not ARImageAnchor")
             return nil
         }
         

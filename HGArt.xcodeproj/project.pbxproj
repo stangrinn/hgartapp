@@ -59,6 +59,7 @@
 		FB9CE95E2EA27E42007B429A /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Helpers/AppEnvironment.swift,
 				"UI/Assets/fonts/Baloo-Regular.ttf",
 			);
 			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
@@ -74,6 +75,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Controllers/CameraPermissionDeniedViewController.swift,
+				Helpers/AppEnvironment.swift,
 				Helpers/PlayerObserver.swift,
 				Helpers/PreloaderScene.swift,
 				Managers/ARSceneCoreManager.swift,
@@ -245,7 +247,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					FB2D9F8F2D9C577A00CBAD8C = {
 						CreatedOnToolsVersion = 16.2;
@@ -466,6 +468,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -526,6 +529,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -542,7 +546,7 @@
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -581,7 +585,7 @@
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -9,19 +9,20 @@ import SpriteKit
 import UIKit
 
 class PreloaderScene {
+    
     struct PreloaderUI {
         let scene: SKScene
         let track: SKShapeNode
         let fill: SKShapeNode
-        let stripesCropNode: SKCropNode  // Crop node with stripes inside
-        let stripesMask: SKShapeNode
+        let stripesCropNode: SKCropNode?  // Crop node with stripes inside
+        let stripesMask: SKShapeNode?
         let label: SKLabelNode
         let trackRect: CGRect
     }
     
     private enum Palette {
         static let textPurple = UIColor(red: 73/255, green: 43/255, blue: 128/255, alpha: 1)
-        static let trackCream = UIColor(red: 254/255, green: 249/255, blue: 235/255, alpha: 1.0)
+        static let trackCream = UIColor(red: 254/255, green: 249/255, blue: 235/255, alpha: 1)
         static let fillPurple = UIColor(red: 115/255, green: 79/255, blue: 176/255, alpha: 1)
         static let stripeDark = UIColor(red: 137/255, green: 97/255, blue: 217/255, alpha: 1)
         static let stripeLight = UIColor(red: 164/255, green: 133/255, blue: 226/255, alpha: 1)
@@ -37,6 +38,81 @@ class PreloaderScene {
         self.anchorID = anchorID
         self.width = width
         self.height = height
+    }
+    
+    func getFullScene() -> SKScene {
+        
+        // Use anchor's physical dimensions scaled to reasonable pixel size
+        let scaleFactor: CGFloat = 2000  // 1 meter = 1000 pixels
+        
+        let sceneSize = CGSize(width: self.width * scaleFactor, height: self.height * scaleFactor)
+        
+        let scene = SKScene(size: sceneSize)
+        
+        scene.name = "Preloader Scene for \(self.anchorID!)"
+        
+        // Use visible background for debugging - dark gray to see white elements
+        scene.backgroundColor = UIColor(white: 1.0, alpha: 0.3)
+
+        let label = SKLabelNode(text: "loading…")
+        
+        label.fontName = "Arial"
+        
+        label.fontColor = .black
+        
+        label.fontSize = 54
+        
+        label.position = CGPoint(x: sceneSize.width/2, y: sceneSize.height - (sceneSize.height/2 + 80))
+        
+        label.verticalAlignmentMode = .center
+        
+        label.horizontalAlignmentMode = .center
+        
+        label.yScale = -1.0  // Flip vertically
+        
+        scene.addChild(label)
+
+        // Progress track - flip Y coordinate
+        let trackWidth = sceneSize.width * 0.7
+        let trackHeight: CGFloat = 34
+        
+        let trackRect = CGRect(x: (sceneSize.width - trackWidth)/2,
+                               y: sceneSize.height - (sceneSize.height/2 - trackHeight/2 - 20) - trackHeight,
+                               width: trackWidth,
+                               height: trackHeight)
+
+        let track = SKShapeNode(rect: trackRect, cornerRadius: trackHeight/2)
+        track.fillColor = Palette.trackCream
+        track.strokeColor = UIColor(white: 1, alpha: 0.1)
+        track.lineWidth = 4
+        track.zPosition = 1
+        scene.addChild(track)
+
+        // Progress fill (start small) - flip Y coordinate
+        let fillPath = UIBezierPath(roundedRect: CGRect(x: trackRect.minX,
+                                                        y: trackRect.minY,
+                                                        width: 1,
+                                                        height: trackRect.height),
+                                    cornerRadius: 0).cgPath
+        
+        let fill = SKShapeNode(path: fillPath)
+        fill.fillColor = .black
+        fill.strokeColor = .clear
+        fill.zPosition = track.zPosition + 1
+        
+        scene.addChild(fill)
+        
+        let ui = PreloaderUI(scene: scene,
+                             track: track,
+                             fill: fill,
+                             stripesCropNode: nil,
+                             stripesMask: nil,
+                             label: label,
+                             trackRect: trackRect)
+        
+        preloadersByAnchor[anchorID] = ui
+
+        return scene
     }
     
     func getScene() -> SKScene {
@@ -87,7 +163,7 @@ class PreloaderScene {
         scene.addChild(track)
 
         // Progress fill (start small) - flip Y coordinate
-        let fillPath = UIBezierPath(roundedRect: CGRect(x: trackRect.minX, y: trackRect.minY, width: 1, height: trackRect.height), 
+        let fillPath = UIBezierPath(roundedRect: CGRect(x: trackRect.minX, y: trackRect.minY, width: 1, height: trackRect.height),
                                     cornerRadius: trackRect.height/2).cgPath
         
         let fill = SKShapeNode(path: fillPath)
@@ -130,7 +206,8 @@ class PreloaderScene {
         cropNode.addChild(stripesContainer)
         
         // Initial mask (very small)
-        let maskPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 1, height: trackRect.height), cornerRadius: trackRect.height/2)
+        let maskPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 1, height: trackRect.height),
+                                    cornerRadius: trackRect.height/2)
         let maskNode = SKShapeNode(path: maskPath.cgPath)
         maskNode.fillColor = .white
         maskNode.strokeColor = .clear
@@ -183,9 +260,9 @@ class PreloaderScene {
                                         height: ui.trackRect.height),
                                         cornerRadius: ui.trackRect.height/2)
             
-            ui.stripesMask.path = maskPath.cgPath
+            ui.stripesMask?.path = maskPath.cgPath
             
-            ui.stripesCropNode.maskNode = ui.stripesMask
+            ui.stripesCropNode?.maskNode = ui.stripesMask
         })
     }
 

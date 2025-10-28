@@ -22,6 +22,18 @@ class ARSceneCoreManager: NSObject {
     private var referenceImages: Set<ARReferenceImage> = []
     private let sceneView: ARSCNView
     
+    private let fileManager = FileManager.default
+    private lazy var cacheDirectory: URL = {
+        let paths = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
+        let cacheDir = paths[0].appendingPathComponent("ARImages", isDirectory: true)
+        try? fileManager.createDirectory(at: cacheDir, withIntermediateDirectories: true)
+        return cacheDir
+    }()
+        
+    private func cachedImagePath(for targetName: String) -> URL {
+        return cacheDirectory.appendingPathComponent("\(targetName).jpg")
+    }
+    
     init(sceneView: ARSCNView) {
         self.sceneView = sceneView
     }
@@ -60,16 +72,35 @@ class ARSceneCoreManager: NSObject {
                 
                 group.enter()
                 
+                let cachedPath = cachedImagePath(for: target.name)
+                            
+                // Check local cache
+                if fileManager.fileExists(atPath: cachedPath.path),
+                            let cachedImage = UIImage(contentsOfFile: cachedPath.path),
+                            let cgImage = cachedImage.cgImage {
+                                
+                    print("ARSessionManager: Using cached image for \(target.name)")
+                    
+                    let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
+                                arImage.name = target.name
+                                self.referenceImages.insert(arImage)
+                                
+                    group.leave()
+                    continue  // Skip the 
+                }
+                
                 // Use cache-buster only in DEBUG builds to avoid unnecessary reloads in production
                 #if DEBUG
-                let effectiveImageURL = self.urlByAddingBuster(imageUrl.absoluteString) ?? imageUrl
+                    let effectiveImageURL = self.urlByAddingBuster(imageUrl.absoluteString) ?? imageUrl
+                    print("Debug MODE: ARSceneCore effectiveImageURL \(effectiveImageURL)")
                 #else
-                let effectiveImageURL = imageUrl
+                    let effectiveImageURL = imageUrl
+                    print("Release MODE: ARSceneCore effectiveImageURL \(effectiveImageURL)")
                 #endif
                 
-                let imageRequest = self.nonCachingRequest(url: effectiveImageURL)
+                let imageRequest = URLRequest(url: effectiveImageURL)
                 
-                self.noCacheSession.dataTask(with: imageRequest) { imageData, response, error in
+                URLSession.shared.dataTask(with: imageRequest) { imageData, response, error in
                     
                     defer { group.leave() }
                     

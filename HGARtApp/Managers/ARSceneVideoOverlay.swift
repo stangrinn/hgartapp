@@ -127,6 +127,7 @@ class ARSceneVideoOverlay: NSObject {
         // 1) Attempt with delegate to stream progress and move to cache inside delegate
         do {
             let finalURL: URL = try await withCheckedThrowingContinuation { (cont: CheckedContinuation<URL, Error>) in
+                
                 final class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
                     let onProgress: (Double) -> Void
                     let destination: URL
@@ -136,12 +137,14 @@ class ARSceneVideoOverlay: NSObject {
                         self.destination = destination
                         self.completion = completion
                     }
+                    
                     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
                                     didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
                         guard totalBytesExpectedToWrite > 0 else { return }
                         let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
                         DispatchQueue.main.async { self.onProgress(progress) }
                     }
+                    
                     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
                                     didFinishDownloadingTo location: URL) {
                         do {
@@ -181,10 +184,12 @@ class ARSceneVideoOverlay: NSObject {
             }
 
             print("✅ Cached video for \(target.name)")
+            
             return finalURL
         } catch {
             // 2) Fallback to simple download (may use different transport)
             print("↩️ Progress download failed, falling back. Error: \(error.localizedDescription)")
+            
             do {
                 let (tempURL, _) = try await URLSession.shared.download(from: remoteURL)
                 if !fileManager.fileExists(atPath: folderURL.path) {

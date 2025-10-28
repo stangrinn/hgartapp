@@ -22,8 +22,7 @@ class ARSceneVideoManager {
     
     private var controls: ARVideoControls
     
-    private var arVideoOverlay: ARSceneVideoOverlay
-    
+    private var arVideoOverlay: ARSceneVideoOverlay 
     init(view: UIView) {
         self.view = view
         

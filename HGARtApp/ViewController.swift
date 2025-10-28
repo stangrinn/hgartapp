@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.backgroundColor = .black
+        view.backgroundColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0)
         setupSceneView()
         setupManagers()
         

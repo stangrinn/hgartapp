@@ -14,32 +14,12 @@ import SpriteKit
 
 class AppPreloaderOverlay {
     
-    // MARK: - App Clip Detection // make some external fuction for all members of application
-    var isRunningInAppClip: Bool {
-        if Bundle.main.object(forInfoDictionaryKey: "NSAppClip") != nil {
-            return true
-        }
-        if let bundleId = Bundle.main.bundleIdentifier,
-           bundleId.contains("Clip") {
-            return true
-        }
-        return false
-    }
-    
     // MARK: - Preloader Overlay
     init(view: UIView) {
         
-        var forResource: String, bgColor: CGColor
+        let forResource: String = "Loader-kids"
         
-        if isRunningInAppClip {
-            print("🎬 Running in App Clip - using KIDS preloader")
-            forResource = "Loader-kids"
-            bgColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0).cgColor
-        } else {
-            print("🎬 Running in main app - using full preloader")
-            forResource = "Loader"
-            bgColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0).cgColor
-        }
+        let bgColor: CGColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0).cgColor
         
         guard let path = Bundle.main.path(forResource: forResource, ofType: "mp4") else {
             print("Intro video not found")
