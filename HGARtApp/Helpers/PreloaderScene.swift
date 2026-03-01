@@ -29,14 +29,21 @@ class PreloaderScene {
     }
     
     var preloadersByAnchor: [UUID: PreloaderUI] = [:]
+    
     var lastProgressByAnchor: [UUID: Double] = [:]
+    
     var anchorID: UUID!
+    
     var width: CGFloat!
+    
     var height: CGFloat!
     
     init(anchorID: UUID, width: CGFloat, height: CGFloat) {
+        
         self.anchorID = anchorID
+        
         self.width = width
+        
         self.height = height
     }
     
@@ -74,6 +81,7 @@ class PreloaderScene {
 
         // Progress track - flip Y coordinate
         let trackWidth = sceneSize.width * 0.7
+        
         let trackHeight: CGFloat = 34
         
         let trackRect = CGRect(x: (sceneSize.width - trackWidth)/2,
@@ -82,22 +90,28 @@ class PreloaderScene {
                                height: trackHeight)
 
         let track = SKShapeNode(rect: trackRect, cornerRadius: trackHeight/2)
+        
         track.fillColor = Palette.trackCream
+        
         track.strokeColor = UIColor(white: 1, alpha: 0.1)
+        
         track.lineWidth = 4
+        
         track.zPosition = 1
+        
         scene.addChild(track)
+        
+        let cgRect = CGRect(x: trackRect.minX, y: trackRect.minY, width: 1, height: trackRect.height)
 
         // Progress fill (start small) - flip Y coordinate
-        let fillPath = UIBezierPath(roundedRect: CGRect(x: trackRect.minX,
-                                                        y: trackRect.minY,
-                                                        width: 1,
-                                                        height: trackRect.height),
-                                    cornerRadius: 0).cgPath
+        let fillPath = UIBezierPath(roundedRect: cgRect, cornerRadius: 0).cgPath
         
         let fill = SKShapeNode(path: fillPath)
+        
         fill.fillColor = .black
+        
         fill.strokeColor = .clear
+        
         fill.zPosition = track.zPosition + 1
         
         scene.addChild(fill)
@@ -149,17 +163,24 @@ class PreloaderScene {
 
         // Progress track - flip Y coordinate
         let trackWidth = sceneSize.width * 0.7
+        
         let trackHeight: CGFloat = 74
+        
         let trackRect = CGRect(x: (sceneSize.width - trackWidth)/2,
                                y: sceneSize.height - (sceneSize.height/2 - trackHeight/2 - 20) - trackHeight,
                                width: trackWidth,
                                height: trackHeight)
 
         let track = SKShapeNode(rect: trackRect, cornerRadius: trackHeight/2)
+        
         track.fillColor = Palette.trackCream
+        
         track.strokeColor = UIColor(white: 0.0, alpha: 0.05)
+        
         track.lineWidth = 4
+        
         track.zPosition = 1
+        
         scene.addChild(track)
 
         // Progress fill (start small) - flip Y coordinate
@@ -167,51 +188,76 @@ class PreloaderScene {
                                     cornerRadius: trackRect.height/2).cgPath
         
         let fill = SKShapeNode(path: fillPath)
+        
         fill.fillColor = Palette.fillPurple
+        
         fill.strokeColor = .clear
+        
         fill.lineCap = .round
+        
         fill.lineJoin = .round
+        
         fill.zPosition = track.zPosition + 1
+        
         scene.addChild(fill)
         
         // Create diagonal stripes pattern with crop node for clipping
         let stripesContainer = SKNode()
+        
         let stripeWidth: CGFloat = 18  // Width of each stripe
+        
         let stripeSpacing: CGFloat = 36  // Distance between stripes
+        
         stripesContainer.position = CGPoint(x: -stripeSpacing, y: 0)
+        
         stripesContainer.alpha = 0.85
         
         // Create multiple diagonal stripe lines
         let stripeColors = [Palette.stripeDark, Palette.stripeLight]
+        
         let maxStripes = Int((trackWidth + trackHeight * 2) / stripeSpacing) + 5
         
         for i in 0..<maxStripes {
+            
             let stripePath = UIBezierPath()
             // Diagonal lines from bottom-left to top-right
             let startX = CGFloat(i) * stripeSpacing - trackHeight * 2
+            
             stripePath.move(to: CGPoint(x: startX, y: 0))
+            
             stripePath.addLine(to: CGPoint(x: startX + trackHeight * 2, y: trackHeight))
             
             let stripe = SKShapeNode(path: stripePath.cgPath)
+            
             stripe.strokeColor = stripeColors[i % stripeColors.count]
+            
             stripe.lineWidth = stripeWidth
+            
             stripe.lineCap = .round
+            
             stripesContainer.addChild(stripe)
         }
         
         // Create crop node to clip stripes
         let cropNode = SKCropNode()
+        
         cropNode.position = CGPoint(x: trackRect.minX, y: trackRect.minY)
+        
         cropNode.zPosition = fill.zPosition + 0.5
+        
         cropNode.addChild(stripesContainer)
         
         // Initial mask (very small)
         let maskPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 1, height: trackRect.height),
                                     cornerRadius: trackRect.height/2)
         let maskNode = SKShapeNode(path: maskPath.cgPath)
+        
         maskNode.fillColor = .white
+        
         maskNode.strokeColor = .clear
+        
         maskNode.lineWidth = 0
+        
         cropNode.maskNode = maskNode
         
         scene.addChild(cropNode)
@@ -269,6 +315,7 @@ class PreloaderScene {
     // Fade and cleanup preloader on success
     func fadeOutPreloader(for anchorID: UUID) {
         guard let ui = preloadersByAnchor[anchorID] else { return }
+        
         ui.scene.run(SKAction.sequence([
             SKAction.fadeOut(withDuration: 0.25),
             SKAction.run { [weak self] in self?.preloadersByAnchor.removeValue(forKey: anchorID) }
@@ -278,8 +325,11 @@ class PreloaderScene {
     // Failure state for preloader
     func setPreloaderFailed(for anchorID: UUID) {
         guard let ui = preloadersByAnchor[anchorID] else { return }
+        
         ui.scene.run(SKAction.run {
+            
             ui.label.text = "connection error"
+        
             ui.label.fontColor = .red
         })
     }

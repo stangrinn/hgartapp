@@ -6,22 +6,6 @@
 //
 
 #if DEBUG
-//import SwiftUI
-//
-//struct ViewControllerPreview: UIViewControllerRepresentable {
-//    func makeUIViewController(context: Context) -> UIViewController {
-//        return ViewController()
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
-//
-//    typealias UIViewControllerType = UIViewController
-//}
-//
-//
-//#Preview {    
-//    ViewControllerPreview()
-//}
 
 import SwiftUI
 

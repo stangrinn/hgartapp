@@ -1,65 +1,82 @@
 {
   "targets": [
     {
-      "name": "Alphabet",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids1.mp4",
+      "name": "The Fool",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/06/fool__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/6b/fool_1810x2418__02.mp4",
       "physicalWidth": 0.42
     },
     {
-      "name": "Alphabet Hebrew",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids-HE.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Alphabet-kids-HE.mp4",
+      "name": "The Magician",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/69/magician__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/e6/magician_1810x2418__06.mp4",
       "physicalWidth": 0.42
     },
     {
-      "name": "I am brave",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Brave-kids.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Brave-kids.mp4",
+      "name": "The Empress",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/9e/3.the-empress-1080x1527__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/2b/3.the-empress-1080x1527.mp4",
       "physicalWidth": 0.42
     },
     {
-      "name": "Numbers",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Numbers-kids.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Numbers-kids.mp4",
+      "name": "The Emperor",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/f2/emperor__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/ee/emperor_1810x2418__02.mp4",
       "physicalWidth": 0.42
     },
     {
-      "name": "Morning Routine",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Morning-kids.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Morning-kids.mp4",
+      "name": "The High Priestess",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/4a/2.the-high-priestess-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/53/2.the-high-priestess-1080x1527.mp4",
       "physicalWidth": 0.42
     },
     {
-      "name": "Evening Routine",
-      "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Evening-kids.png",
-      "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Evening-kids.mp4",
+      "name": "The Hierophant",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/fa/5.the-hierophant-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/7c/5.the-hierophant-1080x1527.mp4",
       "physicalWidth": 0.42
     },
     {
-        "name": "I am creative",
-        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Creative-kids.png",
-        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Creative-kids.mp4",
-        "physicalWidth": 0.42
-        
+      "name": "The Lovers",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/96/6.the-lovers-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/ee/6.the-lovers-1080x1527.mp4",
+      "physicalWidth": 0.42
     },
     {
-        "name": "Happy birthday #1",
-        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-1-kids.png",
-        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-1-kids.mp4",
-        "physicalWidth": 0.42
+      "name": "The Chariot",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/a6/7.the-chariot-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/93/7.the-chariot-1080x1527.mp4",
+      "physicalWidth": 0.42
     },
     {
-        "name": "Happy birthday #2",
-        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-2-kids.png",
-        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/HB-2-kids.mp4",
-        "physicalWidth": 0.42
+      "name": "The Justice",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/1a/8.justice-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/d1/8.justice-1080x1527.mp4",
+      "physicalWidth": 0.42
     },
     {
-        "name": "Shapes",
-        "imageUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Shapes-kids.png",
-        "videoUrl": "https://helenagrinshpun.art/wp-content/uploads/2025/10/Shapes-kids.mp4",
-        "physicalWidth": 0.42
+      "name": "The Hermit",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/42/9.the-hermit-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/f2/9.the-hermit-1080x1527.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "The Strength",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/9b/11.strength-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/45/11.strength-1080x1527.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "The Devil",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/50/15.the-devil-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/7d/15.the-devil-1080x1527.mp4",
+      "physicalWidth": 0.42
+    },
+    {
+      "name": "The Devil",
+      "imageUrl": "https://helenagrinshpun.art/assets/preview/50/15.the-devil-trigger-1810x2418__preview.png",
+      "videoUrl": "https://helenagrinshpun.art/assets/source/7d/15.the-devil-1080x1527.mp4",
+      "physicalWidth": 0.42
     }
   ]
 }

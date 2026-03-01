@@ -23,12 +23,6 @@ enum AppEnvironment {
         return false
     }
     
-    /// Returns the preloader resource name based on environment
-    static var preloaderResourceName: String {
-//        isRunningInAppClip ? "Loader-kids" : "Loader"
-        "Loader-kids"
-    }
-    
     /// Returns the background color based on environment
     static var preloaderBackgroundColor: UIColor {
         if isRunningInAppClip {

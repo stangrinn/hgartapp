@@ -18,11 +18,12 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     
     // Debounce tracking start/stop to avoid thrashing
     private var startWorkItems: [UUID: DispatchWorkItem] = [:]
+    
     private var stopWorkItems: [UUID: DispatchWorkItem] = [:]
     
     init(view: UIView) {
         
-        print("🚀 Initializing ARSceneManager")
+        print("🚀 Initializing AR Scene Manager")
         
         self.appPreloaderOverlay = AppPreloaderOverlay(view: view)
         
@@ -48,6 +49,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         guard let imageAnchor = anchor as? ARImageAnchor else {
             print("❌ 1 ARSceneManager: anchor is not ARImageAnchor")
+            
             return nil
         }
         
@@ -69,7 +71,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         
         var preScene: SKScene!
         
-        DispatchQueue.main.sync { preScene = ps.getScene() }
+        DispatchQueue.main.sync { preScene = ps.getFullScene    () }
         
         plane.firstMaterial?.diffuse.contents = preScene
         

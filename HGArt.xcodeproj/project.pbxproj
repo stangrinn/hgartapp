@@ -43,7 +43,6 @@
 /* Begin PBXFileReference section */
 		FB2D9F902D9C577A00CBAD8C /* HGArtClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArtClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB3E601C2D96B226006EDCDA /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
-		FB6531032E802C07003BFCDA /* HGArtRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HGArtRelease.entitlements; sourceTree = "<group>"; };
 		FB92610A2D96A84B0003B2FF /* HGArt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HGArt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBF674D22DB1FCAE00F84E99 /* HGArtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGArtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -76,6 +75,11 @@
 			membershipExceptions = (
 				Controllers/CameraPermissionDeniedViewController.swift,
 				Helpers/AppEnvironment.swift,
+				Helpers/ARExperienceCoordinator.swift,
+				Helpers/ARExperienceViewController.swift,
+				Helpers/ARExperienceViewModel.swift,
+				Helpers/ARSessionManaging.swift,
+				Helpers/ARTarget.swift,
 				Helpers/PlayerObserver.swift,
 				Helpers/PreloaderScene.swift,
 				Managers/ARSceneCoreManager.swift,
@@ -86,7 +90,6 @@
 				"Resources/ar-config.json",
 				"UI/Assets/fonts/Baloo-Regular.ttf",
 				"UI/Assets/Loader-kids.mp4",
-				UI/Assets/Loader.mp4,
 				UI/Components/AppPreloaderOverlay.swift,
 				UI/Components/ARVideoControls.swift,
 				UI/Components/ARVideoPreloader.swift,
@@ -156,7 +159,6 @@
 		FB9261012D96A84B0003B2FF = {
 			isa = PBXGroup;
 			children = (
-				FB6531032E802C07003BFCDA /* HGArtRelease.entitlements */,
 				FB3E601B2D96B226006EDCDA /* Frameworks */,
 				FB92610C2D96A84B0003B2FF /* HGARtApp */,
 				FB2D9F912D9C577A00CBAD8C /* HGARtAppClip */,
@@ -343,11 +345,11 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = HGArtAppClip/HGArtAppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.6;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -358,7 +360,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay.HGARtClip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -380,10 +382,10 @@
 				CODE_SIGN_ENTITLEMENTS = HGArtAppClip/HGArtAppClip.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.6;
+				CURRENT_PROJECT_VERSION = 2.0;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -394,7 +396,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay.HGARtClip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -542,11 +544,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.6;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -559,7 +561,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -581,11 +583,11 @@
 				CODE_SIGN_ENTITLEMENTS = HGArtRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.6;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -598,7 +600,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = weart.ARKitVideoOverlay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

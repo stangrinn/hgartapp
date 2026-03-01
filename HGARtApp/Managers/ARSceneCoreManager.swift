@@ -19,14 +19,21 @@ private extension Bundle {
 class ARSceneCoreManager: NSObject {
 
     private var targets: [ARTarget] = []
+    
     private var referenceImages: Set<ARReferenceImage> = []
+    
     private let sceneView: ARSCNView
     
     private let fileManager = FileManager.default
+    
     private lazy var cacheDirectory: URL = {
+        
         let paths = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
+    
         let cacheDir = paths[0].appendingPathComponent("ARImages", isDirectory: true)
+        
         try? fileManager.createDirectory(at: cacheDir, withIntermediateDirectories: true)
+        
         return cacheDir
     }()
         
@@ -86,7 +93,8 @@ class ARSceneCoreManager: NSObject {
                                 self.referenceImages.insert(arImage)
                                 
                     group.leave()
-                    continue  // Skip the 
+                    
+                    continue  // Skip the
                 }
                 
                 // Use cache-buster only in DEBUG builds to avoid unnecessary reloads in production
@@ -152,10 +160,14 @@ class ARSceneCoreManager: NSObject {
         
         // Allow caching but revalidate - faster on subsequent loads
         cfg.requestCachePolicy = .returnCacheDataElseLoad
+        
         cfg.urlCache = URLCache.shared
+        
         // Increase timeout for slow connections
         cfg.timeoutIntervalForRequest = 15
+        
         cfg.timeoutIntervalForResource = 30
+        
         // Prefer HTTP/2 over HTTP/3 (QUIC) to avoid connection issues
         cfg.httpShouldUsePipelining = false
         
@@ -163,21 +175,31 @@ class ARSceneCoreManager: NSObject {
     }()
 
     private func urlByAddingBuster(_ raw: String, key: String = "v") -> URL? {
+        
         guard var comps = URLComponents(string: raw) else { return nil }
+        
         var q = comps.queryItems ?? []
+        
         // Use build number as a stable buster per build; fallback to timestamp during dev runs
         let value = Bundle.main.appBuild.isEmpty ? String(Int(Date().timeIntervalSince1970)) : Bundle.main.appBuild
+        
         q.append(URLQueryItem(name: key, value: value))
+        
         comps.queryItems = q
+        
         return comps.url
     }
 
     private func nonCachingRequest(url: URL) -> URLRequest {
+        
         var req = URLRequest(url: url)
+        
         // Use cache when available for faster loads
         req.cachePolicy = .returnCacheDataElseLoad
+        
         // Set timeout for network request
         req.timeoutInterval = 15
+        
         return req
     }
 }

@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0)
+        view.backgroundColor = UIColor(red: 0 / 255, green: 0 / 255, blue: 0 / 255, alpha: 1.0)
         setupSceneView()
         setupManagers()
         
@@ -51,7 +51,7 @@ class ViewController: UIViewController {
        
         if status == .denied || status == .restricted {
             
-            let deniedVC = CameraPermissionDeniedViewController()
+            let deniedVC: CameraPermissionDeniedViewController = CameraPermissionDeniedViewController()
             
             deniedVC.modalPresentationStyle = .fullScreen
             
@@ -90,6 +90,7 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         hasPresentedCameraWarning = false
     }
     
@@ -102,8 +103,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: RPPreviewViewControllerDelegate {
+    
     func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
+        
         print("ViewController: previewControllerDidFinish")
+        
         dismiss(animated: true, completion: nil)
     }
 }
