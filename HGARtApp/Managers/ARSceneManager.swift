@@ -20,6 +20,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     private var startWorkItems: [UUID: DispatchWorkItem] = [:]
     private var stopWorkItems: [UUID: DispatchWorkItem] = [:]
     
+    @MainActor
     init(view: UIView) {
         
         print("🚀 Initializing ARSceneManager")
@@ -94,13 +95,13 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
 //        print("📦 Placeholder node created and added immediately")
         
         // Load video asynchronously and update the plane
-        Task {
+        Task { @MainActor in
             let ok = await videoManager.createOverlayVideoPlaneAsync(
                 for: imageAnchor,
                 targets: targets,
                 parentNode: parentNode,
-                onProgress: { [weak ps] progress in
-                    ps?.updatePreloaderProgress(for: anchor.identifier, progress: progress)
+                onProgress: { progress in
+                    ps.updatePreloaderProgress(for: anchor.identifier, progress: progress)
                 }
             )
             
@@ -108,7 +109,9 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
                 if ok {
                     // success: hide scanner and optionally fade preloader
                     ps.fadeOutPreloader(for: anchor.identifier)
-                    self.scannerOverlay.hideScanner()
+                    if self.videoManager.isTracking(anchor.identifier) {
+                        self.scannerOverlay.hideScanner()
+                    }
                     print("✅ 1 ARSceneManager: async video loaded for anchor: \(anchor.identifier)")
                 } else {
                     // failure: keep preloader label with message
@@ -133,6 +136,8 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             }
             
             let id = anchor.identifier
+            // Record loss immediately, before the debounced playback update.
+            self.videoManager.updateTracking(imageAnchor.isTracked, for: id)
             
             if !imageAnchor.isTracked {
                 // Cancel any pending start; schedule a delayed stop

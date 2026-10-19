@@ -1,24 +1,16 @@
 import XCTest
-import ARKit
 @testable import HGArt
 
-final class ARSessionManagerTests: XCTestCase {
-    var arSessionManager: ARSessionManager!
-    var mockSceneView: ARSCNView!
-    
-    override func setUp() {
-        super.setUp()
-        mockSceneView = ARSCNView()
-        arSessionManager = ARSessionManager(sceneView: mockSceneView)
+final class ARTargetConfigurationTests: XCTestCase {
+    func testBundledConfigurationHasUsableTargets() throws {
+        let url = try XCTUnwrap(Bundle.main.url(forResource: "ar-config", withExtension: "json"))
+        let config = try JSONDecoder().decode(ARTargetsConfig.self, from: Data(contentsOf: url))
+        XCTAssertFalse(config.targets.isEmpty)
+        for target in config.targets {
+            XCTAssertFalse(target.name.isEmpty)
+            XCTAssertGreaterThan(target.physicalWidth, 0)
+            XCTAssertEqual(URL(string: target.imageUrl)?.scheme, "https")
+            XCTAssertEqual(URL(string: target.videoUrl)?.scheme, "https")
+        }
     }
-    
-    override func tearDown() {
-        arSessionManager = nil
-        mockSceneView = nil
-        super.tearDown()
-    }
-    
-    func testInitialization() {
-        XCTAssertNotNil(arSessionManager)
-    }
-} 
+}

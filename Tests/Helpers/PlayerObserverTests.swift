@@ -29,13 +29,23 @@ final class PlayerObserverTests: XCTestCase {
         XCTAssertEqual(playerObserver.player, mockPlayer)
     }
     
-    func testObserveValue() {
-        // This test checks that observeValue correctly processes status changes
-        // However, the actual verification of the play() call is difficult to perform in a unit test
-        // due to the specifics of KVO and working with AVPlayerItem
-        
-        // Checking coverage of the observeValue function would require using mock objects
-        // or more complex testing techniques
-        XCTAssertTrue(true, "This test is a placeholder for observeValue")
+}
+
+private final class ReadyPlayerItem: AVPlayerItem {
+    override var status: AVPlayerItem.Status { .readyToPlay }
+}
+
+private final class PlaybackSpy: AVPlayer {
+    var playCalls = 0
+    override func play() { playCalls += 1 }
+}
+
+extension PlayerObserverTests {
+    func testReadyNotificationDoesNotBypassTrackingAndStartPlayback() {
+        let player = PlaybackSpy()
+        let observer = PlayerObserver(player: player)
+        let item = ReadyPlayerItem(asset: AVMutableComposition())
+        observer.observeValue(forKeyPath: "status", of: item, change: nil, context: nil)
+        XCTAssertEqual(player.playCalls, 0)
     }
-} 
+}

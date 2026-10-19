@@ -1,16 +1,11 @@
-//
-//  HGARtTests.swift
-//  HGARtTests
-//
-//  Created Stanislav Grinshpun on 2025-04-18.
-//
+import XCTest
+@testable import HGArt
 
-import Testing
-
-struct HGARtTests {
-
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+final class HGARtTests: XCTestCase {
+    func testTargetDecodingPreservesPhysicalWidth() throws {
+        let data = Data(#"{"name":"test","imageUrl":"https://example.com/image.png","videoUrl":"https://example.com/video.mp4","physicalWidth":0.42}"#.utf8)
+        let target = try JSONDecoder().decode(ARTarget.self, from: data)
+        XCTAssertEqual(target.name, "test")
+        XCTAssertEqual(target.physicalWidth, 0.42, accuracy: 0.0001)
     }
-
 }

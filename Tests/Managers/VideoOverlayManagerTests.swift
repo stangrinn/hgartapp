@@ -1,45 +1,49 @@
 import XCTest
-import ARKit
-import AVFoundation
 @testable import HGArt
 
 final class VideoOverlayManagerTests: XCTestCase {
-    var mockView: UIView!
-    var mockPlayer: AVPlayer!
-    
-    override func setUp() {
-        super.setUp()
-        mockView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
-        mockPlayer = AVPlayer()
+    func testHTTPFailuresNeverOverwriteCachedVideo() throws {
+        for status in [404, 500] {
+            try withDownload(status: status) { source, response, destination in
+                let existing = Data("existing video".utf8)
+                try existing.write(to: destination)
+                XCTAssertThrowsError(try ARSceneVideoOverlay.cacheDownloadedVideo(at: source, response: response, destination: destination))
+                XCTAssertEqual(try Data(contentsOf: destination), existing)
+            }
+        }
     }
-    
-    override func tearDown() {
-        mockView = nil
-        mockPlayer = nil
-        super.tearDown()
+
+    func testSuccessfulDownloadIsMovedToCache() throws {
+        try withDownload(status: 200) { source, response, destination in
+            let expected = try Data(contentsOf: source)
+            try ARSceneVideoOverlay.cacheDownloadedVideo(at: source, response: response, destination: destination)
+            XCTAssertEqual(try Data(contentsOf: destination), expected)
+            XCTAssertFalse(FileManager.default.fileExists(atPath: source.path))
+        }
     }
-    
-    func testSetControlsVisibility() {
-        // Testing control elements visibility
-        ARVideoOverlayManager.setControlsVisible(true)
-        ARVideoOverlayManager.setControlsVisible(false)
-        // Difficult to verify as it changes the internal state of a static class
-        XCTAssertTrue(true)
+
+    func testHTMLAndEmptyResponsesAreRejected() throws {
+        try withDownload(status: 200, mime: "text/html") { source, response, destination in
+            XCTAssertThrowsError(try ARSceneVideoOverlay.cacheDownloadedVideo(at: source, response: response, destination: destination))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        }
+        try withDownload(status: 200) { source, response, destination in
+            try Data().write(to: source)
+            XCTAssertThrowsError(try ARSceneVideoOverlay.cacheDownloadedVideo(at: source, response: response, destination: destination))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+        }
     }
-    
-    func testUpdateMuteIcon() {
-        // Testing mute icon update
-        ARVideoOverlayManager.updateMuteIcon(isMuted: true)
-        ARVideoOverlayManager.updateMuteIcon(isMuted: false)
-        // Difficult to verify as it changes the internal state of a static class
-        XCTAssertTrue(true)
+
+    private func withDownload(status: Int, mime: String = "video/mp4",
+                              check: (URL, HTTPURLResponse, URL) throws -> Void) throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let source = folder.appendingPathComponent("download")
+        let destination = folder.appendingPathComponent("cached.mp4")
+        try Data("downloaded content".utf8).write(to: source)
+        let response = HTTPURLResponse(url: URL(string: "https://example.com/video.mp4")!, statusCode: status,
+                                       httpVersion: nil, headerFields: ["Content-Type": mime])!
+        try check(source, response, destination)
     }
-    
-    func testUpdatePlayPauseIcon() {
-        // Testing play/pause icon update
-        ARVideoOverlayManager.updatePlayPauseIcon(isPlaying: true)
-        ARVideoOverlayManager.updatePlayPauseIcon(isPlaying: false)
-        // Difficult to verify as it changes the internal state of a static class
-        XCTAssertTrue(true)
-    }
-} 
+}

@@ -41,7 +41,9 @@ class ARSceneVideoOverlay: NSObject {
         }
         
         // Create player with cached URL
-        let player = createOrGetQueuePlayer(url: url, target: target)
+        let player = await MainActor.run {
+            createOrGetQueuePlayer(url: url, target: target)
+        }
         
         // Find the plane node in parentNode (it should be the first child)
         guard let planeNode = parentNode.childNodes.first,
@@ -76,14 +78,8 @@ class ARSceneVideoOverlay: NSObject {
             
             skVideoNodes[target.name] = videoNode
             
-            // Start playback
-            if player.timeControlStatus != .playing {
-                player.play()
-            }
-            
-            videoNode.play()
-            
-            print("🎬 Video loaded and playing for \(target.name) (cached: \(url.isFileURL))")
+            // The manager starts playback only while the anchor is tracked.
+
         }
         
         return player
@@ -101,7 +97,7 @@ class ARSceneVideoOverlay: NSObject {
         
         let cacheDir = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
         
-        let folderURL = cacheDir.appendingPathComponent("ARVideos", isDirectory: true)
+        let folderURL = cacheDir.appendingPathComponent("ARVideos-v2", isDirectory: true)
         
         let fileURL = folderURL.appendingPathComponent(remoteURL.lastPathComponent)
 
@@ -122,13 +118,21 @@ class ARSceneVideoOverlay: NSObject {
         
         onProgress(0.0)
 
-        struct DownloadError: Error { let underlying: Error }
 
         // 1) Attempt with delegate to stream progress and move to cache inside delegate
         do {
             let finalURL: URL = try await withCheckedThrowingContinuation { (cont: CheckedContinuation<URL, Error>) in
                 
-                final class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
+                // URLSession delivers delegate callbacks on its serial delegate queue.
+                final class DownloadDelegate: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
+                    private var didFinish = false
+
+                    private func finish(_ result: Result<URL, Error>) {
+                        guard !didFinish else { return }
+                        didFinish = true
+                        completion(result)
+                    }
+
                     let onProgress: (Double) -> Void
                     let destination: URL
                     let completion: (Result<URL, Error>) -> Void
@@ -148,23 +152,18 @@ class ARSceneVideoOverlay: NSObject {
                     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
                                     didFinishDownloadingTo location: URL) {
                         do {
-                            let fm = FileManager.default
-                            let dir = destination.deletingLastPathComponent()
-                            if !fm.fileExists(atPath: dir.path) {
-                                try fm.createDirectory(at: dir, withIntermediateDirectories: true)
-                            }
-                            if fm.fileExists(atPath: destination.path) {
-                                try fm.removeItem(at: destination)
-                            }
-                            try fm.moveItem(at: location, to: destination)
+                            try ARSceneVideoOverlay.cacheDownloadedVideo(
+                                at: location, response: downloadTask.response, destination: destination
+                            )
                             DispatchQueue.main.async { self.onProgress(1.0) }
-                            completion(.success(destination))
+                            finish(.success(destination))
                         } catch {
-                            completion(.failure(error))
+                            finish(.failure(error))
                         }
                     }
                     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-                        if let error { completion(.failure(error)) }
+                        if let error { finish(.failure(error)) }
+                        session.finishTasksAndInvalidate()
                     }
                 }
 
@@ -175,7 +174,7 @@ class ARSceneVideoOverlay: NSObject {
                 let delegate = DownloadDelegate(onProgress: onProgress, destination: fileURL) { result in
                     switch result {
                     case .success(let url): cont.resume(returning: url)
-                    case .failure(let err): cont.resume(throwing: DownloadError(underlying: err))
+                    case .failure(let err): cont.resume(throwing: err)
                     }
                 }
                 let session = URLSession(configuration: cfg, delegate: delegate, delegateQueue: nil)
@@ -187,15 +186,17 @@ class ARSceneVideoOverlay: NSObject {
             
             return finalURL
         } catch {
+            // Retry transport failures only; HTTP errors must never enter the cache.
+            guard let transportError = error as? URLError, transportError.code != .cancelled else {
+                throw error
+            }
             // 2) Fallback to simple download (may use different transport)
             print("↩️ Progress download failed, falling back. Error: \(error.localizedDescription)")
             
             do {
-                let (tempURL, _) = try await URLSession.shared.download(from: remoteURL)
-                if !fileManager.fileExists(atPath: folderURL.path) {
-                    try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
-                }
-                try fileManager.moveItem(at: tempURL, to: fileURL)
+                let (tempURL, response) = try await URLSession.shared.download(from: remoteURL)
+                defer { try? fileManager.removeItem(at: tempURL) }
+                try Self.cacheDownloadedVideo(at: tempURL, response: response, destination: fileURL)
                 onProgress(1.0)
                 print("✅ Cached video for \(target.name) via fallback")
                 return fileURL
@@ -206,6 +207,33 @@ class ARSceneVideoOverlay: NSObject {
         }
         
         // All paths above return; no further action needed here.
+    }
+
+    enum DownloadValidationError: Error {
+        case invalidResponse
+        case httpStatus(Int)
+        case invalidContent
+    }
+
+    /// Used by both download paths before any response is saved to the cache.
+    static func cacheDownloadedVideo(at location: URL, response: URLResponse?, destination: URL) throws {
+        guard let response = response as? HTTPURLResponse else {
+            throw DownloadValidationError.invalidResponse
+        }
+        guard (200..<300).contains(response.statusCode) else {
+            throw DownloadValidationError.httpStatus(response.statusCode)
+        }
+        let mime = response.mimeType?.lowercased() ?? ""
+        let size = try location.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+        guard size > 0, !mime.hasPrefix("text/"), !mime.contains("json"), !mime.contains("xml") else {
+            throw DownloadValidationError.invalidContent
+        }
+        let fm = FileManager.default
+        try fm.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
+        if fm.fileExists(atPath: destination.path) {
+            try fm.removeItem(at: destination)
+        }
+        try fm.moveItem(at: location, to: destination)
     }
 
     // MARK: - Looper Creation

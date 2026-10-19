@@ -55,7 +55,8 @@ final class ToggleIconButtonTests: XCTestCase {
         XCTAssertFalse(toggleButton.getToggled(), "After setToggled(false) button should be untoggled")
     }
     
-    func testAttach() {
+    @MainActor
+    func testAttach() async {
         // Testing the attach method requires UI verification, which is difficult in unit tests
         // But we can check that the method doesn't throw exceptions
         let mockView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
@@ -70,7 +71,9 @@ final class ToggleIconButtonTests: XCTestCase {
             yOffset: 16
         )
         
-        XCTAssertTrue(true, "attach method called without errors")
+        await MainActor.run {}
+        XCTAssertTrue(toggleButton.superview === mockView)
+        XCTAssertTrue(toggleButton.allTargets.contains(self))
     }
     
     @objc func dummyAction() {

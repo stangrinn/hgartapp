@@ -22,12 +22,14 @@ final class TargetScannerOverlayTests: XCTestCase {
         XCTAssertNotNil(targetScannerOverlay)
     }
     
-    func stopScanning() {
+    @MainActor
+    func testStopScanningRemovesAnimation() async {
         // Check that the method doesn't throw exceptions
         targetScannerOverlay.stopScanning()
         // Since the method deals with UI and contains asynchronous calls,
         // it's difficult to directly test its results in unit tests
-        XCTAssertTrue(true, "stopScanning() method executed without errors")
+        await MainActor.run {}
+        XCTAssertTrue(targetScannerOverlay.subviews.allSatisfy { $0.layer.animation(forKey: "scan") == nil })
     }
     
     func testViewHierarchy() {

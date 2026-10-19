@@ -3,7 +3,21 @@ import AVFoundation
 import SceneKit
 import ARKit
 
+@MainActor
 class ARSceneVideoManager {
+    private var trackedAnchors: Set<UUID> = []
+
+    func updateTracking(_ isTracked: Bool, for anchorID: UUID) {
+        if isTracked {
+            trackedAnchors.insert(anchorID)
+        } else {
+            trackedAnchors.remove(anchorID)
+        }
+    }
+
+    func isTracking(_ anchorID: UUID) -> Bool {
+        trackedAnchors.contains(anchorID)
+    }
     
     private var playersByAnchor: [UUID: AVQueuePlayer] = [:]
     
@@ -43,46 +57,32 @@ class ARSceneVideoManager {
                                       parentNode: SCNNode,
                                       onProgress: @escaping (Double) -> Void) async -> Bool {
         
-        // If player already exists, just start it on the main actor
-        let hasExistingPlayer: Bool = await MainActor.run { [weak self] in
-            guard let self else { return false }
-            return self.playersByAnchor[anchor.identifier] != nil
+        await prepareVideo(for: anchor.identifier) {
+            await self.arVideoOverlay.createMainOverlayAsync(
+                for: anchor, targets: targets, parentNode: parentNode, onProgress: onProgress
+            )
         }
-        
-        if hasExistingPlayer {
-            await MainActor.run {
-                startVideo(for: anchor.identifier)
-            }
-            return true
-        }
+    }
 
-        // Use async version with caching (updates existing parentNode)
-        if let player = await self.arVideoOverlay.createMainOverlayAsync(for: anchor,
-                                    targets: targets,
-                                    parentNode: parentNode,
-                                    onProgress: onProgress) {
-            
-            await MainActor.run {
-                
-                currentAnchorID = anchor.identifier
-                
-                playersByAnchor[anchor.identifier] = player
-                
-                player.isMuted = (isMuted == nil ? true : isMuted!)
-                
-                self.controls.updateMuteIcon(isMuted: player.isMuted)
-                
-                self.controls.setControlsVisible(true)
-                
-                print("📽️ Video is playing (async, cached)")
-            }
+    /// Loading can finish after tracking changes; decide playback only after the await.
+    func prepareVideo(for anchorID: UUID, loadPlayer: () async -> AVQueuePlayer?) async -> Bool {
+        if playersByAnchor[anchorID] != nil {
+            startVideo(for: anchorID)
             return true
-        } else {
-            await MainActor.run {
-                self.controls.setControlsVisible(false)
-            }
+        }
+        guard let player = await loadPlayer() else {
+            if currentAnchorID == nil { controls.setControlsVisible(false) }
             return false
         }
+        playersByAnchor[anchorID] = player
+        player.isMuted = isMuted ?? true
+        if isTracking(anchorID) {
+            controls.updateMuteIcon(isMuted: player.isMuted)
+            startVideo(for: anchorID)
+        } else {
+            player.pause()
+        }
+        return true
     }
 
     @MainActor
@@ -97,9 +97,7 @@ class ARSceneVideoManager {
             print("👋 Video is not Playing")
         }
         
-        self.controls.setControlsVisible(false)
-        
-        clearCurrentAnchor()
+        if currentAnchorID == anchorID { clearCurrentAnchor() }
         
     
     }
@@ -107,7 +105,7 @@ class ARSceneVideoManager {
     @MainActor
     func startVideo(for anchorID: UUID) {
         
-        guard let player = playersByAnchor[anchorID] else { return }
+        guard isTracking(anchorID), let player = playersByAnchor[anchorID] else { return }
         
         if player.timeControlStatus == .playing  || player.timeControlStatus == .waitingToPlayAtSpecifiedRate { return }
         

@@ -67,8 +67,8 @@ class PlayerObserver: NSObject {
         guard keyPath == "status", let item = object as? AVPlayerItem else { return }
 
         if item.status == .readyToPlay {
-            print("🎬 Player item is ready. Starting playback.")
-            self._player.play()
+            print("🎬 Player item is ready.")
+            // Playback belongs to ARSceneVideoManager, which checks tracking.
         } else if item.status == .failed {
             print("❌ AVPlayerItem failed:", item.error?.localizedDescription ?? "Unknown error")
         }
