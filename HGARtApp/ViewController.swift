@@ -15,12 +15,16 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0)
         setupSceneView()
         setupManagers()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(pauseExperience),
+            name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resumeExperience),
+            name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        resumeExperience()
         let status = AVCaptureDevice.authorizationStatus(for: .video)
 
         if (status == .denied || status == .restricted), !hasPresentedCameraWarning {
@@ -82,6 +86,9 @@ class ViewController: UIViewController {
             
             arCoreManager.loadTargetsAndStartARSession { [weak self] loadedTargets in
                 self?.arSceneManager.setTargets(loadedTargets)
+                if UIApplication.shared.applicationState != .active || self?.view.window == nil {
+                    self?.pauseExperience()
+                }
                 //sets targets and runs the AR scene and puts there target references
             }
             
@@ -97,8 +104,23 @@ class ViewController: UIViewController {
         
         super.viewWillDisappear(animated)
         
-        sceneView.session.pause()
+        pauseExperience()
     }
+    @objc private func pauseExperience() {
+        arSceneManager?.setExperienceActive(false)
+        sceneView?.session.pause()
+    }
+
+    @objc private func resumeExperience() {
+        guard isViewLoaded, view.window != nil, UIApplication.shared.applicationState == .active else { return }
+        arSceneManager?.setExperienceActive(true)
+        if let configuration = sceneView?.session.configuration {
+            sceneView.session.run(configuration)
+        }
+    }
+
+    deinit { NotificationCenter.default.removeObserver(self) }
+
 }
 
 extension ViewController: RPPreviewViewControllerDelegate {

@@ -33,12 +33,12 @@ private final class DelayedVideo {
 
 final class VideoManagerTests: XCTestCase {
     @MainActor
-    func testLossDuringDownloadDoesNotStartPlaybackAndReacquisitionResumes() async throws {
+    func testLossDuringPreparationDoesNotStartPlaybackAndReacquisitionResumes() async throws {
         let overlay = DelayedVideo()
         let view = UIView()
         let manager = ARSceneVideoManager(view: view)
         let anchorID = UUID()
-        let started = expectation(description: "Download started")
+        let started = expectation(description: "Preparation started")
         overlay.started = { started.fulfill() }
         manager.updateTracking(true, for: anchorID)
         let load = Task {
@@ -50,7 +50,7 @@ final class VideoManagerTests: XCTestCase {
         overlay.finish()
         let loaded = await load.value
         XCTAssertTrue(loaded)
-        XCTAssertEqual(overlay.player.playCalls, 0, "A late download must not start a lost anchor")
+        XCTAssertEqual(overlay.player.playCalls, 0, "A late preparation must not start a lost anchor")
 
         manager.updateTracking(true, for: anchorID)
         manager.startVideo(for: anchorID)
@@ -59,12 +59,12 @@ final class VideoManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testDownloadStartsPlaybackWhenAnchorRemainsTracked() async {
+    func testPreparationStartsPlaybackWhenAnchorRemainsTracked() async {
         let overlay = DelayedVideo()
         let view = UIView()
         let manager = ARSceneVideoManager(view: view)
         let anchorID = UUID()
-        let started = expectation(description: "Download started")
+        let started = expectation(description: "Preparation started")
         overlay.started = { started.fulfill() }
         manager.updateTracking(true, for: anchorID)
         let load = Task {
@@ -81,4 +81,45 @@ final class VideoManagerTests: XCTestCase {
         XCTAssertGreaterThan(overlay.player.pauseCalls, 0)
     }
 
+
+    @MainActor
+    func testBackgroundBlocksLatePreparationUntilFreshTracking() async {
+        let delayed = DelayedVideo()
+        let view = UIView()
+        let manager = ARSceneVideoManager(view: view)
+        let id = UUID()
+        let started = expectation(description: "Preparation started")
+        delayed.started = { started.fulfill() }
+        manager.updateTracking(true, for: id)
+        let load = Task { await manager.prepareVideo(for: id) { await delayed.load() } }
+        await fulfillment(of: [started], timeout: 3)
+        manager.setExperienceActive(false)
+        delayed.finish()
+        _ = await load.value
+        XCTAssertEqual(delayed.player.playCalls, 0)
+        manager.updateTracking(true, for: id)
+        manager.startVideo(for: id)
+        XCTAssertEqual(delayed.player.playCalls, 0)
+        manager.setExperienceActive(true)
+        manager.startVideo(for: id)
+        XCTAssertEqual(delayed.player.playCalls, 0, "Foreground alone cannot restore stale tracking")
+        manager.updateTracking(true, for: id)
+        manager.startVideo(for: id)
+        XCTAssertEqual(delayed.player.playCalls, 1)
+    }
+
+    @MainActor
+    func testBackgroundPausesAnAlreadyPlayingStream() async {
+        let player = RecordingPlayer()
+        let view = UIView()
+        let manager = ARSceneVideoManager(view: view)
+        let id = UUID()
+        manager.updateTracking(true, for: id)
+        _ = await manager.prepareVideo(for: id) { player }
+        XCTAssertEqual(player.playCalls, 1)
+        manager.setExperienceActive(false)
+        XCTAssertGreaterThan(player.pauseCalls, 0)
+        manager.startVideo(for: id)
+        XCTAssertEqual(player.playCalls, 1)
+    }
 }

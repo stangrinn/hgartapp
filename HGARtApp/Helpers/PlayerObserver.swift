@@ -1,76 +1,83 @@
-//
-//  PlayerObserver.swift
-//  HGARt
-//
-//  Created by Stanislav Grinshpun on 2025-04-15.
-//
-
 import AVFoundation
 import Foundation
 
+/// Observes the current looper item and buffering; playback decisions belong to the manager.
 class PlayerObserver: NSObject {
-    private let _player: AVPlayer
+    enum State { case buffering, playing, paused, failed }
+    let player: AVPlayer
+    var stateDidChange: ((State) -> Void)?
+    private var observations: [NSKeyValueObservation] = []
+    private var itemObservation: NSKeyValueObservation?
+    private var failureToken: NSObjectProtocol?
     private var isObserving = false
 
-    var player: AVPlayer {
-        return _player
-    }
-
     init(player: AVPlayer) {
-        self._player = player
+        self.player = player
         super.init()
-        observeErrors(for: player)
-    }
-
-    func observeErrors(for player: AVPlayer) {
-        
-        if let currentItem: AVPlayerItem = player.currentItem {
-            currentItem.addObserver(self, forKeyPath: "status", options: [.new, .initial], context: nil)
-
-            // Add error handling for player items
-            NotificationCenter.default.addObserver(
-                forName: .AVPlayerItemFailedToPlayToEndTime,
-                object: currentItem,
-                queue: .main
-            ) { notification in
-                if let error = notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey]
-                    as? Error
-                {
-                    print("❌ Player failed to play: \(error.localizedDescription)")
-                }
-            }
-        }
+        startObserving()
     }
 
     func startObserving() {
-        guard !isObserving, let currentItem = _player.currentItem else { return }
-        
-        currentItem.addObserver(self, forKeyPath: "status", options: [.new, .initial], context: nil)
-        
+        guard !isObserving else { return }
         isObserving = true
+        observations = [
+            player.observe(\.currentItem, options: [.initial, .new]) { [weak self] player, _ in
+                DispatchQueue.main.async { [weak self, weak player] in
+                    guard let self, self.isObserving else { return }
+                    self.observeItem(player?.currentItem)
+                }
+            },
+            player.observe(\.timeControlStatus, options: [.initial, .new]) { [weak self] _, _ in self?.publish() },
+            player.observe(\.status, options: [.new]) { [weak self] _, _ in self?.publish() }
+        ]
+    }
+
+    private func observeItem(_ item: AVPlayerItem?) {
+        itemObservation?.invalidate()
+        if let failureToken { NotificationCenter.default.removeObserver(failureToken) }
+        failureToken = nil
+        item?.preferredForwardBufferDuration = 3
+        item?.canUseNetworkResourcesForLiveStreamingWhilePaused = false
+        itemObservation = item?.observe(\.status, options: [.initial, .new]) { [weak self] _, _ in self?.publish() }
+        if let item {
+            failureToken = NotificationCenter.default.addObserver(forName: .AVPlayerItemFailedToPlayToEndTime,
+                object: item, queue: .main) { [weak self] _ in self?.publish(failed: true) }
+        }
+        publish()
+    }
+
+    private func publish(failed: Bool = false) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.isObserving else { return }
+            let state: State
+            if failed || self.player.status == .failed || self.player.currentItem?.status == .failed {
+                state = .failed
+            } else if self.player.timeControlStatus == .playing {
+                state = .playing
+            } else if self.player.timeControlStatus == .waitingToPlayAtSpecifiedRate || self.player.currentItem?.status == .unknown {
+                state = .buffering
+            } else {
+                state = .paused
+            }
+            self.stateDidChange?(state)
+        }
     }
 
     func stopObserving() {
-        guard isObserving, let currentItem = _player.currentItem else { return }
-        
-        currentItem.removeObserver(self, forKeyPath: "status")
-        
         isObserving = false
+        observations.forEach { $0.invalidate() }
+        observations.removeAll()
+        itemObservation?.invalidate()
+        itemObservation = nil
+        if let failureToken { NotificationCenter.default.removeObserver(failureToken) }
+        failureToken = nil
     }
 
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey: Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        guard keyPath == "status", let item = object as? AVPlayerItem else { return }
-
-        if item.status == .readyToPlay {
-            print("🎬 Player item is ready.")
-            // Playback belongs to ARSceneVideoManager, which checks tracking.
-        } else if item.status == .failed {
-            print("❌ AVPlayerItem failed:", item.error?.localizedDescription ?? "Unknown error")
-        }
+    // Retained for explicit KVO dispatch; never starts playback on readiness.
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+                               change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        publish()
     }
+
+    deinit { stopObserving() }
 }

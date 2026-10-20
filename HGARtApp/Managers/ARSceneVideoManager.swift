@@ -6,9 +6,20 @@ import ARKit
 @MainActor
 class ARSceneVideoManager {
     private var trackedAnchors: Set<UUID> = []
+    private var experienceActive = true
+
+    func setExperienceActive(_ active: Bool) {
+        experienceActive = active
+        if !active {
+            trackedAnchors.removeAll()
+            playersByAnchor.values.forEach { $0.pause() }
+            arVideoOverlay.suspendStreams()
+            clearCurrentAnchor()
+        }
+    }
 
     func updateTracking(_ isTracked: Bool, for anchorID: UUID) {
-        if isTracked {
+        if isTracked && experienceActive {
             trackedAnchors.insert(anchorID)
         } else {
             trackedAnchors.remove(anchorID)
@@ -16,7 +27,7 @@ class ARSceneVideoManager {
     }
 
     func isTracking(_ anchorID: UUID) -> Bool {
-        trackedAnchors.contains(anchorID)
+        experienceActive && trackedAnchors.contains(anchorID)
     }
     
     private var playersByAnchor: [UUID: AVQueuePlayer] = [:]
@@ -51,15 +62,14 @@ class ARSceneVideoManager {
                                     isPlaying: { [weak self] in self?.isPlaying ?? false })
     }
     
-    // Async version with video caching
+    // Open the URL directly; AVFoundation prepares and buffers the stream.
     func createOverlayVideoPlaneAsync(for anchor: ARImageAnchor,
                                       targets: [ARTarget],
-                                      parentNode: SCNNode,
-                                      onProgress: @escaping (Double) -> Void) async -> Bool {
+                                      parentNode: SCNNode) async -> Bool {
         
         await prepareVideo(for: anchor.identifier) {
             await self.arVideoOverlay.createMainOverlayAsync(
-                for: anchor, targets: targets, parentNode: parentNode, onProgress: onProgress
+                for: anchor, targets: targets, parentNode: parentNode
             )
         }
     }
@@ -81,6 +91,7 @@ class ARSceneVideoManager {
             startVideo(for: anchorID)
         } else {
             player.pause()
+            if !experienceActive { arVideoOverlay.suspendStreams() }
         }
         return true
     }
@@ -111,6 +122,7 @@ class ARSceneVideoManager {
         
         print("✅ StartVideo player is playing")
         
+        arVideoOverlay.prepareToPlay(player)
         player.play()
         
         currentAnchorID = anchorID

@@ -36,6 +36,18 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
         super.init()
     }
     
+    @MainActor
+    func setExperienceActive(_ active: Bool) {
+        videoManager.setExperienceActive(active)
+        if !active {
+            startWorkItems.values.forEach { $0.cancel() }
+            stopWorkItems.values.forEach { $0.cancel() }
+            startWorkItems.removeAll()
+            stopWorkItems.removeAll()
+            scannerOverlay.showScanner()
+        }
+    }
+
     func setTargets(_ targets: [ARTarget]) {
         print("ARSceneManager: setTargets with count: \(targets.count)")
         
@@ -99,10 +111,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
             let ok = await videoManager.createOverlayVideoPlaneAsync(
                 for: imageAnchor,
                 targets: targets,
-                parentNode: parentNode,
-                onProgress: { progress in
-                    ps.updatePreloaderProgress(for: anchor.identifier, progress: progress)
-                }
+                parentNode: parentNode
             )
             
             await MainActor.run {

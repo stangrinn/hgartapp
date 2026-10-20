@@ -3,6 +3,19 @@
 HGARt is an iOS application that uses augmented reality to overlay videos and 3d animations on real-world art objects and places. 
 The app recognizes predefined image targets and plays corresponding videos on top of them, creating an immersive AR experience.
 
+
+## iOS streaming
+
+Videos now use the remote HTTPS URL directly through `AVURLAsset`, `AVQueuePlayer`, and `AVPlayerLooper`. There is no complete-file download or persistent video cache before playback. The player uses a short forward-buffer preference and AVFoundation's automatic stall handling. Buffering and connection failures are shown on the artwork; no download percentage is fabricated.
+
+Only the scene manager may start playback, after checking current image tracking and whether the experience is active. Resigning active or leaving the screen pauses playback and removes queued stream items to stop background buffering. After returning, fresh tracking recreates the loop from the remote source. Reference-image loading/cache behavior is unchanged. Video playback requires connectivity.
+
+The bundled config now uses the same 12 unique artworks selected for Android, replacing the unavailable legacy WordPress URLs from `develop`.
+
+Validation: build the `HGArt` scheme for an iPhone and run its tests in an iOS Simulator. The main app and App Clip share the streaming implementation. On-device acceptance must still check recognition, initial/repeated buffering on a slow connection, looping, stream errors, sound controls, losing/reacquiring an artwork, and background/foreground transitions. A late preparation or old tracking callback must never start an invisible/backgrounded video.
+
+The Android app is maintained separately in the neighboring `../Android` Git repository.
+
 ## Features
 
 - **Image Recognition**: Detects predefined target images from a configuration file
