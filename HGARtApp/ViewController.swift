@@ -25,14 +25,18 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
 
         resumeExperience()
+        presentCameraDeniedIfNeeded()
+    }
+
+    private func presentCameraDeniedIfNeeded() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
 
-        if (status == .denied || status == .restricted), !hasPresentedCameraWarning {
-            let deniedVC = CameraPermissionDeniedViewController()
-            deniedVC.modalPresentationStyle = .fullScreen
-            present(deniedVC, animated: true, completion: nil)
-            hasPresentedCameraWarning = true
-        }
+        guard status == .denied || status == .restricted, !hasPresentedCameraWarning else { return }
+
+        let deniedVC = CameraPermissionDeniedViewController()
+        deniedVC.modalPresentationStyle = .fullScreen
+        present(deniedVC, animated: true, completion: nil)
+        hasPresentedCameraWarning = true
     }
     
     private func setupSceneView() {
@@ -46,8 +50,6 @@ class ViewController: UIViewController {
         sceneView.antialiasingMode = .multisampling4X
         
         sceneView.preferredFramesPerSecond = 60
-        
-        print("View \(view!)")
     }
     
     private func setupManagers() {
@@ -55,11 +57,7 @@ class ViewController: UIViewController {
        
         if status == .denied || status == .restricted {
             
-            let deniedVC = CameraPermissionDeniedViewController()
-            
-            deniedVC.modalPresentationStyle = .fullScreen
-            
-            present(deniedVC, animated: true, completion: nil)
+            presentCameraDeniedIfNeeded()
             
             return
         } else if status == .notDetermined {
@@ -67,9 +65,7 @@ class ViewController: UIViewController {
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 DispatchQueue.main.async {
                     if !granted {
-                        let deniedVC = CameraPermissionDeniedViewController()
-                        deniedVC.modalPresentationStyle = .fullScreen
-                        self.present(deniedVC, animated: true, completion: nil)
+                        self.presentCameraDeniedIfNeeded()
                     } else {
                         self.setupManagers()
                     }
