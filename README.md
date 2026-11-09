@@ -21,6 +21,9 @@ The application follows a modular architecture with specialized managers for dif
 - **RecordingManager**: Handles screen recording functionality
 - **PlayerObserver**: Observes player state changes using KVO
 
+Architecture boundaries and migration rules are documented in:
+- `docs/architecture-boundaries.md`
+
 ## Technical Details
 
 - **Frameworks**: ARKit, SceneKit, AVFoundation, SpriteKit, ReplayKit
