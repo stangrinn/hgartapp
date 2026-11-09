@@ -20,6 +20,7 @@ class ARSceneCoreManager: NSObject {
 
     private var targets: [ARTarget] = []
     private var referenceImages: Set<ARReferenceImage> = []
+    private let referenceImagesQueue = DispatchQueue(label: "ARSceneCoreManager.referenceImages")
     private let sceneView: ARSCNView
     
     private let fileManager = FileManager.default
@@ -36,6 +37,12 @@ class ARSceneCoreManager: NSObject {
     
     init(sceneView: ARSCNView) {
         self.sceneView = sceneView
+    }
+
+    private func addReferenceImage(_ cgImage: CGImage, for target: ARTarget) {
+        let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
+        arImage.name = target.name
+        referenceImagesQueue.sync { _ = referenceImages.insert(arImage) }
     }
     
     /**
@@ -61,7 +68,7 @@ class ARSceneCoreManager: NSObject {
             
             let group = DispatchGroup()
             
-            self.referenceImages.removeAll()
+            referenceImagesQueue.sync { referenceImages.removeAll() }
             
             for target in self.targets {
                 
@@ -79,12 +86,8 @@ class ARSceneCoreManager: NSObject {
                             let cachedImage = UIImage(contentsOfFile: cachedPath.path),
                             let cgImage = cachedImage.cgImage {
                                 
-                    print("ARSessionManager: Using cached image for \(target.name)")
-                    
-                    let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
-                                arImage.name = target.name
-                                self.referenceImages.insert(arImage)
-                                
+                    addReferenceImage(cgImage, for: target)
+
                     group.leave()
                     continue  // Skip the 
                 }
@@ -92,15 +95,13 @@ class ARSceneCoreManager: NSObject {
                 // Use cache-buster only in DEBUG builds to avoid unnecessary reloads in production
                 #if DEBUG
                     let effectiveImageURL = self.urlByAddingBuster(imageUrl.absoluteString) ?? imageUrl
-                    print("Debug MODE: ARSceneCore effectiveImageURL \(effectiveImageURL)")
                 #else
                     let effectiveImageURL = imageUrl
-                    print("Release MODE: ARSceneCore effectiveImageURL \(effectiveImageURL)")
                 #endif
                 
                 let imageRequest = URLRequest(url: effectiveImageURL)
                 
-                URLSession.shared.dataTask(with: imageRequest) { imageData, response, error in
+                URLSession.shared.dataTask(with: imageRequest) { [self] imageData, response, error in
                     
                     defer { group.leave() }
                     
@@ -118,24 +119,19 @@ class ARSceneCoreManager: NSObject {
                         return
                     }
                     
-                    let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(target.physicalWidth))
-                    
-                    arImage.name = target.name
-                    
-                    self.referenceImages.insert(arImage)
-                    
-                    print("ARSessionManager: ARReferenceImage for target \(arImage)")
-                    
+                    addReferenceImage(cgImage, for: target)
                 }.resume()
             }
             
             group.notify(queue: .main) {
                 
+                let images = self.referenceImagesQueue.sync { self.referenceImages }
+                
                 let configuration = ARImageTrackingConfiguration()
                 
-                configuration.trackingImages = self.referenceImages
+                configuration.trackingImages = images
                 
-                configuration.maximumNumberOfTrackedImages = self.referenceImages.count
+                configuration.maximumNumberOfTrackedImages = images.count
                 
                 self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 
@@ -147,21 +143,6 @@ class ARSceneCoreManager: NSObject {
         }
     }
     
-    private lazy var noCacheSession: URLSession = {
-        let cfg = URLSessionConfiguration.default
-        
-        // Allow caching but revalidate - faster on subsequent loads
-        cfg.requestCachePolicy = .returnCacheDataElseLoad
-        cfg.urlCache = URLCache.shared
-        // Increase timeout for slow connections
-        cfg.timeoutIntervalForRequest = 15
-        cfg.timeoutIntervalForResource = 30
-        // Prefer HTTP/2 over HTTP/3 (QUIC) to avoid connection issues
-        cfg.httpShouldUsePipelining = false
-        
-        return URLSession(configuration: cfg)
-    }()
-
     private func urlByAddingBuster(_ raw: String, key: String = "v") -> URL? {
         guard var comps = URLComponents(string: raw) else { return nil }
         var q = comps.queryItems ?? []
@@ -170,14 +151,5 @@ class ARSceneCoreManager: NSObject {
         q.append(URLQueryItem(name: key, value: value))
         comps.queryItems = q
         return comps.url
-    }
-
-    private func nonCachingRequest(url: URL) -> URLRequest {
-        var req = URLRequest(url: url)
-        // Use cache when available for faster loads
-        req.cachePolicy = .returnCacheDataElseLoad
-        // Set timeout for network request
-        req.timeoutInterval = 15
-        return req
     }
 }
