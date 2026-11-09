@@ -25,8 +25,7 @@ enum AppEnvironment {
     
     /// Returns the preloader resource name based on environment
     static var preloaderResourceName: String {
-//        isRunningInAppClip ? "Loader-kids" : "Loader"
-        "Loader-kids"
+        isRunningInAppClip ? "Loader-kids" : "Loader"
     }
     
     /// Returns the background color based on environment

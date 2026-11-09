@@ -17,9 +17,9 @@ class AppPreloaderOverlay {
     // MARK: - Preloader Overlay
     init(view: UIView) {
         
-        let forResource: String = "Loader-kids"
+        let forResource: String = AppEnvironment.preloaderResourceName
         
-        let bgColor: CGColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0).cgColor
+        let bgColor: CGColor = AppEnvironment.preloaderBackgroundColor.cgColor
         
         guard let path = Bundle.main.path(forResource: forResource, ofType: "mp4") else {
             print("Intro video not found")
