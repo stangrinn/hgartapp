@@ -80,15 +80,36 @@ class ViewController: UIViewController {
             
             arCoreManager = ARSceneCoreManager(sceneView: sceneView)
             
-            arCoreManager.loadTargetsAndStartARSession { [weak self] loadedTargets in
+            loadTargets()
+            
+        }
+    }
+    
+    private func loadTargets() {
+        arCoreManager.loadTargetsAndStartARSession { [weak self] result in
+            switch result {
+            case .success(let loadedTargets):
                 self?.arSceneManager.setTargets(loadedTargets)
                 if UIApplication.shared.applicationState != .active || self?.view.window == nil {
                     self?.pauseExperience()
                 }
-                //sets targets and runs the AR scene and puts there target references
+            case .failure:
+                self?.presentTargetsLoadingFailure()
             }
-            
         }
+    }
+    
+    private func presentTargetsLoadingFailure() {
+        guard presentedViewController == nil else { return }
+        
+        let alert = UIAlertController(title: "Could not load AR content",
+                                      message: "Check your internet connection and try again.",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
+            self?.loadTargets()
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {

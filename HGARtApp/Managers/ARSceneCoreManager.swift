@@ -7,8 +7,15 @@
 
 import Foundation
 import ARKit
+import CryptoKit
 import UIKit
 import SceneKit
+
+enum ARTargetsError: Error {
+    case configMissing
+    case configInvalid
+    case noTargetsLoaded
+}
 
 private extension Bundle {
     var appBuild: String {
@@ -31,8 +38,19 @@ class ARSceneCoreManager: NSObject {
         return cacheDir
     }()
         
-    private func cachedImagePath(for targetName: String) -> URL {
-        return cacheDirectory.appendingPathComponent("\(targetName).jpg")
+    // Keyed by the image URL: Vendure issues a new URL when an asset is replaced.
+    private func cachedImagePath(for imageUrl: String) -> URL {
+        let digest = SHA256.hash(data: Data(imageUrl.utf8)).map { String(format: "%02x", $0) }.joined()
+        return cacheDirectory.appendingPathComponent("\(digest).img")
+    }
+
+    private func purgeStaleCache(keeping targets: [ARTarget]) {
+        let keep = Set(targets.map { cachedImagePath(for: $0.imageUrl).lastPathComponent })
+        let files = (try? fileManager.contentsOfDirectory(atPath: cacheDirectory.path)) ?? []
+
+        for file in files where !keep.contains(file) {
+            try? fileManager.removeItem(at: cacheDirectory.appendingPathComponent(file))
+        }
     }
     
     init(sceneView: ARSCNView) {
@@ -47,15 +65,14 @@ class ARSceneCoreManager: NSObject {
     
     /**
         Loads the targets from the config file and starts the session.
-        @param:
-            - completion: A closure that is called when the targets are loaded and the session is started.
-            - Returns: An array of targets.
+        - completion: Called on the main queue with the loaded targets, or an error when no target can be tracked.
     */
-    func loadTargetsAndStartARSession(completion: @escaping ([ARTarget]) -> Void) {
+    func loadTargetsAndStartARSession(completion: @escaping (Result<[ARTarget], ARTargetsError>) -> Void) {
         
         // Load config.json from the application bundle
         guard let url = Bundle.main.url(forResource: "ar-config", withExtension: "json") else {
             print("ARSessionManager: config.json not found in app bundle")
+            completion(.failure(.configMissing))
             return
         }
         
@@ -65,6 +82,8 @@ class ARSceneCoreManager: NSObject {
             let decoded = try JSONDecoder().decode([String: [ARTarget]].self, from: data)
             
             self.targets = decoded["targets"] ?? []
+            
+            purgeStaleCache(keeping: self.targets)
             
             let group = DispatchGroup()
             
@@ -79,7 +98,7 @@ class ARSceneCoreManager: NSObject {
                 
                 group.enter()
                 
-                let cachedPath = cachedImagePath(for: target.name)
+                let cachedPath = cachedImagePath(for: target.imageUrl)
                             
                 // Check local cache
                 if fileManager.fileExists(atPath: cachedPath.path),
@@ -89,7 +108,7 @@ class ARSceneCoreManager: NSObject {
                     addReferenceImage(cgImage, for: target)
 
                     group.leave()
-                    continue  // Skip the 
+                    continue
                 }
                 
                 // Use cache-buster only in DEBUG builds to avoid unnecessary reloads in production
@@ -120,12 +139,19 @@ class ARSceneCoreManager: NSObject {
                     }
                     
                     addReferenceImage(cgImage, for: target)
+                    
+                    try? imageData.write(to: cachedPath, options: .atomic)
                 }.resume()
             }
             
             group.notify(queue: .main) {
                 
                 let images = self.referenceImagesQueue.sync { self.referenceImages }
+                
+                guard !images.isEmpty else {
+                    completion(.failure(.noTargetsLoaded))
+                    return
+                }
                 
                 let configuration = ARImageTrackingConfiguration()
                 
@@ -135,11 +161,12 @@ class ARSceneCoreManager: NSObject {
                 
                 self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 
-                completion(self.targets)
+                completion(.success(self.targets))
             }
             
         } catch {
             print("ARSessionManager: Failed to read bundled config: \(error.localizedDescription)")
+            completion(.failure(.configInvalid))
         }
     }
     
