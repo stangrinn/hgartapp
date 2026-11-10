@@ -546,7 +546,7 @@
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -585,7 +585,7 @@
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtApp/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
