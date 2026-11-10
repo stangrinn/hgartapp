@@ -48,11 +48,13 @@ class AppPreloaderOverlay {
     
     
     private func removePreloaderOverlay(whenEndOf player: AVPlayer, remove playerLayer: AVPlayerLayer) {
-        NotificationCenter.default.addObserver(
+        var token: NSObjectProtocol?
+        token = NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: player.currentItem,
             queue: .main
         ) { _ in
+            if let token { NotificationCenter.default.removeObserver(token) }
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 playerLayer.removeFromSuperlayer()
             }

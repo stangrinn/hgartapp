@@ -29,6 +29,8 @@ class ARSceneVideoManager {
     func isTracking(_ anchorID: UUID) -> Bool {
         experienceActive && trackedAnchors.contains(anchorID)
     }
+
+    var hasTrackedAnchors: Bool { experienceActive && !trackedAnchors.isEmpty }
     
     private var playersByAnchor: [UUID: AVQueuePlayer] = [:]
     
@@ -123,6 +125,11 @@ class ARSceneVideoManager {
         print("✅ StartVideo player is playing")
         
         arVideoOverlay.prepareToPlay(player)
+        
+        if let previousID = currentAnchorID, previousID != anchorID {
+            playersByAnchor[previousID]?.pause()
+        }
+        
         player.play()
         
         currentAnchorID = anchorID

@@ -157,7 +157,7 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
                         guard let self else { return }
                         Task { @MainActor in
                             self.videoManager.stopVideo(for: id)
-                            self.scannerOverlay.showScanner()
+                            if !self.videoManager.hasTrackedAnchors { self.scannerOverlay.showScanner() }
                         }
                         self.stopWorkItems.removeValue(forKey: id)
                     }
