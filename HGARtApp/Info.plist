@@ -32,6 +32,7 @@
 	<array>
 		<string>Baloo-Regular.ttf</string>
 		<string>Orbitron.ttf</string>
+		<string>CormorantGaramond.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

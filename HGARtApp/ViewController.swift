@@ -10,13 +10,14 @@ class ViewController: UIViewController {
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
     private var launchLoader: LaunchLoaderView?
-    private let launchLoaderShownAt = Date()
+    private var launchLoaderShownAt = Date()
+    private var onboarding: OnboardingView?
+    private var hasStartedScanning = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        showLaunchLoader()
         setupSceneView()
-        setupManagers()
+        showOnboarding()
         NotificationCenter.default.addObserver(self, selector: #selector(pauseExperience),
             name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExperience),
@@ -30,7 +31,37 @@ class ViewController: UIViewController {
         presentCameraDeniedIfNeeded()
     }
 
+    private func showOnboarding() {
+        let onboarding = OnboardingView(frame: view.bounds)
+        onboarding.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        onboarding.layer.zPosition = 998
+        onboarding.onStartScanning = { [weak self] in self?.startScanning() }
+        onboarding.onHowItWorks = { [weak self] in self?.presentHowItWorks() }
+        view.addSubview(onboarding)
+        self.onboarding = onboarding
+    }
+
+    private func startScanning() {
+        guard !hasStartedScanning else { return }
+
+        hasStartedScanning = true
+        onboarding?.dismiss()
+        onboarding = nil
+        showLaunchLoader()
+        setupManagers()
+        presentCameraDeniedIfNeeded()
+    }
+
+    private func presentHowItWorks() {
+        let alert = UIAlertController(title: "How it works",
+                                      message: "Point your camera at a Helena Grinshpun painting. Hold steady until the artwork is recognised and it comes to life.",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
     private func showLaunchLoader() {
+        launchLoaderShownAt = Date()
         let loader = LaunchLoaderView(frame: view.bounds)
         loader.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         loader.layer.zPosition = 999
@@ -46,7 +77,7 @@ class ViewController: UIViewController {
     private func presentCameraDeniedIfNeeded() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
 
-        guard status == .denied || status == .restricted, !hasPresentedCameraWarning else { return }
+        guard hasStartedScanning, status == .denied || status == .restricted, !hasPresentedCameraWarning else { return }
 
         hideLaunchLoader()
         let deniedVC = CameraPermissionDeniedViewController()

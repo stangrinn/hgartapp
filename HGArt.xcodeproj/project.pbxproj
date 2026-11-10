@@ -60,7 +60,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"UI/Assets/fonts/Baloo-Regular.ttf",
-				"UI/Assets/fonts/Orbitron.ttf",
+				UI/Assets/fonts/CormorantGaramond.ttf,
+				UI/Assets/fonts/Orbitron.ttf,
 			);
 			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
 		};
@@ -84,11 +85,14 @@
 				Models/ARTarget.swift,
 				"Resources/ar-config.json",
 				"UI/Assets/fonts/Baloo-Regular.ttf",
-				"UI/Assets/fonts/Orbitron.ttf",
+				UI/Assets/fonts/CormorantGaramond.ttf,
+				"UI/Assets/fonts/CormorantGaramond-OFL.txt",
 				"UI/Assets/fonts/Orbitron-OFL.txt",
-				UI/Components/LaunchLoaderView.swift,
+				UI/Assets/fonts/Orbitron.ttf,
 				UI/Components/ARVideoControls.swift,
 				UI/Components/ARVideoPreloader.swift,
+				UI/Components/LaunchLoaderView.swift,
+				UI/Components/OnboardingView.swift,
 				UI/Components/PaddedLabelText.swift,
 				UI/Components/TargetScannerOverlay.swift,
 				UI/Components/ToggleIconButton.swift,
