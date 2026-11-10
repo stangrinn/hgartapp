@@ -9,10 +9,12 @@ class ViewController: UIViewController {
     private var arCoreManager: ARSceneCoreManager!
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
+    private var appPreloaderOverlay: AppPreloaderOverlay?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 254 / 255, green: 250 / 255, blue: 235 / 255, alpha: 1.0)
+        view.backgroundColor = AppEnvironment.preloaderBackgroundColor
+        appPreloaderOverlay = AppPreloaderOverlay(view: view)
         setupSceneView()
         setupManagers()
         NotificationCenter.default.addObserver(self, selector: #selector(pauseExperience),

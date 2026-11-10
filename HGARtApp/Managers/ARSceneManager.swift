@@ -14,8 +14,6 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     
     private var scannerOverlay: TargetScannerOverlay!
     
-    private var appPreloaderOverlay: AppPreloaderOverlay!
-    
     // Debounce tracking start/stop to avoid thrashing
     private var startWorkItems: [UUID: DispatchWorkItem] = [:]
     private var stopWorkItems: [UUID: DispatchWorkItem] = [:]
@@ -24,8 +22,6 @@ class ARSceneManager: NSObject, ARSCNViewDelegate {
     init(view: UIView) {
         
         print("🚀 Initializing ARSceneManager")
-        
-        self.appPreloaderOverlay = AppPreloaderOverlay(view: view)
         
         self.videoManager = ARSceneVideoManager(view: view)
         
