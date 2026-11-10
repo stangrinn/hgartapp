@@ -9,12 +9,12 @@ class ViewController: UIViewController {
     private var arCoreManager: ARSceneCoreManager!
     private var sceneView: ARSCNView!
     private var hasPresentedCameraWarning = false
-    private var appPreloaderOverlay: AppPreloaderOverlay?
+    private var launchLoader: LaunchLoaderView?
+    private let launchLoaderShownAt = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppEnvironment.preloaderBackgroundColor
-        appPreloaderOverlay = AppPreloaderOverlay(view: view)
+        showLaunchLoader()
         setupSceneView()
         setupManagers()
         NotificationCenter.default.addObserver(self, selector: #selector(pauseExperience),
@@ -30,11 +30,25 @@ class ViewController: UIViewController {
         presentCameraDeniedIfNeeded()
     }
 
+    private func showLaunchLoader() {
+        let loader = LaunchLoaderView(frame: view.bounds)
+        loader.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        loader.layer.zPosition = 999
+        view.addSubview(loader)
+        launchLoader = loader
+    }
+
+    private func hideLaunchLoader() {
+        launchLoader?.dismiss(minimumVisibleSince: launchLoaderShownAt)
+        launchLoader = nil
+    }
+
     private func presentCameraDeniedIfNeeded() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
 
         guard status == .denied || status == .restricted, !hasPresentedCameraWarning else { return }
 
+        hideLaunchLoader()
         let deniedVC = CameraPermissionDeniedViewController()
         deniedVC.modalPresentationStyle = .fullScreen
         present(deniedVC, animated: true, completion: nil)
@@ -89,6 +103,7 @@ class ViewController: UIViewController {
     
     private func loadTargets() {
         arCoreManager.loadTargetsAndStartARSession { [weak self] result in
+            self?.hideLaunchLoader()
             switch result {
             case .success(let loadedTargets):
                 self?.arSceneManager.setTargets(loadedTargets)

@@ -59,8 +59,8 @@
 		FB9CE95E2EA27E42007B429A /* Exceptions for "HGARtApp" folder in "HGArtTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Helpers/AppEnvironment.swift,
 				"UI/Assets/fonts/Baloo-Regular.ttf",
+				"UI/Assets/fonts/Orbitron.ttf",
 			);
 			target = FBF674D12DB1FCAE00F84E99 /* HGArtTests */;
 		};
@@ -75,7 +75,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Controllers/CameraPermissionDeniedViewController.swift,
-				Helpers/AppEnvironment.swift,
 				Helpers/PlayerObserver.swift,
 				Helpers/PreloaderScene.swift,
 				Managers/ARSceneCoreManager.swift,
@@ -85,9 +84,9 @@
 				Models/ARTarget.swift,
 				"Resources/ar-config.json",
 				"UI/Assets/fonts/Baloo-Regular.ttf",
-				"UI/Assets/Loader-kids.mp4",
-				UI/Assets/Loader.mp4,
-				UI/Components/AppPreloaderOverlay.swift,
+				"UI/Assets/fonts/Orbitron.ttf",
+				"UI/Assets/fonts/Orbitron-OFL.txt",
+				UI/Components/LaunchLoaderView.swift,
 				UI/Components/ARVideoControls.swift,
 				UI/Components/ARVideoPreloader.swift,
 				UI/Components/PaddedLabelText.swift,
@@ -347,7 +346,7 @@
 				DEVELOPMENT_TEAM = VWR38Q45WB;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -383,7 +382,7 @@
 				CURRENT_PROJECT_VERSION = 1.6;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/HGARtAppClip/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt Kids";
+				INFOPLIST_KEY_CFBundleDisplayName = "HG ARt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

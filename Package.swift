@@ -19,7 +19,6 @@ let package: Package = Package(
             dependencies: [],
             path: "HGARtApp",
             resources: [
-                .process("UI/Assets/Loader.mp4"),
                 .process("Assets.xcassets")
             ],
             linkerSettings: [
