@@ -39,33 +39,36 @@ final class LaunchLoaderView: UIView {
         logo.axis = .vertical
         logo.alignment = .center
         logo.spacing = 16.8
+        logo.translatesAutoresizingMaskIntoConstraints = false
 
         let overline = makeLabel(text: "augmented art", size: 10, kern: 2.5)
+        overline.translatesAutoresizingMaskIntoConstraints = false
 
         barContainer.backgroundColor = Style.track
         barContainer.layer.cornerRadius = Style.barSize.height / 2
         barContainer.clipsToBounds = true
+        barContainer.translatesAutoresizingMaskIntoConstraints = false
 
         fillLayer.backgroundColor = Style.primary.cgColor
         fillLayer.cornerRadius = Style.barSize.height / 2
-        fillLayer.frame = CGRect(x: -Style.barFillWidth, y: 0, width: Style.barFillWidth, height: Style.barSize.height)
+        fillLayer.frame = CGRect(x: 0, y: 0, width: Style.barFillWidth, height: Style.barSize.height)
         barContainer.layer.addSublayer(fillLayer)
 
-        let content = UIStackView(arrangedSubviews: [logo, overline, barContainer])
-        content.axis = .vertical
-        content.alignment = .center
-        content.spacing = 26
-        content.setCustomSpacing(26, after: logo)
-        content.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(content)
+        [logo, overline, barContainer].forEach(addSubview)
 
+        // Offsets from the vertical centre mirror LaunchScreen.storyboard, so there is no jump on handover.
         NSLayoutConstraint.activate([
             mark.widthAnchor.constraint(equalToConstant: Style.markSize.width),
             mark.heightAnchor.constraint(equalToConstant: Style.markSize.height),
+            logo.centerXAnchor.constraint(equalTo: centerXAnchor),
+            logo.topAnchor.constraint(equalTo: centerYAnchor, constant: -86),
+            overline.leadingAnchor.constraint(equalTo: centerXAnchor, constant: -55.5),
+            overline.topAnchor.constraint(equalTo: centerYAnchor, constant: 11.667),
+            overline.heightAnchor.constraint(equalToConstant: 14),
             barContainer.widthAnchor.constraint(equalToConstant: Style.barSize.width),
             barContainer.heightAnchor.constraint(equalToConstant: Style.barSize.height),
-            content.centerXAnchor.constraint(equalTo: centerXAnchor),
-            content.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -16)
+            barContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
+            barContainer.topAnchor.constraint(equalTo: centerYAnchor, constant: 51.667)
         ])
 
         NotificationCenter.default.addObserver(self, selector: #selector(startAnimating),
